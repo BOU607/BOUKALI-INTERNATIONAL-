@@ -1,0 +1,81 @@
+{
+  "nav": {
+    "products": "Productos",
+    "services": "Servicios",
+    "jobs": "Empleos",
+    "cart": "Carrito",
+    "admin": "Admin"
+  },
+  "home": {
+    "title": "Compra y vende con confianza",
+    "subtitle": "Descubre productos que te gustan. Pago sencillo. Envío rápido.",
+    "browseProducts": "Ver productos",
+    "findPro": "Buscar un profesional",
+    "findJobs": "Buscar empleos",
+    "sellOn": "Vender en BOUKALI INTERNATIONAL",
+    "shopByCategory": "Comprar por categoría",
+    "all": "Todo",
+    "howItWorks": "Cómo funciona",
+    "browse": "Explorar",
+    "browseDesc": "Explora nuestro catálogo de productos.",
+    "addToCart": "Añadir al carrito",
+    "addToCartDesc": "Elige lo que necesitas y añádelo al carrito.",
+    "checkout": "Pagar",
+    "checkoutDesc": "Introduce tus datos y completa tu pedido."
+  },
+  "categories": {
+    "men": "Hombres",
+    "women": "Mujeres",
+    "oilGas": "Petróleo y gas",
+    "spareParts": "Recambios",
+    "usedCar": "Coche de segunda mano",
+    "usedJewellery": "Joyería de segunda mano"
+  },
+  "cart": {
+    "title": "Tu carrito",
+    "empty": "Tu carrito está vacío.",
+    "item": "artículo",
+    "items": "artículos",
+    "each": "cada uno",
+    "remove": "Quitar",
+    "continueShopping": "Seguir comprando",
+    "total": "Total",
+    "checkout": "Pagar"
+  },
+  "products": {
+    "allProducts": "Todos los productos",
+    "addToCart": "Añadir al carrito",
+    "all": "Todo",
+    "noProducts": "Aún no hay productos en esta categoría. Prueba otra o vuelve más tarde."
+  },
+  "checkout": {
+    "title": "Pago",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "address": "Dirección",
+    "payWithCard": "Pagar con tarjeta",
+    "placeOrder": "Confirmar pedido",
+    "orderAndBankTransfer": "Pedido y pago por transferencia",
+    "redirecting": "Redirigiendo al pago…",
+    "placingOrder": "Realizando pedido…",
+    "orderPlaced": "Pedido realizado",
+    "payByBankTransfer": "Pago por transferencia bancaria",
+    "orderId": "Nº de pedido",
+    "bsb": "BSB",
+    "account": "Cuenta",
+    "amount": "Importe",
+    "useOrderIdAsReference": "Usa este nº de pedido como referencia de pago.",
+    "transferInstructions": "Transfiere el importe indicado y usa tu nº de pedido como referencia.",
+    "orderConfirmed": "Pedido confirmado",
+    "thankYou": "Gracias por tu compra.",
+    "continueShopping": "Seguir comprando",
+    "orderSummary": "Resumen del pedido",
+    "total": "Total",
+    "cardNotConfigured": "Pago con tarjeta no configurado. El pedido se creará como pendiente.",
+    "audNote": "Todos los precios y pagos en dólares australianos (AUD). Se aceptan tarjetas australianas."
+  },
+  "footer": {
+    "copyright": "BOUKALI INTERNATIONAL. Compra y vende con confianza.",
+    "availableWorldwide": "Disponible en todo el mundo — elige tu idioma arriba."
+  }
+}

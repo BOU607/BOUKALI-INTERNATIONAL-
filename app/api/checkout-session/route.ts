@@ -1,19 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { addOrder, updateOrderStatus } from "@/lib/store";
+import { addOrder } from "@/lib/store";
 import type { Order, OrderItem } from "@/lib/types";
+import {
+  validateOrderPayload,
+  sanitizeOrderItems,
+  sanitizeString,
+} from "@/lib/security";
 
 const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY)
   : null;
 
 function getBaseUrl(req: NextRequest): string {
-  const origin = req.headers.get("origin") || req.headers.get("host");
-  if (origin) {
-    const protocol = req.headers.get("x-forwarded-proto") || "https";
-    return origin.startsWith("http") ? origin : `${protocol}://${origin}`;
+  const host = req.headers.get("host") || "";
+  const protocol = req.headers.get("x-forwarded-proto") || "https";
+  if (host && !host.includes("localhost")) {
+    return `${protocol}://${host}`;
   }
-  return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+  if (appUrl && (appUrl.startsWith("https://") || appUrl.startsWith("http://"))) {
+    return appUrl.replace(/\/$/, "");
+  }
+  return "http://localhost:3000";
 }
 
 export async function POST(req: NextRequest) {
@@ -24,24 +33,43 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const body = (await req.json()) as {
-    items: OrderItem[];
-    total: number;
-    customer: { name: string; email: string; address: string };
-  };
-  const { items, total, customer } = body;
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
 
-  if (!items?.length || !customer?.name || !customer?.email) {
-    return NextResponse.json(
-      { error: "Missing items or customer info" },
-      { status: 400 }
-    );
+  const err = validateOrderPayload(body);
+  if (err) {
+    return NextResponse.json({ error: err.error }, { status: 400 });
+  }
+
+  const payload = body as {
+    items: unknown[];
+    total: number;
+    customer: { name: unknown; email: unknown; address: unknown };
+  };
+  const items = sanitizeOrderItems(payload.items);
+  if (!items) {
+    return NextResponse.json({ error: "Invalid items" }, { status: 400 });
+  }
+
+  const total = Number(payload.total);
+  if (!Number.isFinite(total) || total < 0) {
+    return NextResponse.json({ error: "Invalid total" }, { status: 400 });
   }
 
   const orderId = `ord-${Date.now()}`;
+  const customer = {
+    name: sanitizeString(payload.customer.name, 200),
+    email: String(payload.customer.email).trim().toLowerCase(),
+    address: sanitizeString(payload.customer.address, 500),
+  };
+
   const order: Order = {
     id: orderId,
-    items,
+    items: items as OrderItem[],
     total,
     customer,
     status: "pending",

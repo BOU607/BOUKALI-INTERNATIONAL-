@@ -1,0 +1,81 @@
+{
+  "nav": {
+    "products": "Products",
+    "services": "Services",
+    "jobs": "Jobs",
+    "cart": "Cart",
+    "admin": "Admin"
+  },
+  "home": {
+    "title": "Buy & sell with confidence",
+    "subtitle": "Discover products you love. Simple checkout. Fast delivery.",
+    "browseProducts": "Browse products",
+    "findPro": "Find a pro",
+    "findJobs": "Find jobs",
+    "sellOn": "Sell on BOUKALI INTERNATIONAL",
+    "shopByCategory": "Shop by category",
+    "all": "All",
+    "howItWorks": "How it works",
+    "browse": "Browse",
+    "browseDesc": "Explore our catalog of products.",
+    "addToCart": "Add to cart",
+    "addToCartDesc": "Choose what you need and add to cart.",
+    "checkout": "Checkout",
+    "checkoutDesc": "Enter details and complete your order."
+  },
+  "categories": {
+    "men": "Men",
+    "women": "Women",
+    "oilGas": "Oil & Gas",
+    "spareParts": "Spare Parts",
+    "usedCar": "Used Car",
+    "usedJewellery": "Used Jewellery"
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty.",
+    "item": "item",
+    "items": "items",
+    "each": "each",
+    "remove": "Remove",
+    "continueShopping": "Continue shopping",
+    "total": "Total",
+    "checkout": "Checkout"
+  },
+  "products": {
+    "allProducts": "All products",
+    "addToCart": "Add to cart",
+    "all": "All",
+    "noProducts": "No products in this category yet. Try another or check back soon."
+  },
+  "checkout": {
+    "title": "Checkout",
+    "name": "Name",
+    "email": "Email",
+    "address": "Address",
+    "payWithCard": "Pay with card",
+    "placeOrder": "Place order",
+    "orderAndBankTransfer": "Order & pay by bank transfer",
+    "redirecting": "Redirecting to payment…",
+    "placingOrder": "Placing order…",
+    "orderPlaced": "Order placed",
+    "payByBankTransfer": "Pay by bank transfer",
+    "orderId": "Order ID",
+    "bsb": "BSB",
+    "account": "Account",
+    "amount": "Amount",
+    "useOrderIdAsReference": "Use this order ID as the payment reference.",
+    "transferInstructions": "Transfer the amount below and use your order ID as the reference.",
+    "orderConfirmed": "Order confirmed",
+    "thankYou": "Thank you for your purchase.",
+    "continueShopping": "Continue shopping",
+    "orderSummary": "Order summary",
+    "total": "Total",
+    "cardNotConfigured": "Card payments not configured. Order will be created as pending.",
+    "audNote": "All prices and payments are in Australian dollars (AUD). Australian cards accepted."
+  },
+  "footer": {
+    "copyright": "BOUKALI INTERNATIONAL. Buy & sell with confidence.",
+    "availableWorldwide": "Available worldwide — use your language above."
+  }
+}

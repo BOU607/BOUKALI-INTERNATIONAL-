@@ -9,6 +9,8 @@ export const CATEGORIES = [
   "Spare Parts",
   "Paint",
   "Electronics",
+  "Used Car",
+  "Used Jewellery",
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];

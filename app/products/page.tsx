@@ -5,8 +5,18 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import type { Product } from "@/lib/types";
 import { useCart } from "@/components/CartProvider";
+import { useI18n } from "@/components/LanguageProvider";
 import { CATEGORIES } from "@/lib/categories";
 import { formatAUD } from "@/lib/currency";
+
+const CATEGORY_KEYS: Record<string, string> = {
+  "Men's Clothing": "categories.men",
+  "Women's Clothing": "categories.women",
+  "Oil & Gas Equipment": "categories.oilGas",
+  "Spare Parts": "categories.spareParts",
+  "Used Car": "categories.usedCar",
+  "Used Jewellery": "categories.usedJewellery",
+};
 
 function ProductsPageContent() {
   const searchParams = useSearchParams();
@@ -15,6 +25,7 @@ function ProductsPageContent() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const { addItem } = useCart();
+  const { t } = useI18n();
 
   useEffect(() => {
     setSelectedCategory(categoryFromUrl);
@@ -49,7 +60,9 @@ function ProductsPageContent() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="font-display text-2xl font-semibold text-stone-100 mb-4">
-        {selectedCategory ? `${selectedCategory}` : "All products"}
+        {selectedCategory
+          ? (CATEGORY_KEYS[selectedCategory] ? t(CATEGORY_KEYS[selectedCategory]) : selectedCategory)
+          : t("products.allProducts")}
       </h1>
       <div className="flex flex-wrap gap-2 mb-8">
         <Link
@@ -60,7 +73,7 @@ function ProductsPageContent() {
               : "bg-ink-800 text-ink-400 hover:text-stone-200 hover:bg-ink-700"
           }`}
         >
-          All
+          {t("products.all")}
         </Link>
         {CATEGORIES.map((cat) => (
           <Link
@@ -72,7 +85,7 @@ function ProductsPageContent() {
                 : "bg-ink-800 text-ink-400 hover:text-stone-200 hover:bg-ink-700"
             }`}
           >
-            {cat}
+            {CATEGORY_KEYS[cat] ? t(CATEGORY_KEYS[cat]) : cat}
           </Link>
         ))}
       </div>
@@ -89,7 +102,7 @@ function ProductsPageContent() {
             </Link>
             <div className="p-4">
               <span className="text-xs text-brand-400 font-medium uppercase tracking-wider">
-                {p.category}
+                {CATEGORY_KEYS[p.category] ? t(CATEGORY_KEYS[p.category]) : p.category}
               </span>
               <Link href={`/products/${p.id}`}>
                 <h2 className="font-medium text-stone-200 mt-1 hover:text-brand-400 transition-colors">
@@ -104,14 +117,14 @@ function ProductsPageContent() {
                 }
                 className="btn-primary w-full mt-3 text-sm py-2"
               >
-                Add to cart
+                {t("products.addToCart")}
               </button>
             </div>
           </article>
         ))}
       </div>
       {!loading && products.length === 0 && (
-        <p className="text-ink-500 text-center py-12">No products in this category yet. Try another or check back soon.</p>
+        <p className="text-ink-500 text-center py-12">{t("products.noProducts")}</p>
       )}
     </div>
   );

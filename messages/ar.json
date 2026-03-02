@@ -1,0 +1,81 @@
+{
+  "nav": {
+    "products": "المنتجات",
+    "services": "الخدمات",
+    "jobs": "وظائف",
+    "cart": "السلة",
+    "admin": "الإدارة"
+  },
+  "home": {
+    "title": "اشترِ وبِع بثقة",
+    "subtitle": "اكتشف المنتجات التي تحبها. دفع بسيط. توصيل سريع.",
+    "browseProducts": "تصفح المنتجات",
+    "findPro": "ابحث عن محترف",
+    "findJobs": "ابحث عن وظائف",
+    "sellOn": "بع على BOUKALI INTERNATIONAL",
+    "shopByCategory": "تسوق حسب الفئة",
+    "all": "الكل",
+    "howItWorks": "كيف يعمل",
+    "browse": "تصفح",
+    "browseDesc": "استكشف كتالوج المنتجات.",
+    "addToCart": "أضف إلى السلة",
+    "addToCartDesc": "اختر ما تحتاجه وأضفه إلى السلة.",
+    "checkout": "إتمام الطلب",
+    "checkoutDesc": "أدخل التفاصيل وأكمل طلبك."
+  },
+  "categories": {
+    "men": "رجال",
+    "women": "نساء",
+    "oilGas": "نفط وغاز",
+    "spareParts": "قطع غيار",
+    "usedCar": "سيارة مستعملة",
+    "usedJewellery": "مجوهرات مستعملة"
+  },
+  "cart": {
+    "title": "سلتك",
+    "empty": "سلتك فارغة.",
+    "item": "منتج",
+    "items": "منتجات",
+    "each": "للقطعة",
+    "remove": "إزالة",
+    "continueShopping": "متابعة التسوق",
+    "total": "المجموع",
+    "checkout": "إتمام الطلب"
+  },
+  "products": {
+    "allProducts": "جميع المنتجات",
+    "addToCart": "أضف إلى السلة",
+    "all": "الكل",
+    "noProducts": "لا توجد منتجات في هذه الفئة بعد. جرب فئة أخرى أو عد لاحقاً."
+  },
+  "checkout": {
+    "title": "إتمام الطلب",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "address": "العنوان",
+    "payWithCard": "الدفع بالبطاقة",
+    "placeOrder": "تأكيد الطلب",
+    "orderAndBankTransfer": "طلب والدفع بالتحويل البنكي",
+    "redirecting": "جاري التحويل للدفع…",
+    "placingOrder": "جاري تقديم الطلب…",
+    "orderPlaced": "تم تقديم الطلب",
+    "payByBankTransfer": "الدفع بالتحويل البنكي",
+    "orderId": "رقم الطلب",
+    "bsb": "BSB",
+    "account": "رقم الحساب",
+    "amount": "المبلغ",
+    "useOrderIdAsReference": "استخدم رقم الطلب كمرجع للدفع.",
+    "transferInstructions": "قم بتحويل المبلغ أدناه واستخدم رقم الطلب كمرجع.",
+    "orderConfirmed": "تم تأكيد الطلب",
+    "thankYou": "شكراً لشرائك.",
+    "continueShopping": "متابعة التسوق",
+    "orderSummary": "ملخص الطلب",
+    "total": "المجموع",
+    "cardNotConfigured": "الدفع بالبطاقة غير مفعّل. سيتم إنشاء الطلب كقيد الانتظار.",
+    "audNote": "جميع الأسعار والمدفوعات بالدولار الأسترالي (AUD). نقبل البطاقات الأسترالية."
+  },
+  "footer": {
+    "copyright": "BOUKALI INTERNATIONAL. اشترِ وبِع بثقة.",
+    "availableWorldwide": "متاح في جميع أنحاء العالم — اختر لغتك أعلاه."
+  }
+}

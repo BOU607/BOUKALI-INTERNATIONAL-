@@ -3,11 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/components/CartProvider";
+import { useI18n } from "@/components/LanguageProvider";
 import type { OrderItem } from "@/lib/types";
 import { formatAUD } from "@/lib/currency";
 
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
+  const { t } = useI18n();
   const [submitting, setSubmitting] = useState(false);
   const [payWithCard, setPayWithCard] = useState(true);
   const [done, setDone] = useState(false);
@@ -23,10 +25,10 @@ export default function CheckoutPage() {
   if (items.length === 0 && !done && !bankTransferDone) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
-        <h1 className="font-display text-2xl font-semibold text-stone-100">Checkout</h1>
-        <p className="text-ink-500 mt-2">Your cart is empty.</p>
+        <h1 className="font-display text-2xl font-semibold text-stone-100">{t("checkout.title")}</h1>
+        <p className="text-ink-500 mt-2">{t("cart.empty")}</p>
         <Link href="/products" className="btn-primary mt-6 inline-block">
-          Browse products
+          {t("home.browseProducts")}
         </Link>
       </div>
     );
@@ -127,21 +129,21 @@ export default function CheckoutPage() {
       <div className="container mx-auto px-4 py-16 text-center max-w-md mx-auto">
         <div className="card p-8 text-left">
           <h1 className="font-display text-2xl font-semibold text-stone-100">
-            Order placed — pay by bank transfer
+            {t("checkout.orderPlaced")} — {t("checkout.payByBankTransfer")}
           </h1>
-          <p className="text-ink-500 mt-2">Transfer the amount below and use your order ID as the reference.</p>
+          <p className="text-ink-500 mt-2">{t("checkout.transferInstructions")}</p>
           <p className="mt-4 text-sm text-brand-400 font-mono">{orderId}</p>
           <div className="mt-6 p-4 rounded-xl bg-ink-800/50 border border-ink-700">
-            <p className="text-sm text-ink-500 mb-1">BSB</p>
+            <p className="text-sm text-ink-500 mb-1">{t("checkout.bsb")}</p>
             <p className="font-mono text-stone-200">{bsb}</p>
-            <p className="text-sm text-ink-500 mt-3 mb-1">Account number</p>
+            <p className="text-sm text-ink-500 mt-3 mb-1">{t("checkout.account")}</p>
             <p className="font-mono text-stone-200">{accountNumber}</p>
-            <p className="text-sm text-ink-500 mt-3 mb-1">Amount (AUD)</p>
+            <p className="text-sm text-ink-500 mt-3 mb-1">{t("checkout.amount")} (AUD)</p>
             <p className="font-mono text-stone-200">{formatAUD(orderTotal)}</p>
-            <p className="text-xs text-ink-500 mt-3">Use order ID <span className="font-mono text-brand-400">{orderId}</span> as your payment reference.</p>
+            <p className="text-xs text-ink-500 mt-3">{t("checkout.useOrderIdAsReference")}</p>
           </div>
           <Link href="/products" className="btn-primary mt-8 inline-block w-full text-center">
-            Continue shopping
+            {t("checkout.continueShopping")}
           </Link>
         </div>
       </div>
@@ -153,12 +155,12 @@ export default function CheckoutPage() {
       <div className="container mx-auto px-4 py-16 text-center max-w-md mx-auto">
         <div className="card p-8">
           <h1 className="font-display text-2xl font-semibold text-stone-100">
-            Order confirmed
+            {t("checkout.orderConfirmed")}
           </h1>
-          <p className="text-ink-500 mt-2">Thank you for your purchase.</p>
+          <p className="text-ink-500 mt-2">{t("checkout.thankYou")}</p>
           <p className="mt-4 text-sm text-brand-400 font-mono">{orderId}</p>
           <Link href="/products" className="btn-primary mt-8 inline-block">
-            Continue shopping
+            {t("checkout.continueShopping")}
           </Link>
         </div>
       </div>
@@ -168,7 +170,7 @@ export default function CheckoutPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="font-display text-2xl font-semibold text-stone-100 mb-8">
-        Checkout
+        {t("checkout.title")}
       </h1>
       <div className="max-w-2xl grid md:grid-cols-2 gap-10">
         <form
@@ -176,7 +178,7 @@ export default function CheckoutPage() {
           className="space-y-4"
         >
           <label className="block">
-            <span className="text-sm text-ink-500">Full name</span>
+            <span className="text-sm text-ink-500">{t("checkout.name")}</span>
             <input
               type="text"
               required
@@ -187,7 +189,7 @@ export default function CheckoutPage() {
             />
           </label>
           <label className="block">
-            <span className="text-sm text-ink-500">Email</span>
+            <span className="text-sm text-ink-500">{t("checkout.email")}</span>
             <input
               type="email"
               required
@@ -198,7 +200,7 @@ export default function CheckoutPage() {
             />
           </label>
           <label className="block">
-            <span className="text-sm text-ink-500">Shipping address</span>
+            <span className="text-sm text-ink-500">{t("checkout.address")}</span>
             <textarea
               required
               value={form.address}
@@ -214,7 +216,7 @@ export default function CheckoutPage() {
               disabled={submitting}
               className="btn-primary w-full py-3"
             >
-              {submitting ? "Redirecting to payment…" : "Pay with card"}
+              {submitting ? t("checkout.redirecting") : t("checkout.payWithCard")}
             </button>
           ) : (
             <button
@@ -222,7 +224,7 @@ export default function CheckoutPage() {
               disabled={submitting}
               className="btn-primary w-full py-3"
             >
-              {submitting ? "Placing order…" : "Place order"}
+              {submitting ? t("checkout.placingOrder") : t("checkout.placeOrder")}
             </button>
           )}
           <button
@@ -231,19 +233,19 @@ export default function CheckoutPage() {
             disabled={submitting}
             className="btn-secondary w-full py-3 mt-2"
           >
-            {submitting ? "Placing order…" : "Order & pay by bank transfer"}
+            {submitting ? t("checkout.placingOrder") : t("checkout.orderAndBankTransfer")}
           </button>
           {!payWithCard && (
             <p className="text-xs text-ink-500">
-              Card payments not configured. Order will be created as pending.
+              {t("checkout.cardNotConfigured")}
             </p>
           )}
           <p className="text-xs text-ink-500">
-            All prices and payments are in Australian dollars (AUD). Australian cards accepted.
+            {t("checkout.audNote")}
           </p>
         </form>
         <div className="card p-6">
-          <h2 className="font-medium text-stone-200 mb-4">Order summary</h2>
+          <h2 className="font-medium text-stone-200 mb-4">{t("checkout.orderSummary")}</h2>
           <ul className="space-y-2">
             {items.map((i) => (
               <li key={i.productId} className="flex justify-between text-sm">
@@ -257,7 +259,7 @@ export default function CheckoutPage() {
             ))}
           </ul>
           <div className="mt-4 pt-4 border-t border-ink-700 flex justify-between font-semibold text-stone-200">
-            <span>Total</span>
+            <span>{t("checkout.total")}</span>
             <span className="text-brand-400">{formatAUD(totalPrice)}</span>
           </div>
         </div>

@@ -119,6 +119,26 @@ const defaultProducts: Product[] = [
     stock: 65,
     createdAt: new Date().toISOString(),
   },
+  {
+    id: "12",
+    name: "2018 Toyota Camry — Used",
+    description: "Well maintained, single owner. Full service history. Low kilometres.",
+    price: 18500.0,
+    image: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=400",
+    category: "Used Car",
+    stock: 1,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: "13",
+    name: "Gold Bracelet — Pre-owned",
+    description: "18K gold link bracelet. Authenticated. Excellent condition.",
+    price: 420.0,
+    image: "https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=400",
+    category: "Used Jewellery",
+    stock: 1,
+    createdAt: new Date().toISOString(),
+  },
 ];
 
 function ensureDataDir() {
