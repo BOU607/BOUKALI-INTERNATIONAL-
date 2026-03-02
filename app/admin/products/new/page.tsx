@@ -1,16 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { Product } from "@/lib/types";
+import { CATEGORIES } from "@/lib/categories";
 
 const defaultProduct: Partial<Product> = {
   name: "",
   description: "",
   price: 0,
   image: "",
-  category: "",
+  category: CATEGORIES[0],
   stock: 0,
 };
 
@@ -86,13 +87,15 @@ export default function NewProductPage() {
         <div className="grid grid-cols-2 gap-4">
           <label className="block">
             <span className="text-sm text-ink-500">Category</span>
-            <input
-              type="text"
+            <select
               value={form.category}
               onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
               className="input mt-1"
-              placeholder="e.g. Electronics"
-            />
+            >
+              {CATEGORIES.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
           </label>
           <label className="block">
             <span className="text-sm text-ink-500">Price</span>

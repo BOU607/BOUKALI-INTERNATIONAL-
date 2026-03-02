@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import type { Product } from "@/lib/types";
+import { CATEGORIES } from "@/lib/categories";
 
 export default function EditProductPage() {
   const params = useParams();
@@ -95,14 +96,17 @@ export default function EditProductPage() {
         <div className="grid grid-cols-2 gap-4">
           <label className="block">
             <span className="text-sm text-ink-500">Category</span>
-            <input
-              type="text"
+            <select
               value={product.category}
               onChange={(e) =>
                 setProduct((p) => (p ? { ...p, category: e.target.value } : p))
               }
               className="input mt-1"
-            />
+            >
+              {CATEGORIES.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
           </label>
           <label className="block">
             <span className="text-sm text-ink-500">Price</span>

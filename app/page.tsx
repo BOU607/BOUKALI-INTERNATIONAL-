@@ -1,4 +1,12 @@
 import Link from "next/link";
+import { CATEGORIES } from "@/lib/categories";
+
+const CATEGORY_LABELS: Record<string, string> = {
+  "Men's Clothing": "Men",
+  "Women's Clothing": "Women",
+  "Oil & Gas Equipment": "Oil & Gas",
+  "Spare Parts": "Spare Parts",
+};
 
 export default function HomePage() {
   return (
@@ -14,11 +22,41 @@ export default function HomePage() {
           <Link href="/products" className="btn-primary text-base px-6 py-3">
             Browse products
           </Link>
+          <Link href="/services" className="btn-secondary text-base px-6 py-3">
+            Find a pro
+          </Link>
+          <Link href="/jobs" className="btn-secondary text-base px-6 py-3">
+            Find jobs
+          </Link>
           <Link href="/admin" className="btn-secondary text-base px-6 py-3">
             Sell on BOUKALI INTERNATIONAL
           </Link>
         </div>
       </div>
+      <section className="mt-24 w-full max-w-5xl">
+        <h2 className="font-display text-xl font-semibold text-stone-200 mb-6 text-center">
+          Shop by category
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          <Link
+            href="/products"
+            className="card p-4 text-center hover:border-brand-500/50 transition-colors"
+          >
+            <span className="text-stone-200 font-medium">All</span>
+          </Link>
+          {CATEGORIES.map((cat) => (
+            <Link
+              key={cat}
+              href={`/products?category=${encodeURIComponent(cat)}`}
+              className="card p-4 text-center hover:border-brand-500/50 transition-colors"
+            >
+              <span className="text-stone-200 font-medium">
+                {CATEGORY_LABELS[cat] ?? cat}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
       <section className="mt-24 w-full max-w-4xl">
         <h2 className="font-display text-xl font-semibold text-stone-200 mb-6 text-center">
           How it works

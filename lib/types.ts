@@ -33,3 +33,24 @@ export type Order = {
   status: "pending" | "paid" | "shipped" | "delivered";
   createdAt: string;
 };
+
+export type Job = {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  type: "full-time" | "part-time" | "contract" | "internship";
+  description: string;
+  createdAt: string;
+};
+
+export type Service = {
+  id: string;
+  trade: string;
+  businessName: string;
+  description: string;
+  phone: string;
+  email: string;
+  location: string;
+  createdAt: string;
+};

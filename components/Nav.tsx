@@ -16,6 +16,12 @@ export function Nav() {
           <Link href="/products" className="btn-ghost text-sm">
             Products
           </Link>
+          <Link href="/services" className="btn-ghost text-sm">
+            Services
+          </Link>
+          <Link href="/jobs" className="btn-ghost text-sm">
+            Jobs
+          </Link>
           <Link href="/cart" className="btn-ghost text-sm relative">
             Cart
             {totalItems > 0 && (
