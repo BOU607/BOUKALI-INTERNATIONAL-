@@ -15,8 +15,8 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Shop — Buy & Sell",
-  description: "Your place to buy and sell products online.",
+  title: "BOUKALI INTERNATIONAL — Buy & Sell",
+  description: "BOUKALI INTERNATIONAL – your place to buy and sell products online.",
 };
 
 export default function RootLayout({
@@ -32,7 +32,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <footer className="border-t border-ink-800 py-8 mt-auto">
             <div className="container mx-auto px-4 text-center text-ink-500 text-sm">
-              © {new Date().getFullYear()} Shop. Buy & sell with confidence.
+              © {new Date().getFullYear()} BOUKALI INTERNATIONAL. Buy & sell with confidence.
             </div>
           </footer>
         </CartProvider>
