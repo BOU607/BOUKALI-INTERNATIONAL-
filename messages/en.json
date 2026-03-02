@@ -1,10 +1,12 @@
 {
   "nav": {
+    "home": "Home",
     "products": "Products",
     "services": "Services",
     "jobs": "Jobs",
     "cart": "Cart",
-    "admin": "Admin"
+    "admin": "Admin",
+    "language": "Language"
   },
   "home": {
     "title": "Buy & sell with confidence",

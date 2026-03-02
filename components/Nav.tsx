@@ -15,7 +15,10 @@ export function Nav() {
         <Link href="/" className="font-display font-semibold text-xl text-stone-100">
           BOUKALI INTERNATIONAL
         </Link>
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-5">
+          <Link href="/" className="btn-ghost text-sm font-medium">
+            {t("nav.home")}
+          </Link>
           <LanguageSwitcher />
           <Link href="/products" className="btn-ghost text-sm">
             {t("nav.products")}

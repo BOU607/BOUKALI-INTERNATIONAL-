@@ -1,10 +1,12 @@
 {
   "nav": {
+    "home": "Inicio",
     "products": "Productos",
     "services": "Servicios",
     "jobs": "Empleos",
     "cart": "Carrito",
-    "admin": "Admin"
+    "admin": "Admin",
+    "language": "Idioma"
   },
   "home": {
     "title": "Compra y vende con confianza",
