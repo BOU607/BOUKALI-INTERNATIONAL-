@@ -15,7 +15,7 @@ export default function HomePage() {
             Browse products
           </Link>
           <Link href="/admin" className="btn-secondary text-base px-6 py-3">
-            Sell on Shop
+            Sell on BOUKALI INTERNATIONAL
           </Link>
         </div>
       </div>

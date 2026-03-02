@@ -1,4 +1,4 @@
-# Shop — Buy & Sell
+# BOUKALI INTERNATIONAL — Buy & Sell
 
 A full-stack e-commerce website where people can **buy products** and you can **manage sales** from an admin area.
 
