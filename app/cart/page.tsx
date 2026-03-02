@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCart } from "@/components/CartProvider";
+import { formatAUD } from "@/lib/currency";
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalItems, totalPrice } = useCart();
@@ -43,7 +44,7 @@ export default function CartPage() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-medium text-stone-200 truncate">{item.name ?? "Product"}</p>
-              <p className="text-brand-400 text-sm">${(item.price ?? 0).toFixed(2)} each</p>
+              <p className="text-brand-400 text-sm">{formatAUD(item.price ?? 0)} each</p>
             </div>
             <div className="flex items-center gap-3">
               <input
@@ -64,7 +65,7 @@ export default function CartPage() {
               </button>
             </div>
             <p className="font-medium text-stone-200 w-20 text-right">
-              ${((item.price ?? 0) * item.quantity).toFixed(2)}
+              {formatAUD((item.price ?? 0) * item.quantity)}
             </p>
           </div>
         ))}
@@ -75,7 +76,7 @@ export default function CartPage() {
         </Link>
         <div className="flex items-center gap-6">
           <p className="text-lg font-semibold text-stone-200">
-            Total: <span className="text-brand-400">${totalPrice.toFixed(2)}</span>
+            Total: <span className="text-brand-400">{formatAUD(totalPrice)}</span>
           </p>
           <Link href="/checkout" className="btn-primary">
             Checkout

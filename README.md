@@ -1,13 +1,15 @@
 # BOUKALI INTERNATIONAL — Buy & Sell
 
-A full-stack e-commerce website where people can **buy products** and you can **manage sales** from an admin area.
+A full-stack e-commerce website where people can **buy products**, **find services** (plumber, electrician, painter, etc.), **search jobs**, and you can **manage everything** from a protected admin area.
 
 ## What’s included
 
-- **Storefront**: Home, product list, product detail, cart, checkout
-- **Admin**: Dashboard, add/edit/delete products, view orders and total sales, update order status
-- **API**: REST endpoints for products and orders
-- **Data**: Stored in JSON files in the `data/` folder (created on first run)
+- **Storefront**: Home, products (by category), cart, **Stripe checkout**
+- **Services**: Search plumbers, electrical, painters, carpenters, etc.
+- **Jobs**: Job search and listings
+- **Admin** (login protected): Products, services, jobs, orders & sales
+- **Payments**: Stripe — customers pay by card; orders marked **paid** after success
+- **Data**: JSON files in `data/` (products, orders, jobs, services)
 
 ## Quick start
 
@@ -17,38 +19,34 @@ A full-stack e-commerce website where people can **buy products** and you can **
    npm install
    ```
 
-2. **Run the app**
+2. **Configure environment**
+
+   Copy `.env.example` to `.env.local` and set:
+
+   - **Stripe**: `STRIPE_SECRET_KEY` (from [Stripe Dashboard](https://dashboard.stripe.com/apikeys) → Secret key)
+   - **NextAuth**: `NEXTAUTH_SECRET` (any long random string), `NEXTAUTH_URL` (e.g. `http://localhost:3000`), `ADMIN_EMAIL`, `ADMIN_PASSWORD` (your admin login)
+
+3. **Run the app**
 
    ```bash
    npm run dev
    ```
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser.
+4. Open [http://localhost:3000](http://localhost:3000). Log in at `/admin/login` with `ADMIN_EMAIL` / `ADMIN_PASSWORD`.
 
-## Pages
+## Payments (Stripe)
 
-| Page | URL | Description |
-|------|-----|-------------|
-| Home | `/` | Landing and “how it works” |
-| Products | `/products` | Browse all products |
-| Product | `/products/[id]` | Product detail and add to cart |
-| Cart | `/cart` | Review and edit cart |
-| Checkout | `/checkout` | Customer info and place order |
-| Admin dashboard | `/admin` | Overview (products count, orders, total sales) |
-| Admin products | `/admin/products` | List, add, edit, delete products |
-| Admin orders | `/admin/orders` | List orders and update status (pending → paid → shipped → delivered) |
+- Checkout shows **Pay with card**; customer is sent to Stripe Checkout and redirected back on success.
+- If `STRIPE_SECRET_KEY` is not set, checkout falls back to **Place order** (order created as pending, no payment).
+- On Vercel, add `STRIPE_SECRET_KEY` in Project → Settings → Environment Variables.
+
+## Admin login
+
+- All `/admin/*` routes (except `/admin/login`) require sign-in.
+- Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in `.env.local` (and on Vercel). Use a strong password.
 
 ## Tech stack
 
-- **Next.js 14** (App Router)
-- **React 18**
-- **TypeScript**
-- **Tailwind CSS**
-- Data stored in `data/products.json` and `data/orders.json`
-
-## Next steps
-
-- Add **authentication** (e.g. NextAuth) to protect `/admin`
-- Connect a **database** (e.g. PostgreSQL, SQLite) instead of JSON files
-- Add **payments** (e.g. Stripe) in checkout
-- Add **search and filters** on the products page
+- **Next.js 14** (App Router), **React 18**, **TypeScript**, **Tailwind CSS**
+- **Stripe** (Checkout), **NextAuth** (Credentials)
+- Data: `data/products.json`, `data/orders.json`, `data/jobs.json`, `data/services.json`

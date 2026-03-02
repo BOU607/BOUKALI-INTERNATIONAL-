@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { useCart } from "@/components/CartProvider";
+import { formatAUD } from "@/lib/currency";
 
 export default function ProductPage() {
   const params = useParams();
@@ -80,7 +81,7 @@ export default function ProductPage() {
             {product.name}
           </h1>
           <p className="text-3xl font-semibold text-brand-400 mt-4">
-            ${product.price.toFixed(2)}
+            {formatAUD(product.price)}
           </p>
           <p className="text-ink-500 mt-6 leading-relaxed">{product.description}</p>
           <p className="text-sm text-ink-500 mt-4">

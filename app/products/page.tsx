@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import type { Product } from "@/lib/types";
 import { useCart } from "@/components/CartProvider";
 import { CATEGORIES } from "@/lib/categories";
+import { formatAUD } from "@/lib/currency";
 
 function ProductsPageContent() {
   const searchParams = useSearchParams();
@@ -95,7 +96,7 @@ function ProductsPageContent() {
                   {p.name}
                 </h2>
               </Link>
-              <p className="text-brand-400 font-semibold mt-2">${p.price.toFixed(2)}</p>
+              <p className="text-brand-400 font-semibold mt-2">{formatAUD(p.price)}</p>
               <button
                 type="button"
                 onClick={() =>

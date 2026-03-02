@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Outfit } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
+import { AuthProvider } from "@/components/AuthProvider";
 import { Nav } from "@/components/Nav";
 
 const dmSans = DM_Sans({
@@ -27,7 +28,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${dmSans.variable} ${outfit.variable}`}>
       <body className="min-h-screen flex flex-col">
-        <CartProvider>
+        <AuthProvider>
+          <CartProvider>
           <Nav />
           <main className="flex-1">{children}</main>
           <footer className="border-t border-ink-800 py-8 mt-auto">
@@ -35,7 +37,8 @@ export default function RootLayout({
               © {new Date().getFullYear()} BOUKALI INTERNATIONAL. Buy & sell with confidence.
             </div>
           </footer>
-        </CartProvider>
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );
