@@ -9,7 +9,7 @@ export default function AdminJobsPage() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     title: "",
-    company: "BOUKALI INTERNATIONAL",
+    company: "Miaha international market",
     location: "",
     type: "full-time" as Job["type"],
     description: "",
@@ -33,7 +33,7 @@ export default function AdminJobsPage() {
     });
     setForm({
       title: "",
-      company: "BOUKALI INTERNATIONAL",
+      company: "Miaha international market",
       location: "",
       type: "full-time",
       description: "",

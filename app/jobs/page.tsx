@@ -24,7 +24,7 @@ export default function JobsPage() {
         Job search
       </h1>
       <p className="text-ink-500 mb-6">
-        Find opportunities at BOUKALI INTERNATIONAL.
+        Find opportunities at Miaha international market.
       </p>
       <div className="max-w-xl mb-8">
         <input

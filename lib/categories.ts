@@ -1,4 +1,4 @@
-/** All markets/categories BOUKALI INTERNATIONAL targets */
+/** All markets/categories Miaha international market targets */
 export const CATEGORIES = [
   "Agriculture",
   "Seeds",

@@ -13,7 +13,7 @@ export function Nav() {
     <header className="sticky top-0 z-50 border-b border-ink-800 bg-ink-950/90 backdrop-blur">
       <div className="container mx-auto px-4 h-14 flex items-center justify-between">
         <Link href="/" className="font-display font-semibold text-xl text-stone-100">
-          BOUKALI INTERNATIONAL
+          Miaha international market
         </Link>
         <nav className="flex items-center gap-5">
           <Link href="/" className="btn-ghost text-sm font-medium">

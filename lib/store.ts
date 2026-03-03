@@ -217,7 +217,7 @@ const defaultJobs: Job[] = [
   {
     id: "1",
     title: "Sales Associate",
-    company: "BOUKALI INTERNATIONAL",
+    company: "Miaha international market",
     location: "Remote",
     type: "full-time",
     description: "Support customers and drive sales for our product catalog.",
@@ -226,7 +226,7 @@ const defaultJobs: Job[] = [
   {
     id: "2",
     title: "Marketing Coordinator",
-    company: "BOUKALI INTERNATIONAL",
+    company: "Miaha international market",
     location: "Remote",
     type: "part-time",
     description: "Help with digital marketing and social media.",
@@ -235,7 +235,7 @@ const defaultJobs: Job[] = [
   {
     id: "3",
     title: "Warehouse Assistant",
-    company: "BOUKALI INTERNATIONAL",
+    company: "Miaha international market",
     location: "On-site",
     type: "full-time",
     description: "Manage inventory and fulfill orders.",

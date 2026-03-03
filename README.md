@@ -1,4 +1,4 @@
-# BOUKALI INTERNATIONAL — Buy & Sell
+# Miaha international market — Buy & Sell
 
 A full-stack e-commerce website where people can **buy products**, **find services** (plumber, electrician, painter, etc.), **search jobs**, and you can **manage everything** from a protected admin area.
 

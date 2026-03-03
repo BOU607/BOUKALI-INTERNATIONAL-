@@ -21,8 +21,8 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "BOUKALI INTERNATIONAL — Buy & Sell",
-  description: "BOUKALI INTERNATIONAL – your place to buy and sell products online.",
+  title: "Miaha international market — Buy & Sell",
+  description: "Miaha international market – your place to buy and sell products online.",
 };
 
 export default async function RootLayout({
