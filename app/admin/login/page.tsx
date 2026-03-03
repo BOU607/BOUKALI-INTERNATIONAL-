@@ -73,6 +73,9 @@ export default function AdminLoginPage() {
           >
             {loading ? "Signing in…" : "Sign in"}
           </button>
+          <p className="text-ink-500 text-xs mt-3">
+            Forgot password? Set a new one in Vercel → your project → Settings → Environment Variables → <code className="bg-ink-800 px-1 rounded">ADMIN_PASSWORD</code>, then redeploy.
+          </p>
         </form>
         <Link href="/" className="block text-center text-ink-500 text-sm mt-6 hover:text-stone-300">
           ← Back to store
