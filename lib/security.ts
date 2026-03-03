@@ -32,7 +32,7 @@ export function isValidNumber(value: unknown, min: number, max: number): boolean
 }
 
 export type OrderPayload = {
-  items?: Array unknown;
+  items?: unknown[];
   total?: unknown;
   customer?: { name?: unknown; email?: unknown; address?: unknown };
 };
