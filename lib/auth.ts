@@ -11,13 +11,12 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const email = process.env.ADMIN_EMAIL;
-        const password = process.env.ADMIN_PASSWORD;
+        const email = process.env.ADMIN_EMAIL?.trim();
+        const password = process.env.ADMIN_PASSWORD?.trim();
         if (!email || !password) return null;
-        if (
-          credentials?.email === email &&
-          credentials?.password === password
-        ) {
+        const inputEmail = credentials?.email?.trim().toLowerCase() ?? "";
+        const inputPassword = (credentials?.password ?? "").trim();
+        if (inputEmail === email.trim().toLowerCase() && inputPassword === password) {
           return { id: "1", email, name: "Admin" };
         }
         return null;
