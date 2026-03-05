@@ -7,6 +7,7 @@ import {
   sanitizeOrderItems,
   sanitizeString,
 } from "@/lib/security";
+import { getLocationFromRequest } from "@/lib/geo";
 
 const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY)
@@ -67,6 +68,7 @@ export async function POST(req: NextRequest) {
     address: sanitizeString(payload.customer.address, 500),
   };
 
+  const visitorLocation = getLocationFromRequest(req);
   const order: Order = {
     id: orderId,
     items: items as OrderItem[],
@@ -74,6 +76,7 @@ export async function POST(req: NextRequest) {
     customer,
     status: "pending",
     createdAt: new Date().toISOString(),
+    visitorLocation: Object.keys(visitorLocation).length > 0 ? visitorLocation : undefined,
   };
   addOrder(order);
 

@@ -57,6 +57,14 @@ export default function AdminOrdersPage() {
                   {order.customer.name} — {order.customer.email}
                 </p>
                 <p className="text-sm text-ink-500 mt-1">{order.customer.address}</p>
+                {order.visitorLocation && (
+                  <p className="text-xs text-brand-400 mt-1">
+                    Location: {[order.visitorLocation.city, order.visitorLocation.countryRegion, order.visitorLocation.country].filter(Boolean).join(", ") || "—"}
+                    {order.visitorLocation.latitude && order.visitorLocation.longitude && (
+                      <span className="text-ink-500 ml-1">({order.visitorLocation.latitude}, {order.visitorLocation.longitude})</span>
+                    )}
+                  </p>
+                )}
                 <p className="text-xs text-ink-500 mt-2">
                   {new Date(order.createdAt).toLocaleString()}
                 </p>

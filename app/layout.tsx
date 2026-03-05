@@ -7,6 +7,7 @@ import { AuthProvider } from "@/components/AuthProvider";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
+import { VisitLogger } from "@/components/VisitLogger";
 import { DEFAULT_LOCALE, LOCALES } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 
@@ -45,6 +46,7 @@ export default async function RootLayout({
         <AuthProvider>
           <LanguageProvider initialLocale={locale}>
             <CartProvider>
+              <VisitLogger />
               <Nav />
               <main className="flex-1">{children}</main>
               <Footer />

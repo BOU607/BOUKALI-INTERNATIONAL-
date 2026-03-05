@@ -7,6 +7,7 @@ import {
   sanitizeOrderItems,
   sanitizeString,
 } from "@/lib/security";
+import { getLocationFromRequest } from "@/lib/geo";
 
 /** GET orders: admin only — prevents data leak to unauthenticated users */
 export async function GET(req: NextRequest) {
@@ -56,6 +57,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid total" }, { status: 400 });
   }
 
+  const visitorLocation = getLocationFromRequest(req);
   const order: Order = {
     id: `ord-${Date.now()}`,
     items,
@@ -67,6 +69,7 @@ export async function POST(req: NextRequest) {
     },
     status: "pending",
     createdAt: new Date().toISOString(),
+    visitorLocation: Object.keys(visitorLocation).length > 0 ? visitorLocation : undefined,
   };
   addOrder(order);
   return NextResponse.json(order);

@@ -1,4 +1,4 @@
-import type { Product, Order, Job, Service } from "./types";
+import type { Product, Order, Job, Service, Visit } from "./types";
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
 import { join } from "path";
 
@@ -7,6 +7,8 @@ const PRODUCTS_FILE = join(DATA_DIR, "products.json");
 const ORDERS_FILE = join(DATA_DIR, "orders.json");
 const JOBS_FILE = join(DATA_DIR, "jobs.json");
 const SERVICES_FILE = join(DATA_DIR, "services.json");
+const VISITS_FILE = join(DATA_DIR, "visits.json");
+const MAX_VISITS = 500;
 
 const defaultProducts: Product[] = [
   {
@@ -211,6 +213,38 @@ export function updateOrderStatus(orderId: string, status: Order["status"]) {
     writeOrders(orders);
   }
   return order;
+}
+
+function readVisits(): Visit[] {
+  ensureDataDir();
+  if (!existsSync(VISITS_FILE)) return [];
+  return JSON.parse(readFileSync(VISITS_FILE, "utf-8"));
+}
+
+function writeVisits(visits: Visit[]) {
+  ensureDataDir();
+  writeFileSync(VISITS_FILE, JSON.stringify(visits, null, 2));
+}
+
+export function addVisit(visit: Omit<Visit, "id" | "createdAt">) {
+  const visits = readVisits();
+  const entry: Visit = {
+    ...visit,
+    id: `v-${Date.now()}`,
+    createdAt: new Date().toISOString(),
+  };
+  visits.unshift(entry);
+  if (visits.length > MAX_VISITS) visits.length = MAX_VISITS;
+  try {
+    writeVisits(visits);
+  } catch {
+    // Read-only filesystem (e.g. Vercel serverless); visits won't persist.
+  }
+  return entry;
+}
+
+export function getVisits(): Visit[] {
+  return readVisits();
 }
 
 const defaultJobs: Job[] = [
