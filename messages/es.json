@@ -5,8 +5,18 @@
     "services": "Servicios",
     "jobs": "Empleos",
     "cart": "Carrito",
+    "trackOrder": "Seguir pedido",
     "admin": "Admin",
     "language": "Idioma"
+  },
+  "trackOrder": {
+    "title": "Seguir tu pedido",
+    "enterDetails": "Introduce el número de pedido y tu email para ver el estado y los productos.",
+    "orderId": "Nº de pedido",
+    "email": "Email",
+    "track": "Seguir pedido",
+    "checking": "Comprobando…",
+    "placed": "Realizado"
   },
   "home": {
     "title": "Compra y vende con confianza",

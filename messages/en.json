@@ -5,8 +5,18 @@
     "services": "Services",
     "jobs": "Jobs",
     "cart": "Cart",
+    "trackOrder": "Track order",
     "admin": "Admin",
     "language": "Language"
+  },
+  "trackOrder": {
+    "title": "Track your order",
+    "enterDetails": "Enter your order ID and email to see status and items.",
+    "orderId": "Order ID",
+    "email": "Email",
+    "track": "Track order",
+    "checking": "Checking…",
+    "placed": "Placed"
   },
   "home": {
     "title": "Buy & sell with confidence",

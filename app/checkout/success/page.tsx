@@ -55,7 +55,12 @@ export default function CheckoutSuccessPage() {
       <div className="card p-8">
         <h1 className="font-display text-2xl font-semibold text-stone-100">Payment successful</h1>
         <p className="text-ink-500 mt-2">Thank you for your purchase.</p>
-        {orderId && <p className="mt-4 text-sm text-brand-400 font-mono">{orderId}</p>}
+        {orderId && (
+          <>
+            <p className="mt-4 text-sm text-brand-400 font-mono">{orderId}</p>
+            <p className="mt-2 text-xs text-ink-500">Save this order ID. You can track your order anytime from the menu → Track order.</p>
+          </>
+        )}
         <Link href="/products" className="btn-primary mt-8 inline-block">Continue shopping</Link>
       </div>
     </div>

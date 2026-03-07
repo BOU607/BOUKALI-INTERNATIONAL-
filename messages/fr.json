@@ -5,8 +5,18 @@
     "services": "Services",
     "jobs": "Emplois",
     "cart": "Panier",
+    "trackOrder": "Suivi de commande",
     "admin": "Admin",
     "language": "Langue"
+  },
+  "trackOrder": {
+    "title": "Suivre votre commande",
+    "enterDetails": "Entrez le numéro de commande et votre e-mail pour voir le statut et les articles.",
+    "orderId": "N° de commande",
+    "email": "E-mail",
+    "track": "Suivre la commande",
+    "checking": "Vérification…",
+    "placed": "Passée le"
   },
   "home": {
     "title": "Achetez et vendez en toute confiance",

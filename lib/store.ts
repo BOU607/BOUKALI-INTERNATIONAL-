@@ -198,6 +198,10 @@ export function getOrders(): Order[] {
   return readOrders();
 }
 
+export function getOrderById(orderId: string): Order | undefined {
+  return readOrders().find((o) => o.id === orderId);
+}
+
 export function addOrder(order: Order) {
   const orders = readOrders();
   orders.unshift(order);

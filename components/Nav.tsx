@@ -29,6 +29,9 @@ export function Nav() {
           <Link href="/jobs" className="btn-ghost text-sm">
             {t("nav.jobs")}
           </Link>
+          <Link href="/track-order" className="btn-ghost text-sm">
+            {t("nav.trackOrder")}
+          </Link>
           <Link href="/cart" className="btn-ghost text-sm relative">
             {t("nav.cart")}
             {totalItems > 0 && (
