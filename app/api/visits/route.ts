@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { getVisits } from "@/lib/visits-persist";
+import { getVisits, isKvConfigured } from "@/lib/visits-persist";
 
 /** GET recent visits (admin only) — list of connections with detected location */
 export async function GET(req: NextRequest) {
@@ -18,5 +18,5 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const visits = await getVisits();
-  return NextResponse.json(visits);
+  return NextResponse.json({ visits, kvConfigured: isKvConfigured() });
 }

@@ -4,8 +4,21 @@ import { addVisit as addVisitFile, getVisits as getVisitsFile } from "./store";
 const MAX_VISITS = 500;
 const KV_KEY = "miaha:visits";
 
+/** Read Redis/KV credentials at runtime (supports both KV_* and UPSTASH_* names). */
+function getKvCreds(): { url: string; token: string } | null {
+  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (url && token) return { url, token };
+  return null;
+}
+
+/** Whether Redis/KV env vars are set (for admin UI status). */
+export function isKvConfigured(): boolean {
+  return getKvCreds() !== null;
+}
+
 /**
- * Add a visit. Uses Vercel KV when KV_REST_API_URL is set (so visits persist on Vercel), otherwise file.
+ * Add a visit. Uses Redis (KV or Upstash) when env vars are set, otherwise file.
  */
 export async function addVisit(visit: Omit<Visit, "id" | "createdAt">): Promise<Visit> {
   const entry: Visit = {
@@ -14,9 +27,11 @@ export async function addVisit(visit: Omit<Visit, "id" | "createdAt">): Promise<
     createdAt: new Date().toISOString(),
   };
 
-  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+  const creds = getKvCreds();
+  if (creds) {
     try {
-      const { kv } = await import("@vercel/kv");
+      const { createClient } = await import("@vercel/kv");
+      const kv = createClient({ url: creds.url, token: creds.token });
       await kv.lpush(KV_KEY, entry);
       await kv.ltrim(KV_KEY, 0, MAX_VISITS - 1);
       return entry;
@@ -30,12 +45,14 @@ export async function addVisit(visit: Omit<Visit, "id" | "createdAt">): Promise<
 }
 
 /**
- * Get recent visits. Uses Vercel KV when configured, otherwise file.
+ * Get recent visits. Uses Redis when configured, otherwise file.
  */
 export async function getVisits(): Promise<Visit[]> {
-  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+  const creds = getKvCreds();
+  if (creds) {
     try {
-      const { kv } = await import("@vercel/kv");
+      const { createClient } = await import("@vercel/kv");
+      const kv = createClient({ url: creds.url, token: creds.token });
       const list = (await kv.lrange(KV_KEY, 0, MAX_VISITS - 1)) as Visit[] | null;
       return Array.isArray(list) ? list : [];
     } catch (e) {

@@ -10,12 +10,21 @@ function formatLoc(v: Visit): string {
 
 export default function AdminVisitorsPage() {
   const [visits, setVisits] = useState<Visit[]>([]);
+  const [kvConfigured, setKvConfigured] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/visits")
       .then((r) => r.json())
-      .then(setVisits)
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setVisits(data);
+          setKvConfigured(null);
+        } else {
+          setVisits(data.visits ?? []);
+          setKvConfigured(data.kvConfigured ?? null);
+        }
+      })
       .catch(() => setVisits([]))
       .finally(() => setLoading(false));
   }, []);
@@ -37,7 +46,9 @@ export default function AdminVisitorsPage() {
       </h2>
       <p className="text-sm text-ink-500 mb-6">
         Approximate location detected when someone loads the site (from IP). Last {visits.length} connections.
-        On Vercel, add a KV store and set KV_REST_API_URL + KV_REST_API_TOKEN so visits persist.
+        {kvConfigured === true && " Storage: Redis (KV configured)."}
+        {kvConfigured === false && " Storage: not configured — set KV_REST_API_URL + KV_REST_API_TOKEN (or UPSTASH_* ) on Vercel so visits persist."}
+        {kvConfigured === null && " On Vercel, add a KV store and set KV_REST_API_URL + KV_REST_API_TOKEN so visits persist."}
       </p>
       <div className="space-y-2">
         {visits.map((v) => (
