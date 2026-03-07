@@ -36,7 +36,8 @@ export async function addVisit(visit: Omit<Visit, "id" | "createdAt">): Promise<
       await kv.ltrim(KV_KEY, 0, MAX_VISITS - 1);
       return entry;
     } catch (e) {
-      console.warn("KV addVisit failed:", e);
+      // Don't fall back to file on Vercel (read-only FS). Surface the real Redis error.
+      throw e;
     }
   }
 
