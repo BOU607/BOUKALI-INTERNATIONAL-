@@ -31,7 +31,17 @@
     "oilGas": "نفط وغاز",
     "spareParts": "قطع غيار",
     "usedCar": "سيارة مستعملة",
-    "usedJewellery": "مجوهرات مستعملة"
+    "usedJewellery": "مجوهرات مستعملة",
+    "animalsFeeds": "أعلاف حيوانية",
+    "quincaillerie": "أدوات معدنية",
+    "pharmacognosy": "علم العقاقير",
+    "medicinalPlants": "نباتات طبية",
+    "kidsClothesShoes": "ملابس وأحذية أطفال",
+    "newFashion": "أحدث الأزياء في السوق",
+    "electricalTools": "أدوات ومعدات كهربائية",
+    "constructionMaterials": "مواد وأدوات البناء",
+    "paintsAndTools": "الدهانات والأدوات",
+    "cowsSheepHorses": "أبقار، أغنام وخيول"
   },
   "cart": {
     "title": "سلتك",

@@ -16,6 +16,16 @@ const CATEGORY_KEYS: Record<string, string> = {
   "Spare Parts": "categories.spareParts",
   "Used Car": "categories.usedCar",
   "Used Jewellery": "categories.usedJewellery",
+  "Animals Feeds": "categories.animalsFeeds",
+  Quincaillerie: "categories.quincaillerie",
+  Pharmacognosy: "categories.pharmacognosy",
+  "Medicinal plants": "categories.medicinalPlants",
+  "Kids clothes and shoes": "categories.kidsClothesShoes",
+  "New Fashion in the market": "categories.newFashion",
+  "Electrical tools and equipment": "categories.electricalTools",
+  "Construction materials and tools": "categories.constructionMaterials",
+  "Paints and tools": "categories.paintsAndTools",
+  "Cows, sheep and horses": "categories.cowsSheepHorses",
 };
 
 function ProductsPageContent() {

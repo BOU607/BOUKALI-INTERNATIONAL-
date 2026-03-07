@@ -31,7 +31,17 @@
     "oilGas": "Oil & Gas",
     "spareParts": "Spare Parts",
     "usedCar": "Used Car",
-    "usedJewellery": "Used Jewellery"
+    "usedJewellery": "Used Jewellery",
+    "animalsFeeds": "Animals Feeds",
+    "quincaillerie": "Quincaillerie",
+    "pharmacognosy": "Pharmacognosy",
+    "medicinalPlants": "Medicinal plants",
+    "kidsClothesShoes": "Kids clothes and shoes",
+    "newFashion": "New Fashion in the market",
+    "electricalTools": "Electrical tools and equipment",
+    "constructionMaterials": "Construction materials and tools",
+    "paintsAndTools": "Paints and tools",
+    "cowsSheepHorses": "Cows, sheep and horses"
   },
   "cart": {
     "title": "Your cart",

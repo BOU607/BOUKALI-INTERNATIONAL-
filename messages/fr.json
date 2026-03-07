@@ -31,7 +31,16 @@
     "oilGas": "Pétrole et gaz",
     "spareParts": "Pièces détachées",
     "usedCar": "Voiture d'occasion",
-    "usedJewellery": "Bijoux d'occasion"
+    "usedJewellery": "Bijoux d'occasion",
+    "animalsFeeds": "Aliments pour animaux",
+    "quincaillerie": "Quincaillerie",
+    "pharmacognosy": "Pharmacognosie",
+    "medicinalPlants": "Plantes médicinales",
+    "kidsClothesShoes": "Vêtements et chaussures enfants",
+    "newFashion": "Nouvelle mode sur le marché",
+    "electricalTools": "Outils et équipements électriques",
+    "constructionMaterials": "Matériaux et outils de construction",
+    "paintsAndTools": "Peintures et outils"
   },
   "cart": {
     "title": "Votre panier",
