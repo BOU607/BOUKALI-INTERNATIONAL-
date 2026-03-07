@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useI18n } from "@/components/LanguageProvider";
 import { formatAUD } from "@/lib/currency";
 
-type OrderStatus = "pending" | "paid" | "shipped" | "delivered";
+type OrderStatus = "pending" | "paid" | "shipped" | "delivered" | "refunded";
 
 type TrackedOrder = {
   id: string;
@@ -20,6 +20,7 @@ const STATUS_LABELS: Record<OrderStatus, string> = {
   paid: "Paid",
   shipped: "Shipped",
   delivered: "Delivered",
+  refunded: "Refunded",
 };
 
 export default function TrackOrderPage() {
@@ -99,13 +100,15 @@ export default function TrackOrderPage() {
             <span className="text-ink-500 text-sm">{t("trackOrder.orderId")}: {order.id}</span>
             <span
               className={`px-3 py-1 rounded-full text-sm font-medium ${
-                order.status === "delivered"
-                  ? "bg-green-500/20 text-green-400"
-                  : order.status === "shipped"
-                    ? "bg-blue-500/20 text-blue-400"
-                    : order.status === "paid"
-                      ? "bg-amber-500/20 text-amber-400"
-                      : "bg-ink-700 text-ink-300"
+                order.status === "refunded"
+                  ? "bg-red-500/20 text-red-400"
+                  : order.status === "delivered"
+                    ? "bg-green-500/20 text-green-400"
+                    : order.status === "shipped"
+                      ? "bg-blue-500/20 text-blue-400"
+                      : order.status === "paid"
+                        ? "bg-amber-500/20 text-amber-400"
+                        : "bg-ink-700 text-ink-300"
               }`}
             >
               {STATUS_LABELS[order.status]}

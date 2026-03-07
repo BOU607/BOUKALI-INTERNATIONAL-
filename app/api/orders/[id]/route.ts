@@ -3,7 +3,7 @@ import { getToken } from "next-auth/jwt";
 import { updateOrderStatus } from "@/lib/store";
 import type { Order } from "@/lib/types";
 
-const VALID_STATUSES: Order["status"][] = ["pending", "paid", "shipped", "delivered"];
+const VALID_STATUSES: Order["status"][] = ["pending", "paid", "shipped", "delivered", "refunded"];
 
 /** PATCH order status: admin only */
 export async function PATCH(

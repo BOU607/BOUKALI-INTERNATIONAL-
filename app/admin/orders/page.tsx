@@ -83,13 +83,15 @@ export default function AdminOrdersPage() {
               <div className="flex items-center gap-2 flex-shrink-0">
                 <span
                   className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-                    order.status === "delivered"
-                      ? "bg-green-500/20 text-green-400"
-                      : order.status === "shipped"
-                        ? "bg-blue-500/20 text-blue-400"
-                        : order.status === "paid"
-                          ? "bg-brand-500/20 text-brand-400"
-                          : "bg-ink-600 text-ink-400"
+                    order.status === "refunded"
+                      ? "bg-red-500/20 text-red-400"
+                      : order.status === "delivered"
+                        ? "bg-green-500/20 text-green-400"
+                        : order.status === "shipped"
+                          ? "bg-blue-500/20 text-blue-400"
+                          : order.status === "paid"
+                            ? "bg-brand-500/20 text-brand-400"
+                            : "bg-ink-600 text-ink-400"
                   }`}
                 >
                   {order.status}
@@ -105,6 +107,7 @@ export default function AdminOrdersPage() {
                   <option value="paid">Paid</option>
                   <option value="shipped">Shipped</option>
                   <option value="delivered">Delivered</option>
+                  <option value="refunded">Refunded</option>
                 </select>
               </div>
             </div>

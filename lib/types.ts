@@ -41,7 +41,7 @@ export type Order = {
   items: OrderItem[];
   total: number;
   customer: { name: string; email: string; address: string };
-  status: "pending" | "paid" | "shipped" | "delivered";
+  status: "pending" | "paid" | "shipped" | "delivered" | "refunded";
   createdAt: string;
   /** Detected location when order was placed (from request IP) */
   visitorLocation?: OrderLocation;
