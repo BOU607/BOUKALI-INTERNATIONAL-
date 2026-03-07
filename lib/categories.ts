@@ -7,6 +7,8 @@ export const CATEGORIES = [
   "Oil & Gas Equipment",
   "Spare Parts",
   "Electronics",
+  "Computer and Laptop",
+  "Household appliances",
   "Used Car",
   "Used Jewellery",
   "Animals Feeds",

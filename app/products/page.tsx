@@ -24,6 +24,8 @@ const CATEGORY_KEYS: Record<string, string> = {
   "New Fashion in the market": "categories.newFashion",
   "Electrical tools and equipment": "categories.electricalTools",
   "Construction materials and tools": "categories.constructionMaterials",
+  "Computer and Laptop": "categories.computerLaptop",
+  "Household appliances": "categories.householdAppliances",
   "Paints and tools": "categories.paintsAndTools",
   "Cows, sheep and horses": "categories.cowsSheepHorses",
 };
