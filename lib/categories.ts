@@ -24,3 +24,28 @@ export const CATEGORIES = [
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];
+
+/** Background image URL per category for Shop by category cards (Unsplash placeholders; replace with your own) */
+export const CATEGORY_BACKGROUND_IMAGES: Partial<Record<Category, string>> = {
+  Agriculture: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400",
+  Seeds: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400",
+  "Men's Clothing": "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=400",
+  "Women's Clothing": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400",
+  "Oil & Gas Equipment": "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400",
+  "Spare Parts": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400",
+  Electronics: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400",
+  "Computer and Laptop": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400",
+  "Household appliances": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400",
+  "Used Car": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400",
+  "Used Jewellery": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400",
+  "Animals Feeds": "https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=400",
+  Quincaillerie: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400",
+  Pharmacognosy: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=400",
+  "Medicinal plants": "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=400",
+  "Kids clothes and shoes": "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=400",
+  "New Fashion in the market": "https://images.unsplash.com/photo-1445205170230-053b83016050?w=400",
+  "Electrical tools and equipment": "https://images.unsplash.com/photo-1589939705384-5185137a739f?w=400",
+  "Construction materials and tools": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400",
+  "Paints and tools": "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400",
+  "Cows, sheep and horses": "https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=400",
+};

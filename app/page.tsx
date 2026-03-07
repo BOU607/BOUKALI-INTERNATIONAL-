@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CATEGORIES } from "@/lib/categories";
+import { CATEGORIES, CATEGORY_BACKGROUND_IMAGES } from "@/lib/categories";
 import { useI18n } from "@/components/LanguageProvider";
 
 const CATEGORY_KEYS: Record<string, string> = {
@@ -59,21 +59,28 @@ export default function HomePage() {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           <Link
             href="/products"
-            className="card p-4 text-center hover:border-brand-500/50 transition-colors"
+            className="card p-4 text-center hover:border-brand-500/50 transition-colors min-h-[100px] flex items-center justify-center"
           >
             <span className="text-stone-200 font-medium">{t("home.all")}</span>
           </Link>
-          {CATEGORIES.map((cat) => (
-            <Link
-              key={cat}
-              href={`/products?category=${encodeURIComponent(cat)}`}
-              className="card p-4 text-center hover:border-brand-500/50 transition-colors"
-            >
-              <span className="text-stone-200 font-medium">
-                {CATEGORY_KEYS[cat] ? t(CATEGORY_KEYS[cat]) : cat}
-              </span>
-            </Link>
-          ))}
+          {CATEGORIES.map((cat) => {
+            const bgImage = CATEGORY_BACKGROUND_IMAGES[cat];
+            return (
+              <Link
+                key={cat}
+                href={`/products?category=${encodeURIComponent(cat)}`}
+                className="relative overflow-hidden rounded-xl min-h-[100px] flex items-center justify-center p-4 border border-ink-800 hover:border-brand-500/50 transition-colors group"
+                style={bgImage ? { backgroundImage: `url(${bgImage})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
+              >
+                {bgImage && (
+                  <span className="absolute inset-0 bg-black/60 group-hover:bg-black/50 transition-colors" aria-hidden />
+                )}
+                <span className="relative z-10 text-stone-100 font-medium text-center text-sm drop-shadow-md">
+                  {CATEGORY_KEYS[cat] ? t(CATEGORY_KEYS[cat]) : cat}
+                </span>
+              </Link>
+            );
+          })}
         </div>
       </section>
       <section className="mt-24 w-full max-w-4xl">
