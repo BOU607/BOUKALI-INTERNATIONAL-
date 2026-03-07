@@ -40,7 +40,8 @@
     "newFashion": "Nouvelle mode sur le marché",
     "electricalTools": "Outils et équipements électriques",
     "constructionMaterials": "Matériaux et outils de construction",
-    "paintsAndTools": "Peintures et outils"
+    "paintsAndTools": "Peintures et outils",
+    "cowsSheepHorses": "Vaches, moutons et chevaux"
   },
   "cart": {
     "title": "Votre panier",
