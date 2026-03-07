@@ -3,8 +3,18 @@
 import { useEffect, useState } from "react";
 import type { Visit } from "@/lib/types";
 
+/** Decode URL-encoded text (e.g. Santa%20Clara → Santa Clara) for display. */
+function decodeLoc(s: string | undefined): string {
+  if (!s) return "";
+  try {
+    return decodeURIComponent(s);
+  } catch {
+    return s;
+  }
+}
+
 function formatLoc(v: Visit): string {
-  const parts = [v.city, v.countryRegion, v.country].filter(Boolean);
+  const parts = [v.city, v.countryRegion, v.country].filter(Boolean).map(decodeLoc);
   return parts.length ? parts.join(", ") : "—";
 }
 
@@ -40,7 +50,7 @@ export default function AdminVisitorsPage() {
     fetch("/api/visit")
       .then((r) => r.json())
       .then((data) => {
-        const loc = [data.city, data.countryRegion, data.country].filter(Boolean).join(", ") || "—";
+        const loc = [data.city, data.countryRegion, data.country].filter(Boolean).map(decodeLoc).join(", ") || "—";
         if (data.recorded === true) {
           setTestResult(`Recorded: yes. Location: ${loc}`);
           loadVisits();
