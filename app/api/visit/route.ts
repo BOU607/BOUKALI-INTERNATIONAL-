@@ -10,8 +10,9 @@ export async function GET(req: NextRequest) {
   const location = getLocationFromRequest(req);
   try {
     await addVisit(location);
-  } catch {
-    // Ignore persist errors
+    return NextResponse.json({ ...location, recorded: true });
+  } catch (e) {
+    const message = e instanceof Error ? e.message : "Could not save visit";
+    return NextResponse.json({ ...location, recorded: false, error: message }, { status: 200 });
   }
-  return NextResponse.json(location);
 }

@@ -12,9 +12,11 @@ export default function AdminVisitorsPage() {
   const [visits, setVisits] = useState<Visit[]>([]);
   const [kvConfigured, setKvConfigured] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
+  const [testResult, setTestResult] = useState<string | null>(null);
+  const [testing, setTesting] = useState(false);
 
-  useEffect(() => {
-    fetch("/api/visits")
+  const loadVisits = () => {
+    return fetch("/api/visits")
       .then((r) => r.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -25,9 +27,30 @@ export default function AdminVisitorsPage() {
           setKvConfigured(data.kvConfigured ?? null);
         }
       })
-      .catch(() => setVisits([]))
-      .finally(() => setLoading(false));
+      .catch(() => setVisits([]));
+  };
+
+  useEffect(() => {
+    loadVisits().finally(() => setLoading(false));
   }, []);
+
+  const runTestVisit = () => {
+    setTesting(true);
+    setTestResult(null);
+    fetch("/api/visit")
+      .then((r) => r.json())
+      .then((data) => {
+        const loc = [data.city, data.countryRegion, data.country].filter(Boolean).join(", ") || "—";
+        if (data.recorded === true) {
+          setTestResult(`Recorded: yes. Location: ${loc}`);
+          loadVisits();
+        } else {
+          setTestResult(`Recorded: no. Location: ${loc}. ${data.error ? `Error: ${data.error}` : ""}`);
+        }
+      })
+      .catch((err) => setTestResult(`Request failed: ${err.message}`))
+      .finally(() => setTesting(false));
+  };
 
   if (loading) {
     return (
@@ -50,6 +73,24 @@ export default function AdminVisitorsPage() {
         {kvConfigured === false && " Storage: not configured — set KV_REST_API_URL + KV_REST_API_TOKEN (or UPSTASH_* ) on Vercel so visits persist."}
         {kvConfigured === null && " On Vercel, add a KV store and set KV_REST_API_URL + KV_REST_API_TOKEN so visits persist."}
       </p>
+      <div className="flex flex-wrap items-center gap-3 mb-6">
+        <button
+          type="button"
+          onClick={runTestVisit}
+          disabled={testing}
+          className="btn-primary"
+        >
+          {testing ? "Testing…" : "Test visit now"}
+        </button>
+        <button type="button" onClick={() => { loadVisits(); setTestResult(null); }} className="btn-secondary">
+          Refresh list
+        </button>
+      </div>
+      {testResult && (
+        <p className="text-sm text-stone-300 mb-4 p-3 rounded bg-stone-800/50">
+          {testResult}
+        </p>
+      )}
       <div className="space-y-2">
         {visits.map((v) => (
           <div key={v.id} className="card p-4 flex flex-wrap items-center justify-between gap-2">
