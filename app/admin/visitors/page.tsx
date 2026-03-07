@@ -7,9 +7,10 @@ import type { Visit } from "@/lib/types";
 function decodeLoc(s: string | undefined): string {
   if (!s) return "";
   try {
-    return decodeURIComponent(s);
+    const decoded = decodeURIComponent(s);
+    return decoded.replace(/%20/g, " ");
   } catch {
-    return s;
+    return s.replace(/%20/g, " ");
   }
 }
 
