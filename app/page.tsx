@@ -47,8 +47,11 @@ export default function HomePage() {
           <Link href="/jobs" className="btn-secondary text-base px-6 py-3">
             {t("home.findJobs")}
           </Link>
-          <Link href="/admin" className="btn-secondary text-base px-6 py-3">
+          <Link href="/sell" className="btn-secondary text-base px-6 py-3">
             {t("home.sellOn")}
+          </Link>
+          <Link href="/trust" className="btn-ghost text-base px-6 py-3 text-ink-400 hover:text-stone-200">
+            {t("nav.trust")}
           </Link>
         </div>
       </div>

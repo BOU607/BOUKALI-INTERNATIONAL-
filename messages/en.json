@@ -6,8 +6,43 @@
     "jobs": "Jobs",
     "cart": "Cart",
     "trackOrder": "Track order",
+    "trust": "Trust & Safety",
+    "sell": "Sell with us",
+    "contact": "Contact",
     "admin": "Admin",
     "language": "Language"
+  },
+  "trust": {
+    "title": "Trust, Safety & Security",
+    "subtitle": "We are committed to honest, secure trading for both buyers and sellers.",
+    "buySafeTitle": "Buy with confidence",
+    "buy1": "Secure payment: card or bank transfer with clear confirmation.",
+    "buy2": "Honest listings: we aim for accurate product descriptions and fair pricing.",
+    "buy3": "Order tracking: follow your order from placement to delivery.",
+    "buy4": "Support: contact us if something is wrong; we take complaints seriously.",
+    "sellSafeTitle": "Sell with confidence",
+    "sell1": "Secure platform: your listings and sales data are protected.",
+    "sell2": "Fair dealing: we treat all sellers with respect and transparency.",
+    "sell3": "Timely payments: clear process for receiving what you earn.",
+    "sell4": "Support: we help resolve disputes and protect both sides.",
+    "commitmentTitle": "Our commitment",
+    "commitment": "Miaha international market is built on safety, honesty and security. We do not tolerate fraud or misuse. Whether you buy or sell, we want you to feel protected and respected. If you have a concern, contact us.",
+    "contactUs": "Contact us"
+  },
+  "sell": {
+    "title": "Sell with us",
+    "subtitle": "Join our marketplace and reach buyers worldwide. We keep it safe and fair for everyone.",
+    "step1": "Contact us to become a seller. Tell us what you sell and your business details.",
+    "step2": "We set up your access so you can list your products safely on our platform.",
+    "step3": "You receive orders; we help keep payments and communication secure.",
+    "trustNote": "We take safety and honesty seriously. See our Trust & Safety page for how we protect buyers and sellers.",
+    "contactToSell": "Contact us to sell"
+  },
+  "contact": {
+    "title": "Contact us",
+    "subtitle": "Questions, concerns or want to become a seller? Get in touch.",
+    "emailLabel": "Email us at:",
+    "note": "We aim to reply within 1–2 business days. For order issues, include your order ID."
   },
   "trackOrder": {
     "title": "Track your order",
@@ -100,6 +135,9 @@
   },
   "footer": {
     "copyright": "Miaha international market. Buy & sell with confidence.",
-    "availableWorldwide": "Available worldwide — use your language above."
+    "availableWorldwide": "Available worldwide — use your language above.",
+    "trust": "Trust & Safety",
+    "sell": "Sell with us",
+    "contact": "Contact"
   }
 }

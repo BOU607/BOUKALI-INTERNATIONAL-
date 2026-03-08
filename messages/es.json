@@ -6,8 +6,43 @@
     "jobs": "Empleos",
     "cart": "Carrito",
     "trackOrder": "Seguir pedido",
+    "trust": "Confianza y seguridad",
+    "sell": "Vende con nosotros",
+    "contact": "Contacto",
     "admin": "Admin",
     "language": "Idioma"
+  },
+  "trust": {
+    "title": "Confianza, seguridad y protección",
+    "subtitle": "Estamos comprometidos con el comercio honesto y seguro para compradores y vendedores.",
+    "buySafeTitle": "Compra con confianza",
+    "buy1": "Pago seguro: tarjeta o transferencia con confirmación clara.",
+    "buy2": "Anuncios honestos: descripciones precisas y precios justos.",
+    "buy3": "Seguimiento del pedido: sigue tu pedido desde que lo haces hasta la entrega.",
+    "buy4": "Soporte: contáctanos si hay un problema; nos tomamos las quejas en serio.",
+    "sellSafeTitle": "Vende con confianza",
+    "sell1": "Plataforma segura: tus anuncios y datos de ventas están protegidos.",
+    "sell2": "Trato justo: tratamos a todos los vendedores con respeto y transparencia.",
+    "sell3": "Pagos a tiempo: proceso claro para recibir tus ingresos.",
+    "sell4": "Soporte: ayudamos a resolver disputas y proteger a ambas partes.",
+    "commitmentTitle": "Nuestro compromiso",
+    "commitment": "Miaha international market se basa en la seguridad, la honestidad y la protección. No toleramos el fraude. Si compras o vendes, queremos que te sientas protegido y respetado. Si tienes alguna duda, contáctanos.",
+    "contactUs": "Contáctanos"
+  },
+  "sell": {
+    "title": "Vende con nosotros",
+    "subtitle": "Únete a nuestro marketplace y llega a compradores en todo el mundo. Mantenemos la seguridad y la equidad para todos.",
+    "step1": "Contáctanos para ser vendedor. Dinos qué vendes y tus datos.",
+    "step2": "Activamos tu acceso para que puedas publicar tus productos con seguridad.",
+    "step3": "Recibes pedidos; ayudamos a asegurar pagos y comunicación.",
+    "trustNote": "Nos tomamos la seguridad y la honestidad en serio. Consulta nuestra página Confianza y seguridad.",
+    "contactToSell": "Contáctanos para vender"
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "subtitle": "¿Preguntas, dudas o quieres ser vendedor? Escríbenos.",
+    "emailLabel": "Escríbenos a:",
+    "note": "Intentamos responder en 1–2 días laborables. Para problemas con un pedido, incluye el número de pedido."
   },
   "trackOrder": {
     "title": "Seguir tu pedido",
@@ -100,6 +135,9 @@
   },
   "footer": {
     "copyright": "Miaha international market. Compra y vende con confianza.",
-    "availableWorldwide": "Disponible en todo el mundo — elige tu idioma arriba."
+    "availableWorldwide": "Disponible en todo el mundo — elige tu idioma arriba.",
+    "trust": "Confianza y seguridad",
+    "sell": "Vende con nosotros",
+    "contact": "Contacto"
   }
 }
