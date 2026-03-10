@@ -21,7 +21,25 @@ function loadCart(): CartItem[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(CART_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const parsed: unknown = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(parsed)) return [];
+
+    // Normalize: dedupe by productId (keep last), ensure quantity >= 1, valid shape
+    const byId = new Map<string, CartItem>();
+    for (const entry of parsed) {
+      if (!entry || typeof entry !== "object" || typeof (entry as CartItem).productId !== "string")
+        continue;
+      const item = entry as CartItem;
+      const qty = Math.max(1, Math.floor(Number(item.quantity)) || 1);
+      byId.set(item.productId, {
+        productId: item.productId,
+        quantity: qty,
+        name: typeof item.name === "string" ? item.name : undefined,
+        price: typeof item.price === "number" ? item.price : undefined,
+        image: typeof item.image === "string" ? item.image : undefined,
+      });
+    }
+    return Array.from(byId.values());
   } catch {
     return [];
   }

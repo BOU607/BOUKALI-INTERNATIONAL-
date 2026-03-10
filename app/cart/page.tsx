@@ -6,7 +6,7 @@ import { useI18n } from "@/components/LanguageProvider";
 import { formatAUD } from "@/lib/currency";
 
 export default function CartPage() {
-  const { items, removeItem, updateQuantity, totalItems, totalPrice } = useCart();
+  const { items, removeItem, updateQuantity, totalItems, totalPrice, clearCart } = useCart();
   const { t } = useI18n();
 
   if (items.length === 0) {
@@ -73,9 +73,18 @@ export default function CartPage() {
         ))}
       </div>
       <div className="max-w-3xl mt-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <Link href="/products" className="btn-ghost">
-          {t("cart.continueShopping")}
-        </Link>
+        <div className="flex flex-wrap items-center gap-3">
+          <Link href="/products" className="btn-ghost">
+            {t("cart.continueShopping")}
+          </Link>
+          <button
+            type="button"
+            onClick={() => clearCart()}
+            className="btn-ghost text-red-400 hover:text-red-300 text-sm"
+          >
+            {t("cart.clearCart")}
+          </button>
+        </div>
         <div className="flex items-center gap-6">
           <p className="text-lg font-semibold text-stone-200">
             {t("cart.total")}: <span className="text-brand-400">{formatAUD(totalPrice)}</span>
