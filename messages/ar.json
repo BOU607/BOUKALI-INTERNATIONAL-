@@ -10,7 +10,8 @@
     "sell": "بع معنا",
     "contact": "اتصل بنا",
     "admin": "الإدارة",
-    "language": "اللغة"
+    "language": "اللغة",
+    "searchPlaceholder": "البحث عن منتجات..."
   },
   "trust": {
     "title": "الثقة والأمان والأمن",
@@ -77,7 +78,8 @@
     "addToCart": "أضف إلى السلة",
     "addToCartDesc": "اختر ما تحتاجه وأضفه إلى السلة.",
     "checkout": "إتمام الطلب",
-    "checkoutDesc": "أدخل التفاصيل وأكمل طلبك."
+    "checkoutDesc": "أدخل التفاصيل وأكمل طلبك.",
+    "featuredProducts": "منتجات شائعة"
   },
   "categories": {
     "men": "رجال",
@@ -115,7 +117,13 @@
     "allProducts": "جميع المنتجات",
     "addToCart": "أضف إلى السلة",
     "all": "الكل",
-    "noProducts": "لا توجد منتجات في هذه الفئة بعد. جرب فئة أخرى أو عد لاحقاً."
+    "noProducts": "لا توجد منتجات في هذه الفئة بعد. جرب فئة أخرى أو عد لاحقاً.",
+    "searchPlaceholder": "البحث بالاسم أو الوصف...",
+    "search": "بحث",
+    "searchResults": "نتائج \"{{query}}\"",
+    "sortNewest": "الأحدث",
+    "sortPriceAsc": "السعر: من الأقل إلى الأعلى",
+    "sortPriceDesc": "السعر: من الأعلى إلى الأقل"
   },
   "checkout": {
     "title": "إتمام الطلب",
@@ -164,6 +172,11 @@
     }
   },
   "footer": {
+    "getHelp": "المساعدة",
+    "company": "الشركة",
+    "securePayment": "دفع آمن · بطاقة وتحويل بنكي",
+    "trackOrder": "تتبع الطلب",
+    "home": "الرئيسية",
     "copyright": "Miaha international market. اشترِ وبِع بثقة.",
     "availableWorldwide": "متاح في جميع أنحاء العالم — اختر لغتك أعلاه.",
     "trust": "الثقة والأمان",

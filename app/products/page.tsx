@@ -4,11 +4,10 @@ import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import type { Product } from "@/lib/types";
-import { useCart } from "@/components/CartProvider";
 import { useI18n } from "@/components/LanguageProvider";
 import { CATEGORIES } from "@/lib/categories";
 import { ShareButton } from "@/components/ShareButton";
-import { formatAUD } from "@/lib/currency";
+import { ProductCard } from "@/components/ProductCard";
 
 const CATEGORY_KEYS: Record<string, string> = {
   "Men's Clothing": "categories.men",
@@ -31,28 +30,48 @@ const CATEGORY_KEYS: Record<string, string> = {
   "Cows, sheep and horses": "categories.cowsSheepHorses",
 };
 
+const SORT_OPTIONS = [
+  { value: "newest", labelKey: "products.sortNewest" },
+  { value: "price-asc", labelKey: "products.sortPriceAsc" },
+  { value: "price-desc", labelKey: "products.sortPriceDesc" },
+] as const;
+
+function sortProducts(products: Product[], sort: string): Product[] {
+  const list = [...products];
+  if (sort === "price-asc") list.sort((a, b) => a.price - b.price);
+  else if (sort === "price-desc") list.sort((a, b) => b.price - a.price);
+  else list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  return list;
+}
+
 function ProductsPageContent() {
   const searchParams = useSearchParams();
   const categoryFromUrl = searchParams.get("category") ?? "";
+  const qFromUrl = searchParams.get("q") ?? "";
   const [selectedCategory, setSelectedCategory] = useState(categoryFromUrl);
+  const [searchQuery, setSearchQuery] = useState(qFromUrl);
+  const [sort, setSort] = useState("newest");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const { addItem } = useCart();
   const { t } = useI18n();
 
   useEffect(() => {
     setSelectedCategory(categoryFromUrl);
-  }, [categoryFromUrl]);
+    setSearchQuery(qFromUrl);
+  }, [categoryFromUrl, qFromUrl]);
 
   useEffect(() => {
-    const url = selectedCategory
-      ? `/api/products?category=${encodeURIComponent(selectedCategory)}`
-      : "/api/products";
+    const params = new URLSearchParams();
+    if (selectedCategory) params.set("category", selectedCategory);
+    if (searchQuery.trim()) params.set("q", searchQuery.trim());
+    const url = `/api/products${params.toString() ? `?${params}` : ""}`;
     fetch(url)
       .then((r) => r.json())
       .then(setProducts)
       .finally(() => setLoading(false));
-  }, [selectedCategory]);
+  }, [selectedCategory, searchQuery]);
+
+  const sortedProducts = sortProducts(products, sort);
 
   if (loading) {
     return (
@@ -74,18 +93,47 @@ function ProductsPageContent() {
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
         <h1 className="font-display text-2xl font-semibold text-stone-100">
-          {selectedCategory
-            ? (CATEGORY_KEYS[selectedCategory] ? t(CATEGORY_KEYS[selectedCategory]) : selectedCategory)
-            : t("products.allProducts")}
+          {searchQuery
+            ? (t("products.searchResults").replace("{{query}}", searchQuery))
+            : selectedCategory
+              ? (CATEGORY_KEYS[selectedCategory] ? t(CATEGORY_KEYS[selectedCategory]) : selectedCategory)
+              : t("products.allProducts")}
         </h1>
         <ShareButton
           title={selectedCategory ? `${selectedCategory} - Miaha international market` : "Products - Miaha international market"}
           url={selectedCategory ? `/products?category=${encodeURIComponent(selectedCategory)}` : "/products"}
         />
       </div>
+      <div className="flex flex-wrap gap-2 mb-4">
+        <form method="get" action="/products" className="flex gap-2 flex-1 min-w-[200px] max-w-md">
+          <input type="hidden" name="category" value={selectedCategory || undefined} />
+          <input
+            type="search"
+            name="q"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={t("products.searchPlaceholder")}
+            className="input flex-1 py-2 text-sm"
+          />
+          <button type="submit" className="btn-secondary py-2 px-4 text-sm">
+            {t("products.search")}
+          </button>
+        </form>
+        <select
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+          className="input py-2 text-sm w-auto"
+        >
+          {SORT_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {t(opt.labelKey)}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="flex flex-wrap gap-2 mb-8">
         <Link
-          href="/products"
+          href={searchQuery ? `/products?q=${encodeURIComponent(searchQuery)}` : "/products"}
           className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors ${
             !selectedCategory
               ? "bg-brand-500 text-white"
@@ -97,7 +145,9 @@ function ProductsPageContent() {
         {CATEGORIES.map((cat) => (
           <Link
             key={cat}
-            href={`/products?category=${encodeURIComponent(cat)}`}
+            href={searchQuery
+              ? `/products?category=${encodeURIComponent(cat)}&q=${encodeURIComponent(searchQuery)}`
+              : `/products?category=${encodeURIComponent(cat)}`}
             className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors ${
               selectedCategory === cat
                 ? "bg-brand-500 text-white"
@@ -109,40 +159,15 @@ function ProductsPageContent() {
         ))}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {products.map((p) => (
-          <article key={p.id} className="card overflow-hidden group hover:border-ink-700 transition-colors">
-            <Link href={`/products/${p.id}`} className="block aspect-square overflow-hidden bg-ink-900">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={p.image}
-                alt={p.name}
-                className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </Link>
-            <div className="p-4">
-              <span className="text-xs text-brand-400 font-medium uppercase tracking-wider">
-                {CATEGORY_KEYS[p.category] ? t(CATEGORY_KEYS[p.category]) : p.category}
-              </span>
-              <Link href={`/products/${p.id}`}>
-                <h2 className="font-medium text-stone-200 mt-1 hover:text-brand-400 transition-colors">
-                  {p.name}
-                </h2>
-              </Link>
-              <p className="text-brand-400 font-semibold mt-2">{formatAUD(p.price)}</p>
-              <button
-                type="button"
-                onClick={() =>
-                  addItem(p.id, 1, { name: p.name, price: p.price, image: p.image })
-                }
-                className="btn-primary w-full mt-3 text-sm py-2"
-              >
-                {t("products.addToCart")}
-              </button>
-            </div>
-          </article>
+        {sortedProducts.map((p) => (
+          <ProductCard
+            key={p.id}
+            product={p}
+            categoryLabel={CATEGORY_KEYS[p.category] ? t(CATEGORY_KEYS[p.category]) : p.category}
+          />
         ))}
       </div>
-      {!loading && products.length === 0 && (
+      {!loading && sortedProducts.length === 0 && (
         <p className="text-ink-500 text-center py-12">{t("products.noProducts")}</p>
       )}
     </div>

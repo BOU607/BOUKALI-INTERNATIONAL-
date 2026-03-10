@@ -10,7 +10,8 @@
     "sell": "Vende con nosotros",
     "contact": "Contacto",
     "admin": "Admin",
-    "language": "Idioma"
+    "language": "Idioma",
+    "searchPlaceholder": "Buscar productos..."
   },
   "trust": {
     "title": "Confianza, seguridad y protección",
@@ -77,7 +78,8 @@
     "addToCart": "Añadir al carrito",
     "addToCartDesc": "Elige lo que necesitas y añádelo al carrito.",
     "checkout": "Pagar",
-    "checkoutDesc": "Introduce tus datos y completa tu pedido."
+    "checkoutDesc": "Introduce tus datos y completa tu pedido.",
+    "featuredProducts": "Productos populares"
   },
   "categories": {
     "men": "Hombres",
@@ -115,7 +117,13 @@
     "allProducts": "Todos los productos",
     "addToCart": "Añadir al carrito",
     "all": "Todo",
-    "noProducts": "Aún no hay productos en esta categoría. Prueba otra o vuelve más tarde."
+    "noProducts": "Aún no hay productos en esta categoría. Prueba otra o vuelve más tarde.",
+    "searchPlaceholder": "Buscar por nombre o descripción...",
+    "search": "Buscar",
+    "searchResults": "Resultados para \"{{query}}\"",
+    "sortNewest": "Más recientes",
+    "sortPriceAsc": "Precio: menor a mayor",
+    "sortPriceDesc": "Precio: mayor a menor"
   },
   "checkout": {
     "title": "Pago",
@@ -164,6 +172,11 @@
     }
   },
   "footer": {
+    "getHelp": "Ayuda",
+    "company": "Empresa",
+    "securePayment": "Pago seguro · Tarjeta y transferencia",
+    "trackOrder": "Seguir pedido",
+    "home": "Inicio",
     "copyright": "Miaha international market. Compra y vende con confianza.",
     "availableWorldwide": "Disponible en todo el mundo — elige tu idioma arriba.",
     "trust": "Confianza y seguridad",

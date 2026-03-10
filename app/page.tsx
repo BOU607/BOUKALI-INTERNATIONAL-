@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { CATEGORIES, CATEGORY_BACKGROUND_IMAGES } from "@/lib/categories";
 import { useI18n } from "@/components/LanguageProvider";
+import { ProductCard } from "@/components/ProductCard";
+import type { Product } from "@/lib/types";
 
 const PROMO_DISMISS_KEY = "miaha_promo_dismissed";
 
@@ -31,6 +33,7 @@ const CATEGORY_KEYS: Record<string, string> = {
 export default function HomePage() {
   const { t } = useI18n();
   const [showPromo, setShowPromo] = useState(true);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     try {
@@ -38,6 +41,13 @@ export default function HomePage() {
     } catch {
       setShowPromo(true);
     }
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((r) => r.json())
+      .then((list: Product[]) => setFeaturedProducts(list.slice(0, 8)))
+      .catch(() => setFeaturedProducts([]));
   }, []);
 
   const dismissPromo = () => {
@@ -125,6 +135,27 @@ export default function HomePage() {
           })}
         </div>
       </section>
+      {featuredProducts.length > 0 && (
+        <section className="mt-24 w-full max-w-6xl">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-display text-xl font-semibold text-stone-200">
+              {t("home.featuredProducts")}
+            </h2>
+            <Link href="/products" className="text-brand-400 hover:text-brand-300 text-sm font-medium">
+              {t("home.browseProducts")} →
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featuredProducts.map((p) => (
+              <ProductCard
+                key={p.id}
+                product={p}
+                categoryLabel={CATEGORY_KEYS[p.category] ? t(CATEGORY_KEYS[p.category]) : p.category}
+              />
+            ))}
+          </div>
+        </section>
+      )}
       <section className="mt-24 w-full max-w-4xl">
         <h2 className="font-display text-xl font-semibold text-stone-200 mb-6 text-center">
           {t("home.howItWorks")}
