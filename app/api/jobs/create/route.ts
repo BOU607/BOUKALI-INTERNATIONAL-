@@ -7,6 +7,7 @@ export async function POST(req: NextRequest) {
   const id = String(Date.now());
   const job: Job = {
     ...body,
+    category: body.category || "Other",
     id,
     createdAt: new Date().toISOString(),
   };

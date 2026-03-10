@@ -44,6 +44,12 @@
     "emailLabel": "Escríbenos a:",
     "note": "Intentamos responder en 1–2 días laborables. Para problemas con un pedido, incluye el número de pedido."
   },
+  "share": {
+    "label": "Compartir",
+    "share": "Compartir",
+    "copyLink": "Copiar enlace",
+    "copied": "¡Copiado!"
+  },
   "trackOrder": {
     "title": "Seguir tu pedido",
     "enterDetails": "Introduce el número de pedido y tu email para ver el estado y los productos.",
@@ -56,6 +62,9 @@
   "home": {
     "title": "Compra y vende con confianza",
     "subtitle": "Descubre productos que te gustan. Pago sencillo. Envío rápido.",
+    "firstSellersLine": "Nuevo marketplace — sé uno de nuestros primeros vendedores.",
+    "promoBanner": "Primeros 10 pedidos: envío gratis.",
+    "promoDismiss": "Cerrar",
     "browseProducts": "Ver productos",
     "findPro": "Buscar un profesional",
     "findJobs": "Buscar empleos",
@@ -132,6 +141,26 @@
     "total": "Total",
     "cardNotConfigured": "Pago con tarjeta no configurado. El pedido se creará como pendiente.",
     "audNote": "Todos los precios y pagos en dólares australianos (AUD). Se aceptan tarjetas australianas."
+  },
+  "jobs": {
+    "title": "Búsqueda de empleo",
+    "subtitle": "Encuentra oportunidades en Miaha international market.",
+    "searchPlaceholder": "Buscar por puesto, empresa, ubicación...",
+    "noJobs": "No se encontraron ofertas. Prueba otra búsqueda o vuelve más tarde.",
+    "allCategories": "Todas",
+    "category": {
+      "sales": "Ventas",
+      "marketing": "Marketing",
+      "operations": "Operaciones",
+      "itTech": "IT y tecnología",
+      "administration": "Administración",
+      "customerService": "Atención al cliente",
+      "drivingLogistics": "Conducción y logística",
+      "constructionTrades": "Construcción y oficios",
+      "healthcare": "Sanidad",
+      "retail": "Comercio",
+      "other": "Otro"
+    }
   },
   "footer": {
     "copyright": "Miaha international market. Compra y vende con confianza.",

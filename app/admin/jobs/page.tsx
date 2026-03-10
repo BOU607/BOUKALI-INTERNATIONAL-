@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { Job } from "@/lib/types";
+import { JOB_CATEGORIES } from "@/lib/job-categories";
 
 export default function AdminJobsPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -12,6 +13,7 @@ export default function AdminJobsPage() {
     company: "Miaha international market",
     location: "",
     type: "full-time" as Job["type"],
+    category: "Other",
     description: "",
   });
 
@@ -36,6 +38,7 @@ export default function AdminJobsPage() {
       company: "Miaha international market",
       location: "",
       type: "full-time",
+      category: "Other",
       description: "",
     });
     setShowForm(false);
@@ -120,6 +123,20 @@ export default function AdminJobsPage() {
             </select>
           </label>
           <label className="block">
+            <span className="text-sm text-ink-500">Category</span>
+            <select
+              value={form.category}
+              onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
+              className="input mt-1"
+            >
+              {JOB_CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="block">
             <span className="text-sm text-ink-500">Description</span>
             <textarea
               required
@@ -143,6 +160,7 @@ export default function AdminJobsPage() {
                 <th className="p-4 text-sm font-medium text-ink-500">Company</th>
                 <th className="p-4 text-sm font-medium text-ink-500">Location</th>
                 <th className="p-4 text-sm font-medium text-ink-500">Type</th>
+                <th className="p-4 text-sm font-medium text-ink-500">Category</th>
                 <th className="p-4 text-sm font-medium text-ink-500">Actions</th>
               </tr>
             </thead>
@@ -153,6 +171,7 @@ export default function AdminJobsPage() {
                   <td className="p-4 text-ink-500">{j.company}</td>
                   <td className="p-4 text-ink-500">{j.location}</td>
                   <td className="p-4 text-ink-500">{j.type}</td>
+                  <td className="p-4 text-ink-500">{j.category || "Other"}</td>
                   <td className="p-4">
                     <button
                       type="button"

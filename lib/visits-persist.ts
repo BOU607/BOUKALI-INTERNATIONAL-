@@ -21,14 +21,13 @@ export function isKvConfigured(): boolean {
  * Add a visit. Uses Redis (KV or Upstash) when env vars are set, otherwise file.
  */
 export async function addVisit(visit: Omit<Visit, "id" | "createdAt">): Promise<Visit> {
-  const entry: Visit = {
-    ...visit,
-    id: `v-${Date.now()}`,
-    createdAt: new Date().toISOString(),
-  };
-
   const creds = getKvCreds();
   if (creds) {
+    const entry: Visit = {
+      ...visit,
+      id: `v-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+    };
     try {
       const { createClient } = await import("@vercel/kv");
       const kv = createClient({ url: creds.url, token: creds.token });
@@ -41,8 +40,8 @@ export async function addVisit(visit: Omit<Visit, "id" | "createdAt">): Promise<
     }
   }
 
-  addVisitFile(visit);
-  return entry;
+  // File store builds id/createdAt; return that so caller matches persisted row.
+  return addVisitFile(visit);
 }
 
 /**

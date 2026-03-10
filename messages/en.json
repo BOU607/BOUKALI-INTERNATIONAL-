@@ -44,6 +44,12 @@
     "emailLabel": "Email us at:",
     "note": "We aim to reply within 1–2 business days. For order issues, include your order ID."
   },
+  "share": {
+    "label": "Share",
+    "share": "Share",
+    "copyLink": "Copy link",
+    "copied": "Copied!"
+  },
   "trackOrder": {
     "title": "Track your order",
     "enterDetails": "Enter your order ID and email to see status and items.",
@@ -56,6 +62,9 @@
   "home": {
     "title": "Buy & sell with confidence",
     "subtitle": "Discover products you love. Simple checkout. Fast delivery.",
+    "firstSellersLine": "New marketplace — become one of our first sellers.",
+    "promoBanner": "First 10 orders: free delivery.",
+    "promoDismiss": "Dismiss",
     "browseProducts": "Browse products",
     "findPro": "Find a pro",
     "findJobs": "Find jobs",
@@ -132,6 +141,26 @@
     "total": "Total",
     "cardNotConfigured": "Card payments not configured. Order will be created as pending.",
     "audNote": "All prices and payments are in Australian dollars (AUD). Australian cards accepted."
+  },
+  "jobs": {
+    "title": "Job search",
+    "subtitle": "Find opportunities at Miaha international market.",
+    "searchPlaceholder": "Search by title, company, location...",
+    "noJobs": "No jobs found. Try a different search or check back later.",
+    "allCategories": "All",
+    "category": {
+      "sales": "Sales",
+      "marketing": "Marketing",
+      "operations": "Operations",
+      "itTech": "IT & Tech",
+      "administration": "Administration",
+      "customerService": "Customer Service",
+      "drivingLogistics": "Driving & Logistics",
+      "constructionTrades": "Construction & Trades",
+      "healthcare": "Healthcare",
+      "retail": "Retail",
+      "other": "Other"
+    }
   },
   "footer": {
     "copyright": "Miaha international market. Buy & sell with confidence.",

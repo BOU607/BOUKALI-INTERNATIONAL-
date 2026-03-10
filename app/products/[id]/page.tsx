@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { useCart } from "@/components/CartProvider";
+import { ShareButton } from "@/components/ShareButton";
 import { formatAUD } from "@/lib/currency";
 
 export default function ProductPage() {
@@ -87,6 +88,13 @@ export default function ProductPage() {
           <p className="text-sm text-ink-500 mt-4">
             In stock: {product.stock}
           </p>
+          <div className="flex flex-wrap items-center gap-4 mt-6">
+            <ShareButton
+              title={product.name}
+              url={`/products/${product.id}`}
+              text={product.description?.slice(0, 100)}
+            />
+          </div>
           <div className="flex items-center gap-4 mt-8">
             <label className="flex items-center gap-2">
               <span className="text-sm text-ink-500">Qty</span>

@@ -44,6 +44,12 @@
     "emailLabel": "راسلنا على:",
     "note": "نسعى للرد خلال 1–2 يوم عمل. لمشاكل الطلبات، أدرج رقم الطلب."
   },
+  "share": {
+    "label": "مشاركة",
+    "share": "مشاركة",
+    "copyLink": "نسخ الرابط",
+    "copied": "تم النسخ!"
+  },
   "trackOrder": {
     "title": "تتبع طلبك",
     "enterDetails": "أدخل رقم الطلب وبريدك الإلكتروني لمعرفة الحالة والمنتجات.",
@@ -56,6 +62,9 @@
   "home": {
     "title": "اشترِ وبِع بثقة",
     "subtitle": "اكتشف المنتجات التي تحبها. دفع بسيط. توصيل سريع.",
+    "firstSellersLine": "سوق جديد — كن أحد أوائل البائعين معنا.",
+    "promoBanner": "أول 10 طلبات: توصيل مجاني.",
+    "promoDismiss": "إغلاق",
     "browseProducts": "تصفح المنتجات",
     "findPro": "ابحث عن محترف",
     "findJobs": "ابحث عن وظائف",
@@ -132,6 +141,26 @@
     "total": "المجموع",
     "cardNotConfigured": "الدفع بالبطاقة غير مفعّل. سيتم إنشاء الطلب كقيد الانتظار.",
     "audNote": "جميع الأسعار والمدفوعات بالدولار الأسترالي (AUD). نقبل البطاقات الأسترالية."
+  },
+  "jobs": {
+    "title": "البحث عن وظائف",
+    "subtitle": "اعثر على فرص في Miaha international market.",
+    "searchPlaceholder": "ابحث بالوظيفة أو الشركة أو الموقع...",
+    "noJobs": "لم يتم العثور على وظائف. جرّب بحثاً آخر أو عد لاحقاً.",
+    "allCategories": "الكل",
+    "category": {
+      "sales": "مبيعات",
+      "marketing": "تسويق",
+      "operations": "عمليات",
+      "itTech": "تقنية المعلومات",
+      "administration": "إدارة",
+      "customerService": "خدمة العملاء",
+      "drivingLogistics": "قيادة ولوجستيات",
+      "constructionTrades": "بناء وحرف",
+      "healthcare": "صحة",
+      "retail": "تجزئة",
+      "other": "أخرى"
+    }
   },
   "footer": {
     "copyright": "Miaha international market. اشترِ وبِع بثقة.",

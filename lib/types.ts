@@ -53,6 +53,8 @@ export type Job = {
   company: string;
   location: string;
   type: "full-time" | "part-time" | "contract" | "internship";
+  /** Work category for tabs (e.g. Sales, IT & Tech). Defaults to "Other" if missing. */
+  category?: string;
   description: string;
   createdAt: string;
 };

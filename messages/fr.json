@@ -44,6 +44,12 @@
     "emailLabel": "Écrivez-nous à :",
     "note": "Nous visons une réponse sous 1–2 jours ouvrés. Pour un problème de commande, indiquez le numéro de commande."
   },
+  "share": {
+    "label": "Partager",
+    "share": "Partager",
+    "copyLink": "Copier le lien",
+    "copied": "Copié !"
+  },
   "trackOrder": {
     "title": "Suivre votre commande",
     "enterDetails": "Entrez le numéro de commande et votre e-mail pour voir le statut et les articles.",
@@ -56,6 +62,9 @@
   "home": {
     "title": "Achetez et vendez en toute confiance",
     "subtitle": "Découvrez les produits que vous aimez. Paiement simple. Livraison rapide.",
+    "firstSellersLine": "Nouvelle marketplace — soyez parmi nos premiers vendeurs.",
+    "promoBanner": "Les 10 premières commandes : livraison offerte.",
+    "promoDismiss": "Fermer",
     "browseProducts": "Parcourir les produits",
     "findPro": "Trouver un pro",
     "findJobs": "Trouver des emplois",
@@ -132,6 +141,26 @@
     "total": "Total",
     "cardNotConfigured": "Paiement par carte non configuré. La commande sera enregistrée en attente.",
     "audNote": "Tous les prix et paiements sont en dollars australiens (AUD). Cartes australiennes acceptées."
+  },
+  "jobs": {
+    "title": "Recherche d'emploi",
+    "subtitle": "Trouvez des opportunités chez Miaha international market.",
+    "searchPlaceholder": "Rechercher par poste, entreprise, lieu...",
+    "noJobs": "Aucune offre trouvée. Essayez une autre recherche ou revenez plus tard.",
+    "allCategories": "Tout",
+    "category": {
+      "sales": "Vente",
+      "marketing": "Marketing",
+      "operations": "Opérations",
+      "itTech": "IT & Tech",
+      "administration": "Administration",
+      "customerService": "Service client",
+      "drivingLogistics": "Conduite & logistique",
+      "constructionTrades": "BTP & métiers",
+      "healthcare": "Santé",
+      "retail": "Commerce",
+      "other": "Autre"
+    }
   },
   "footer": {
     "copyright": "Miaha international market. Achetez et vendez en toute confiance.",

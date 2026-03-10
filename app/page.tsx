@@ -1,8 +1,11 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { CATEGORIES, CATEGORY_BACKGROUND_IMAGES } from "@/lib/categories";
 import { useI18n } from "@/components/LanguageProvider";
+
+const PROMO_DISMISS_KEY = "miaha_promo_dismissed";
 
 const CATEGORY_KEYS: Record<string, string> = {
   "Men's Clothing": "categories.men",
@@ -27,15 +30,51 @@ const CATEGORY_KEYS: Record<string, string> = {
 
 export default function HomePage() {
   const { t } = useI18n();
+  const [showPromo, setShowPromo] = useState(true);
+
+  useEffect(() => {
+    try {
+      setShowPromo(!localStorage.getItem(PROMO_DISMISS_KEY));
+    } catch {
+      setShowPromo(true);
+    }
+  }, []);
+
+  const dismissPromo = () => {
+    try {
+      localStorage.setItem(PROMO_DISMISS_KEY, "1");
+    } catch {
+      /* ignore */
+    }
+    setShowPromo(false);
+  };
 
   return (
     <div className="min-h-[80vh] flex flex-col items-center justify-center px-4">
+      {showPromo && (
+        <div className="w-full max-w-5xl mb-6 flex items-center justify-center gap-3 rounded-xl bg-brand-500/15 border border-brand-500/30 px-4 py-3 text-center">
+          <span className="text-brand-200 font-medium">{t("home.promoBanner")}</span>
+          <button
+            type="button"
+            onClick={dismissPromo}
+            className="shrink-0 rounded p-1 text-ink-400 hover:text-stone-200 hover:bg-ink-800/50"
+            aria-label={t("home.promoDismiss")}
+          >
+            ×
+          </button>
+        </div>
+      )}
       <div className="max-w-2xl text-center">
         <h1 className="font-display text-4xl sm:text-5xl font-bold text-stone-100 tracking-tight">
           {t("home.title")}
         </h1>
         <p className="mt-4 text-lg text-ink-500">
           {t("home.subtitle")}
+        </p>
+        <p className="mt-3 text-sm text-ink-400">
+          <Link href="/sell" className="underline hover:text-brand-400">
+            {t("home.firstSellersLine")}
+          </Link>
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link href="/products" className="btn-primary text-base px-6 py-3">

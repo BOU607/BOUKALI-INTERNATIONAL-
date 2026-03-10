@@ -7,6 +7,7 @@ import type { Product } from "@/lib/types";
 import { useCart } from "@/components/CartProvider";
 import { useI18n } from "@/components/LanguageProvider";
 import { CATEGORIES } from "@/lib/categories";
+import { ShareButton } from "@/components/ShareButton";
 import { formatAUD } from "@/lib/currency";
 
 const CATEGORY_KEYS: Record<string, string> = {
@@ -71,11 +72,17 @@ function ProductsPageContent() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="font-display text-2xl font-semibold text-stone-100 mb-4">
-        {selectedCategory
-          ? (CATEGORY_KEYS[selectedCategory] ? t(CATEGORY_KEYS[selectedCategory]) : selectedCategory)
-          : t("products.allProducts")}
-      </h1>
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+        <h1 className="font-display text-2xl font-semibold text-stone-100">
+          {selectedCategory
+            ? (CATEGORY_KEYS[selectedCategory] ? t(CATEGORY_KEYS[selectedCategory]) : selectedCategory)
+            : t("products.allProducts")}
+        </h1>
+        <ShareButton
+          title={selectedCategory ? `${selectedCategory} - Miaha international market` : "Products - Miaha international market"}
+          url={selectedCategory ? `/products?category=${encodeURIComponent(selectedCategory)}` : "/products"}
+        />
+      </div>
       <div className="flex flex-wrap gap-2 mb-8">
         <Link
           href="/products"
