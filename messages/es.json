@@ -43,6 +43,10 @@
     "title": "Contáctanos",
     "subtitle": "¿Preguntas, dudas o quieres ser vendedor? Escríbenos.",
     "emailLabel": "Escríbenos a:",
+    "phoneLabel": "Teléfono:",
+    "whatsappLabel": "WhatsApp:",
+    "addressLabel": "Dirección:",
+    "viewOnMap": "Ver en Google Maps",
     "note": "Intentamos responder en 1–2 días laborables. Para problemas con un pedido, incluye el número de pedido."
   },
   "share": {
@@ -174,6 +178,10 @@
   "footer": {
     "getHelp": "Ayuda",
     "company": "Empresa",
+    "reachUs": "Contáctanos",
+    "phone": "Teléfono",
+    "whatsapp": "WhatsApp",
+    "findUs": "Ubicación",
     "securePayment": "Pago seguro · Tarjeta y transferencia",
     "trackOrder": "Seguir pedido",
     "home": "Inicio",

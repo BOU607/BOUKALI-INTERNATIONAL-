@@ -43,6 +43,10 @@
     "title": "Nous contacter",
     "subtitle": "Questions, demandes ou envie de devenir vendeur ? Écrivez-nous.",
     "emailLabel": "Écrivez-nous à :",
+    "phoneLabel": "Téléphone :",
+    "whatsappLabel": "WhatsApp :",
+    "addressLabel": "Adresse :",
+    "viewOnMap": "Voir sur Google Maps",
     "note": "Nous visons une réponse sous 1–2 jours ouvrés. Pour un problème de commande, indiquez le numéro de commande."
   },
   "share": {
@@ -174,6 +178,10 @@
   "footer": {
     "getHelp": "Aide",
     "company": "Entreprise",
+    "reachUs": "Nous joindre",
+    "phone": "Téléphone",
+    "whatsapp": "WhatsApp",
+    "findUs": "Nous trouver",
     "securePayment": "Paiement sécurisé · Carte et virement",
     "trackOrder": "Suivi de commande",
     "home": "Accueil",

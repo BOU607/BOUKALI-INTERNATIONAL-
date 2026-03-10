@@ -2,9 +2,12 @@
 
 import Link from "next/link";
 import { useI18n } from "@/components/LanguageProvider";
+import { contact, whatsappHref } from "@/lib/contact";
 
 export function Footer() {
   const { t } = useI18n();
+  const hasReach = contact.phone || contact.whatsapp || contact.address || contact.googleMapLink;
+
   return (
     <footer className="border-t border-ink-800 mt-auto">
       <div className="container mx-auto px-4 py-12">
@@ -49,6 +52,34 @@ export function Footer() {
               </li>
             </ul>
           </div>
+          {hasReach && (
+            <div>
+              <h3 className="font-semibold text-stone-200 mb-3">{t("footer.reachUs")}</h3>
+              <ul className="space-y-2 text-sm">
+                {contact.phone && (
+                  <li>
+                    <a href={`tel:${contact.phone.replace(/\s/g, "")}`} className="text-ink-400 hover:text-brand-400 transition-colors">
+                      {t("footer.phone")}: {contact.phone}
+                    </a>
+                  </li>
+                )}
+                {contact.whatsapp && (
+                  <li>
+                    <a href={whatsappHref(contact.whatsapp)} target="_blank" rel="noopener noreferrer" className="text-ink-400 hover:text-brand-400 transition-colors">
+                      {t("footer.whatsapp")}
+                    </a>
+                  </li>
+                )}
+                {(contact.address || contact.googleMapLink) && (
+                  <li>
+                    <Link href="/contact#map" className="text-ink-400 hover:text-brand-400 transition-colors">
+                      {t("footer.findUs")}
+                    </Link>
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
         </div>
         <p className="text-ink-500 text-sm mt-8 pt-6 border-t border-ink-800">
           {t("footer.securePayment")}

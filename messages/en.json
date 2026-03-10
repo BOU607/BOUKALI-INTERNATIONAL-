@@ -43,6 +43,10 @@
     "title": "Contact us",
     "subtitle": "Questions, concerns or want to become a seller? Get in touch.",
     "emailLabel": "Email us at:",
+    "phoneLabel": "Phone:",
+    "whatsappLabel": "WhatsApp:",
+    "addressLabel": "Address:",
+    "viewOnMap": "View on Google Maps",
     "note": "We aim to reply within 1–2 business days. For order issues, include your order ID."
   },
   "share": {
@@ -174,6 +178,10 @@
   "footer": {
     "getHelp": "Get help",
     "company": "Company",
+    "reachUs": "Reach us",
+    "phone": "Phone",
+    "whatsapp": "WhatsApp",
+    "findUs": "Find us",
     "securePayment": "Secure payment · Card & bank transfer",
     "copyright": "Miaha international market. Buy & sell with confidence.",
     "availableWorldwide": "Available worldwide — use your language above.",
