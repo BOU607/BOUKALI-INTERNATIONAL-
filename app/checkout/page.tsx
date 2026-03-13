@@ -97,7 +97,13 @@ export default function CheckoutPage() {
 
   const bsb = process.env.NEXT_PUBLIC_BSB ?? "";
   const accountNumber = process.env.NEXT_PUBLIC_ACCOUNT ?? "";
-  const hasBankDetails = bsb && accountNumber;
+  const iban = process.env.NEXT_PUBLIC_IBAN ?? "";
+  const bankName = process.env.NEXT_PUBLIC_BANK_NAME ?? "";
+  const accountHolder = process.env.NEXT_PUBLIC_ACCOUNT_HOLDER ?? "";
+  const swift = process.env.NEXT_PUBLIC_SWIFT ?? "";
+  const hasAustralianDetails = bsb && accountNumber;
+  const hasIbanDetails = iban && bankName && accountHolder;
+  const hasBankDetails = hasAustralianDetails || hasIbanDetails;
   if (bankTransferDone && orderId) {
     return (
       <div className="container mx-auto px-4 py-16 text-center max-w-md mx-auto">
@@ -111,7 +117,28 @@ export default function CheckoutPage() {
             <p className="text-sm text-ink-500 mb-1">{t("checkout.amount")} (AUD)</p>
             <p className="font-mono text-stone-200">{formatAUD(orderTotal)}</p>
             <p className="text-xs text-ink-500 mt-3">{t("checkout.useOrderIdAsReference")}</p>
-            {hasBankDetails ? (
+            {hasIbanDetails ? (
+              <div className="mt-4 space-y-3 text-left">
+                <div>
+                  <p className="text-sm text-ink-500 mb-0.5">{t("checkout.bankName")}</p>
+                  <p className="font-mono text-stone-200">{bankName}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-ink-500 mb-0.5">{t("checkout.accountHolder")}</p>
+                  <p className="font-mono text-stone-200">{accountHolder}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-ink-500 mb-0.5">{t("checkout.iban")}</p>
+                  <p className="font-mono text-stone-200 break-all">{iban}</p>
+                </div>
+                {swift && (
+                  <div>
+                    <p className="text-sm text-ink-500 mb-0.5">{t("checkout.swift")}</p>
+                    <p className="font-mono text-stone-200">{swift}</p>
+                  </div>
+                )}
+              </div>
+            ) : hasAustralianDetails ? (
               <>
                 <p className="text-sm text-ink-500 mt-4 mb-1">{t("checkout.bsb")}</p>
                 <p className="font-mono text-stone-200">{bsb}</p>
