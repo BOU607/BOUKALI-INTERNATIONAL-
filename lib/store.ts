@@ -148,12 +148,12 @@ function ensureDataDir() {
 }
 
 function readProducts(): Product[] {
-  ensureDataDir();
-  if (!existsSync(PRODUCTS_FILE)) {
-    writeFileSync(PRODUCTS_FILE, JSON.stringify(defaultProducts, null, 2));
+  try {
+    if (!existsSync(PRODUCTS_FILE)) return defaultProducts;
+    return JSON.parse(readFileSync(PRODUCTS_FILE, "utf-8"));
+  } catch {
     return defaultProducts;
   }
-  return JSON.parse(readFileSync(PRODUCTS_FILE, "utf-8"));
 }
 
 function writeProducts(products: Product[]) {
