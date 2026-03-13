@@ -15,37 +15,57 @@ export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
   // Apply security headers to all responses
-  if (!path.startsWith("/admin")) {
-    const res = NextResponse.next();
-    return addSecurityHeaders(res);
-  }
-  if (path === "/admin/login") {
-    return addSecurityHeaders(NextResponse.next());
+  const next = () => addSecurityHeaders(NextResponse.next());
+
+  if (!path.startsWith("/admin") && !path.startsWith("/seller")) {
+    return next();
   }
 
-  // Require sign-in for all other /admin routes
+  // Public seller routes
+  if (path === "/seller/login" || path === "/seller/register") {
+    return next();
+  }
+
+  // Public admin route
+  if (path === "/admin/login") {
+    return next();
+  }
+
   const secret = process.env.NEXTAUTH_SECRET;
   if (!secret) {
-    const loginUrl = new URL("/admin/login", req.url);
+    const loginUrl = new URL(path.startsWith("/seller") ? "/seller/login" : "/admin/login", req.url);
     loginUrl.searchParams.set("callbackUrl", path);
     return addSecurityHeaders(NextResponse.redirect(loginUrl));
   }
 
-  let token = null;
+  let token: { id?: string; role?: string } | null = null;
   try {
     token = await getToken({ req, secret });
   } catch {
-    const loginUrl = new URL("/admin/login", req.url);
+    const loginUrl = new URL(path.startsWith("/seller") ? "/seller/login" : "/admin/login", req.url);
     loginUrl.searchParams.set("callbackUrl", path);
     return addSecurityHeaders(NextResponse.redirect(loginUrl));
   }
 
   if (!token) {
+    const loginUrl = new URL(path.startsWith("/seller") ? "/seller/login" : "/admin/login", req.url);
+    loginUrl.searchParams.set("callbackUrl", path);
+    return addSecurityHeaders(NextResponse.redirect(loginUrl));
+  }
+
+  if (path.startsWith("/seller") && token.role !== "seller") {
+    const loginUrl = new URL("/seller/login", req.url);
+    loginUrl.searchParams.set("callbackUrl", path);
+    return addSecurityHeaders(NextResponse.redirect(loginUrl));
+  }
+
+  if (path.startsWith("/admin") && token.role !== "admin") {
     const loginUrl = new URL("/admin/login", req.url);
     loginUrl.searchParams.set("callbackUrl", path);
     return addSecurityHeaders(NextResponse.redirect(loginUrl));
   }
-  return addSecurityHeaders(NextResponse.next());
+
+  return next();
 }
 
 export const config = {

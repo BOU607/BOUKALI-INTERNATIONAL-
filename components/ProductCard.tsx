@@ -38,7 +38,7 @@ export function ProductCard({ product, categoryLabel }: ProductCardProps) {
         <button
           type="button"
           onClick={() =>
-            addItem(product.id, 1, { name: product.name, price: product.price, image: product.image })
+            addItem(product.id, 1, { name: product.name, price: product.price, image: product.image, sellerId: product.sellerId })
           }
           className="btn-primary w-full mt-3 text-sm py-2"
         >

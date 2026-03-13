@@ -1,5 +1,19 @@
+/** Seller on the marketplace - registers and lists products */
+export type Seller = {
+  id: string;
+  name: string;
+  email: string;
+  passwordHash: string;
+  businessName: string;
+  phone: string;
+  /** pending = awaiting admin approval, approved = can list products */
+  status: "pending" | "approved";
+  createdAt: string;
+};
+
 export type Product = {
   id: string;
+  sellerId?: string;
   name: string;
   description: string;
   price: number;
@@ -11,6 +25,7 @@ export type Product = {
 
 export type CartItem = {
   productId: string;
+  sellerId?: string;
   quantity: number;
   name?: string;
   price?: number;
@@ -19,6 +34,7 @@ export type CartItem = {
 
 export type OrderItem = {
   productId: string;
+  sellerId?: string;
   name: string;
   price: number;
   quantity: number;

@@ -1,12 +1,1 @@
-[
-  {
-    "id": "1",
-    "name": "Your Product Name",
-    "description": "Describe your product here.",
-    "price": 0,
-    "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
-    "category": "Electronics",
-    "stock": 1,
-    "createdAt": "2026-03-10T00:00:00.000Z"
-  }
-]
+[]

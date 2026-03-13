@@ -62,6 +62,9 @@ export function Nav() {
               </span>
             )}
           </Link>
+          <Link href="/seller/login" className="btn-ghost text-sm">
+            Seller
+          </Link>
           <Link href="/admin" className="btn-ghost text-sm text-ink-500">
             {t("nav.admin")}
           </Link>

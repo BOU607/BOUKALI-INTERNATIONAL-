@@ -5,10 +5,10 @@ import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export default function AdminLoginPage() {
+export default function SellerLoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/admin";
+  const callbackUrl = searchParams.get("callbackUrl") || "/seller/dashboard";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,14 +18,14 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    const res = await signIn("admin", {
+    const res = await signIn("seller", {
       email,
       password,
       redirect: false,
     });
     setLoading(false);
     if (res?.error) {
-      setError("Invalid email or password.");
+      setError("Invalid email or password, or your account is not yet approved.");
       return;
     }
     router.push(callbackUrl);
@@ -33,13 +33,13 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-[60vh] flex items-center justify-center px-4">
+    <div className="min-h-[60vh] flex items-center justify-center px-4 py-12">
       <div className="card p-8 w-full max-w-md">
         <h1 className="font-display text-xl font-semibold text-stone-100">
-          Admin login
+          Seller login
         </h1>
         <p className="text-ink-500 text-sm mt-1">
-          Sign in to manage products, orders, and services.
+          Sign in to manage your products and orders.
         </p>
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <label className="block">
@@ -50,7 +50,7 @@ export default function AdminLoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="input mt-1"
-              placeholder="admin@example.com"
+              placeholder="seller@example.com"
             />
           </label>
           <label className="block">
@@ -63,23 +63,19 @@ export default function AdminLoginPage() {
               className="input mt-1"
             />
           </label>
-          {error && (
-            <p className="text-sm text-red-400">{error}</p>
-          )}
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn-primary w-full py-3"
-          >
+          {error && <p className="text-sm text-red-400">{error}</p>}
+          <button type="submit" disabled={loading} className="btn-primary w-full py-3">
             {loading ? "Signing in…" : "Sign in"}
           </button>
-          <p className="text-ink-500 text-xs mt-3">
-            Forgot password? Set a new one in Vercel → your project → Settings → Environment Variables → <code className="bg-ink-800 px-1 rounded">ADMIN_PASSWORD</code>, then redeploy.
-          </p>
         </form>
-        <Link href="/" className="block text-center text-ink-500 text-sm mt-6 hover:text-stone-300">
-          ← Back to store
-        </Link>
+        <div className="mt-6 flex gap-4">
+          <Link href="/seller/register" className="text-sm text-brand-400 hover:underline">
+            Become a seller
+          </Link>
+          <Link href="/" className="text-sm text-ink-500 hover:text-stone-300">
+            ← Back to store
+          </Link>
+        </div>
       </div>
     </div>
   );

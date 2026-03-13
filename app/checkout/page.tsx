@@ -54,6 +54,7 @@ export default function CheckoutPage() {
 
   const orderItems: OrderItem[] = items.map((i) => ({
     productId: i.productId,
+    sellerId: i.sellerId,
     name: i.name ?? "Product",
     price: i.price ?? 0,
     quantity: i.quantity,

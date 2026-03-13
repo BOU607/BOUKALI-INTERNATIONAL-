@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getProducts } from "@/lib/store";
+import { getProducts } from "@/lib/products-persist";
 
 export async function GET(req: NextRequest) {
-  const products = getProducts();
+  const products = await getProducts();
   const category = req.nextUrl.searchParams.get("category")?.trim();
   const q = req.nextUrl.searchParams.get("q")?.trim().toLowerCase();
 

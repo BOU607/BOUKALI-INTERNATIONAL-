@@ -6,6 +6,7 @@ const ordersKey = "shop_orders";
 const defaultProducts: Product[] = [
   {
     id: "1",
+    sellerId: "legacy",
     name: "Classic Wireless Headphones",
     description: "Premium sound with 30-hour battery. Comfortable over-ear design.",
     price: 89.99,
@@ -16,6 +17,7 @@ const defaultProducts: Product[] = [
   },
   {
     id: "2",
+    sellerId: "legacy",
     name: "Minimalist Watch",
     description: "Sleek analog watch with leather strap. Water resistant.",
     price: 129.0,
@@ -26,6 +28,7 @@ const defaultProducts: Product[] = [
   },
   {
     id: "3",
+    sellerId: "legacy",
     name: "Organic Cotton T-Shirt",
     description: "Soft, sustainable cotton. Available in multiple colors.",
     price: 24.99,
@@ -36,6 +39,7 @@ const defaultProducts: Product[] = [
   },
   {
     id: "4",
+    sellerId: "legacy",
     name: "Portable Power Bank",
     description: "20,000 mAh. Fast charging for phones and tablets.",
     price: 45.0,

@@ -35,7 +35,13 @@ export default function SellPage() {
       </p>
 
       <div className="flex flex-wrap gap-4">
-        <Link href="/contact" className="btn-primary">
+        <Link href="/seller/register" className="btn-primary">
+          Become a seller
+        </Link>
+        <Link href="/seller/login" className="btn-secondary">
+          Seller login
+        </Link>
+        <Link href="/contact" className="btn-ghost">
           {t("sell.contactToSell")}
         </Link>
         <Link href="/trust" className="btn-secondary">

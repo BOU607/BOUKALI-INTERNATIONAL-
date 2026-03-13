@@ -35,13 +35,13 @@ export default function AdminProductsPage() {
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div className="mb-6">
         <h2 className="font-display text-lg font-medium text-stone-200">
           Products
         </h2>
-        <Link href="/admin/products/new" className="btn-primary text-sm">
-          Add product
-        </Link>
+        <p className="text-ink-500 text-sm mt-1">
+          Products are added by sellers. Approve sellers in the Sellers section.
+        </p>
       </div>
       <div className="card overflow-hidden">
         <div className="overflow-x-auto">
@@ -94,7 +94,7 @@ export default function AdminProductsPage() {
           </table>
         </div>
         {products.length === 0 && (
-          <p className="p-8 text-center text-ink-500">No products. Add your first one.</p>
+          <p className="p-8 text-center text-ink-500">No products yet. Sellers add products after registration and approval.</p>
         )}
       </div>
     </div>

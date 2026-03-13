@@ -5,7 +5,7 @@ import type { CartItem } from "@/lib/types";
 
 type CartContextValue = {
   items: CartItem[];
-  addItem: (productId: string, quantity?: number, product?: { name: string; price: number; image: string }) => void;
+  addItem: (productId: string, quantity?: number, product?: { name: string; price: number; image: string; sellerId?: string }) => void;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -33,6 +33,7 @@ function loadCart(): CartItem[] {
       const qty = Math.max(1, Math.floor(Number(item.quantity)) || 1);
       byId.set(item.productId, {
         productId: item.productId,
+        sellerId: typeof item.sellerId === "string" ? item.sellerId : undefined,
         quantity: qty,
         name: typeof item.name === "string" ? item.name : undefined,
         price: typeof item.price === "number" ? item.price : undefined,
@@ -64,7 +65,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [items, mounted]);
 
   const addItem = useCallback(
-    (productId: string, quantity = 1, product?: { name: string; price: number; image: string }) => {
+    (productId: string, quantity = 1, product?: { name: string; price: number; image: string; sellerId?: string }) => {
       setItems((prev) => {
         const existing = prev.find((i) => i.productId === productId);
         if (existing) {
@@ -76,6 +77,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           ...prev,
           {
             productId,
+            sellerId: product?.sellerId,
             quantity,
             name: product?.name,
             price: product?.price,

@@ -72,6 +72,7 @@ export function validateOrderPayload(body: unknown): { error: string } | null {
 /** Build a sanitized order item for storage */
 export function sanitizeOrderItem(item: unknown): {
   productId: string;
+  sellerId?: string;
   name: string;
   price: number;
   quantity: number;
@@ -80,23 +81,25 @@ export function sanitizeOrderItem(item: unknown): {
   if (!item || typeof item !== "object") return null;
   const o = item as Record<string, unknown>;
   const productId = sanitizeString(o.productId, 100);
+  const sellerId = typeof o.sellerId === "string" ? sanitizeString(o.sellerId, 100) : undefined;
   const name = sanitizeString(o.name ?? "Product", MAX_PRODUCT_NAME) || "Product";
   const price = Number(o.price);
   const quantity = Math.min(Math.max(Number(o.quantity) | 0, 1), 999);
   const image = sanitizeString(o.image, 2000);
   if (!productId || !Number.isFinite(price) || price < 0) return null;
-  return { productId, name, price, quantity, image };
+  return { productId, sellerId: sellerId || undefined, name, price, quantity, image };
 }
 
 /** Validate and sanitize full order items array */
 export function sanitizeOrderItems(items: unknown[]): Array<{
   productId: string;
+  sellerId?: string;
   name: string;
   price: number;
   quantity: number;
   image: string;
 }> | null {
-  const out: Array<{ productId: string; name: string; price: number; quantity: number; image: string }> = [];
+  const out: Array<{ productId: string; sellerId?: string; name: string; price: number; quantity: number; image: string }> = [];
   for (const item of items) {
     const s = sanitizeOrderItem(item);
     if (!s) return null;
