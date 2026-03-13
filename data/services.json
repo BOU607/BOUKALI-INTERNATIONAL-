@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "trade": "Plumber",
+    "businessName": "Quick Fix Plumbing",
+    "description": "Residential and commercial plumbing. Repairs, installations, emergency call-outs.",
+    "phone": "+1 555-0101",
+    "email": "contact@quickfix.example",
+    "location": "Downtown",
+    "createdAt": "2026-03-10T06:55:02.778Z"
+  },
+  {
+    "id": "2",
+    "trade": "Electrical",
+    "businessName": "SafeWire Electric",
+    "description": "Licensed electricians. Wiring, panels, lighting, and repairs.",
+    "phone": "+1 555-0102",
+    "email": "info@safewire.example",
+    "location": "City wide",
+    "createdAt": "2026-03-10T06:55:02.778Z"
+  },
+  {
+    "id": "3",
+    "trade": "Painter",
+    "businessName": "Fresh Coat Painters",
+    "description": "Interior and exterior painting. Residential and commercial.",
+    "phone": "+1 555-0103",
+    "email": "hello@freshcoat.example",
+    "location": "Greater area",
+    "createdAt": "2026-03-10T06:55:02.778Z"
+  }
+]

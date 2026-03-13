@@ -9,8 +9,7 @@ out
 dist
 build
 
-# data (optional: remove this line if you want to commit products/orders)
-data/
+# data/ - REMOVED so products.json is deployed to Vercel
 
 # misc
 .DS_Store

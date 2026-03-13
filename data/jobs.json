@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "title": "Sales Associate",
+    "company": "Miaha international market",
+    "location": "Remote",
+    "type": "full-time",
+    "category": "Sales",
+    "description": "Support customers and drive sales for our product catalog.",
+    "createdAt": "2026-03-10T06:55:02.820Z"
+  },
+  {
+    "id": "2",
+    "title": "Marketing Coordinator",
+    "company": "Miaha international market",
+    "location": "Remote",
+    "type": "part-time",
+    "category": "Marketing",
+    "description": "Help with digital marketing and social media.",
+    "createdAt": "2026-03-10T06:55:02.820Z"
+  },
+  {
+    "id": "3",
+    "title": "Warehouse Assistant",
+    "company": "Miaha international market",
+    "location": "On-site",
+    "type": "full-time",
+    "category": "Operations",
+    "description": "Manage inventory and fulfill orders.",
+    "createdAt": "2026-03-10T06:55:02.820Z"
+  }
+]

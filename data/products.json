@@ -1,0 +1,132 @@
+[
+  {
+    "id": "1",
+    "name": "Classic Wireless Headphones",
+    "description": "Premium sound with 30-hour battery. Comfortable over-ear design.",
+    "price": 89.99,
+    "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
+    "category": "Electronics",
+    "stock": 50,
+    "createdAt": "2026-03-10T06:55:02.908Z"
+  },
+  {
+    "id": "2",
+    "name": "Minimalist Watch",
+    "description": "Sleek analog watch with leather strap. Water resistant.",
+    "price": 129,
+    "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400",
+    "category": "Electronics",
+    "stock": 30,
+    "createdAt": "2026-03-10T06:55:02.911Z"
+  },
+  {
+    "id": "3",
+    "name": "Organic Cotton T-Shirt",
+    "description": "Soft, sustainable cotton. Available in multiple colors.",
+    "price": 24.99,
+    "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",
+    "category": "Men clothes",
+    "stock": 100,
+    "createdAt": "2026-03-10T06:55:02.911Z"
+  },
+  {
+    "id": "4",
+    "name": "Portable Power Bank",
+    "description": "20,000 mAh. Fast charging for phones and tablets.",
+    "price": 45,
+    "image": "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=400",
+    "category": "Electronics",
+    "stock": 75,
+    "createdAt": "2026-03-10T06:55:02.911Z"
+  },
+  {
+    "id": "5",
+    "name": "Women's Summer Dress",
+    "description": "Light, breathable fabric. Perfect for warm weather.",
+    "price": 49.99,
+    "image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400",
+    "category": "Women clothes",
+    "stock": 60,
+    "createdAt": "2026-03-10T06:55:02.911Z"
+  },
+  {
+    "id": "6",
+    "name": "Kids Sneakers",
+    "description": "Comfortable and durable for everyday play.",
+    "price": 34.99,
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",
+    "category": "Kids",
+    "stock": 80,
+    "createdAt": "2026-03-10T06:55:02.911Z"
+  },
+  {
+    "id": "7",
+    "name": "Industrial Pump Seal Kit",
+    "description": "High-quality spare parts for oil & gas pumps. Durable and reliable.",
+    "price": 125,
+    "image": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400",
+    "category": "Oil & Gas Equipment",
+    "stock": 25,
+    "createdAt": "2026-03-10T06:55:02.911Z"
+  },
+  {
+    "id": "8",
+    "name": "Valve Gasket Set",
+    "description": "Spare parts for industrial valves. Compatible with standard fittings.",
+    "price": 45,
+    "image": "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=400",
+    "category": "Car spare parts",
+    "stock": 50,
+    "createdAt": "2026-03-10T06:55:02.911Z"
+  },
+  {
+    "id": "9",
+    "name": "Interior Wall Paint — White",
+    "description": "Premium matte finish. Easy to apply, long-lasting.",
+    "price": 38.99,
+    "image": "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400",
+    "category": "Paint",
+    "stock": 120,
+    "createdAt": "2026-03-10T06:55:02.911Z"
+  },
+  {
+    "id": "10",
+    "name": "Premium Crop Seeds — Wheat",
+    "description": "High-yield wheat seeds for agriculture. Certified quality.",
+    "price": 29.99,
+    "image": "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=400",
+    "category": "Seeds",
+    "stock": 200,
+    "createdAt": "2026-03-10T06:55:02.911Z"
+  },
+  {
+    "id": "11",
+    "name": "Tractor Replacement Filter",
+    "description": "Air and oil filter for agricultural machinery.",
+    "price": 42,
+    "image": "https://images.unsplash.com/photo-1625245488614-25e37e2f2e0f?w=400",
+    "category": "Agriculture",
+    "stock": 65,
+    "createdAt": "2026-03-10T06:55:02.911Z"
+  },
+  {
+    "id": "12",
+    "name": "2018 Toyota Camry — Used",
+    "description": "Well maintained, single owner. Full service history. Low kilometres.",
+    "price": 18500,
+    "image": "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=400",
+    "category": "Used Car",
+    "stock": 1,
+    "createdAt": "2026-03-10T06:55:02.911Z"
+  },
+  {
+    "id": "13",
+    "name": "Gold Bracelet — Pre-owned",
+    "description": "18K gold link bracelet. Authenticated. Excellent condition.",
+    "price": 420,
+    "image": "https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=400",
+    "category": "Used Jewellery",
+    "stock": 1,
+    "createdAt": "2026-03-10T06:55:02.911Z"
+  }
+]

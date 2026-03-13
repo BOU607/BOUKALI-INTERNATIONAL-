@@ -1,0 +1,99 @@
+[
+  {
+    "id": "ord-1773136342908",
+    "items": [
+      {
+        "productId": "3",
+        "name": "Organic Cotton T-Shirt",
+        "price": 24.99,
+        "quantity": 1,
+        "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400"
+      },
+      {
+        "productId": "2",
+        "name": "Minimalist Watch",
+        "price": 129,
+        "quantity": 2,
+        "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"
+      },
+      {
+        "productId": "1",
+        "name": "Classic Wireless Headphones",
+        "price": 89.99,
+        "quantity": 1,
+        "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"
+      },
+      {
+        "productId": "5",
+        "name": "Women's Summer Dress",
+        "price": 49.99,
+        "quantity": 1,
+        "image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400"
+      },
+      {
+        "productId": "6",
+        "name": "Kids Sneakers",
+        "price": 34.99,
+        "quantity": 1,
+        "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"
+      },
+      {
+        "productId": "7",
+        "name": "Industrial Pump Seal Kit",
+        "price": 125,
+        "quantity": 1,
+        "image": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400"
+      },
+      {
+        "productId": "8",
+        "name": "Valve Gasket Set",
+        "price": 45,
+        "quantity": 1,
+        "image": "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=400"
+      },
+      {
+        "productId": "10",
+        "name": "Premium Crop Seeds — Wheat",
+        "price": 29.99,
+        "quantity": 1,
+        "image": "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=400"
+      },
+      {
+        "productId": "9",
+        "name": "Interior Wall Paint — White",
+        "price": 38.99,
+        "quantity": 1,
+        "image": "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400"
+      },
+      {
+        "productId": "11",
+        "name": "Tractor Replacement Filter",
+        "price": 42,
+        "quantity": 2,
+        "image": "https://images.unsplash.com/photo-1625245488614-25e37e2f2e0f?w=400"
+      },
+      {
+        "productId": "12",
+        "name": "2018 Toyota Camry — Used",
+        "price": 18500,
+        "quantity": 2,
+        "image": "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=400"
+      },
+      {
+        "productId": "13",
+        "name": "Gold Bracelet — Pre-owned",
+        "price": 420,
+        "quantity": 1,
+        "image": "https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=400"
+      }
+    ],
+    "total": 38200.94,
+    "customer": {
+      "name": "MOAKADEM YOUCEF",
+      "email": "attaffahmed@hotmail.com",
+      "address": "Doha\nP.O Box 22666"
+    },
+    "status": "pending",
+    "createdAt": "2026-03-10T09:52:22.908Z"
+  }
+]
