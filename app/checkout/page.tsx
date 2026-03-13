@@ -60,14 +60,20 @@ export default function CheckoutPage() {
           customer: form,
         }),
       });
-      if (!res.ok) throw new Error("Order failed");
-      const data = await res.json();
+      let data: { id?: string; total?: number; error?: string };
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error("Invalid response from server");
+      }
+      if (!res.ok) throw new Error(data.error || "Order failed");
       setOrderId(data.id);
       setOrderTotal(data.total);
       clearCart();
       setBankTransferDone(true);
-    } catch {
-      alert("Something went wrong. Please try again.");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      alert(msg);
     } finally {
       setSubmitting(false);
     }
