@@ -96,8 +96,8 @@ export async function POST(req: NextRequest) {
   addOrder(order);
 
   const baseUrl = getBaseUrl(req);
-  const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [
-    ...items.map((i) => ({
+  const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = items.map(
+    (i) => ({
       price_data: {
         currency: "aud",
         product_data: {
@@ -107,22 +107,18 @@ export async function POST(req: NextRequest) {
         unit_amount: Math.round(i.price * 100),
       },
       quantity: i.quantity,
-    })),
-    ...(fees.buyerFee > 0
-      ? [
-          {
-            price_data: {
-              currency: "aud",
-              product_data: {
-                name: "Service fee (1%)",
-              },
-              unit_amount: Math.round(fees.buyerFee * 100),
-            },
-            quantity: 1,
-          },
-        ]
-      : []),
-  ];
+    })
+  );
+  if (fees.buyerFee > 0) {
+    lineItems.push({
+      price_data: {
+        currency: "aud",
+        product_data: { name: "Service fee (1%)" },
+        unit_amount: Math.round(fees.buyerFee * 100),
+      },
+      quantity: 1,
+    });
+  }
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: lineItems,
