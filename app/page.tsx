@@ -10,6 +10,8 @@ import type { Product } from "@/lib/types";
 const PROMO_DISMISS_KEY = "miaha_promo_dismissed";
 
 const CATEGORY_KEYS: Record<string, string> = {
+  "Accommodation (Apartments, Studios, Hotels)": "categories.accommodation",
+  "Homemade Sweets & Cakes": "categories.homemadeSweets",
   "Men's Clothing": "categories.men",
   "Women's Clothing": "categories.women",
   "Oil & Gas Equipment": "categories.oilGas",

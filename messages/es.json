@@ -86,6 +86,8 @@
     "featuredProducts": "Productos populares"
   },
   "categories": {
+    "accommodation": "Alojamiento (apartamentos, estudios, hoteles)",
+    "homemadeSweets": "Dulces y pasteles caseros",
     "men": "Hombres",
     "women": "Mujeres",
     "oilGas": "Petróleo y gas",

@@ -86,6 +86,8 @@
     "featuredProducts": "Popular products"
   },
   "categories": {
+    "accommodation": "Accommodation (Apartments, Studios, Hotels)",
+    "homemadeSweets": "Homemade Sweets & Cakes",
     "men": "Men",
     "women": "Women",
     "oilGas": "Oil & Gas",

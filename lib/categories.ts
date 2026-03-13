@@ -1,5 +1,7 @@
 /** All markets/categories Miaha international market targets */
 export const CATEGORIES = [
+  "Accommodation (Apartments, Studios, Hotels)",
+  "Homemade Sweets & Cakes",
   "Agriculture",
   "Seeds",
   "Men's Clothing",
@@ -27,6 +29,8 @@ export type Category = (typeof CATEGORIES)[number];
 
 /** Background image URL per category for Shop by category cards (Unsplash placeholders; replace with your own) */
 export const CATEGORY_BACKGROUND_IMAGES: Partial<Record<Category, string>> = {
+  "Accommodation (Apartments, Studios, Hotels)": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400",
+  "Homemade Sweets & Cakes": "https://images.unsplash.com/photo-1558302391-9b381f7a7256?w=400",
   Agriculture: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400",
   Seeds: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400",
   "Men's Clothing": "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=400",

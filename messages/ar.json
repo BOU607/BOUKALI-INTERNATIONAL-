@@ -86,6 +86,8 @@
     "featuredProducts": "منتجات شائعة"
   },
   "categories": {
+    "accommodation": "إقامة (شقق، استوديوهات، فنادق)",
+    "homemadeSweets": "حلويات وكيك منزلي",
     "men": "رجال",
     "women": "نساء",
     "oilGas": "نفط وغاز",

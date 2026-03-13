@@ -10,6 +10,8 @@ import { ShareButton } from "@/components/ShareButton";
 import { ProductCard } from "@/components/ProductCard";
 
 const CATEGORY_KEYS: Record<string, string> = {
+  "Accommodation (Apartments, Studios, Hotels)": "categories.accommodation",
+  "Homemade Sweets & Cakes": "categories.homemadeSweets",
   "Men's Clothing": "categories.men",
   "Women's Clothing": "categories.women",
   "Oil & Gas Equipment": "categories.oilGas",
