@@ -87,7 +87,7 @@ const defaultProducts: Product[] = [
     description: "Spare parts for industrial valves. Compatible with standard fittings.",
     price: 45.0,
     image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=400",
-    category: "Spare Parts",
+    category: "Car spare parts",
     stock: 50,
     createdAt: new Date().toISOString(),
   },
