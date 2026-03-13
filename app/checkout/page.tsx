@@ -8,14 +8,27 @@ import type { OrderItem } from "@/lib/types";
 import { formatAUD } from "@/lib/currency";
 import { computeFees } from "@/lib/fees";
 
+const CONFIRM_KEY = "miaha_order_confirm";
+
+function loadSavedOrder(): { orderId: string; orderTotal: number } | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = sessionStorage.getItem(CONFIRM_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw) as { orderId: string; orderTotal: number };
+    if (data?.orderId && typeof data?.orderTotal === "number") return data;
+  } catch {}
+  return null;
+}
+
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
   const { t } = useI18n();
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
-  const [orderId, setOrderId] = useState<string | null>(null);
-  const [bankTransferDone, setBankTransferDone] = useState(false);
-  const [orderTotal, setOrderTotal] = useState(0);
+  const [orderId, setOrderId] = useState<string | null>(() => loadSavedOrder()?.orderId ?? null);
+  const [bankTransferDone, setBankTransferDone] = useState(() => !!loadSavedOrder());
+  const [orderTotal, setOrderTotal] = useState(() => loadSavedOrder()?.orderTotal ?? 0);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -27,7 +40,7 @@ export default function CheckoutPage() {
     [totalPrice]
   );
 
-  if (items.length === 0 && !done && !bankTransferDone) {
+  if (items.length === 0 && !done && !bankTransferDone && !orderId) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h1 className="font-display text-2xl font-semibold text-stone-100">{t("checkout.title")}</h1>
@@ -67,8 +80,11 @@ export default function CheckoutPage() {
         throw new Error("Invalid response from server");
       }
       if (!res.ok) throw new Error(data.error || "Order failed");
-      setOrderId(data.id);
-      setOrderTotal(data.total);
+      const id = data.id ?? "";
+      const tot = typeof data.total === "number" ? data.total : total;
+      sessionStorage.setItem(CONFIRM_KEY, JSON.stringify({ orderId: id, orderTotal: tot }));
+      setOrderId(id);
+      setOrderTotal(tot);
       clearCart();
       setBankTransferDone(true);
     } catch (err) {
@@ -106,7 +122,11 @@ export default function CheckoutPage() {
               <p className="text-sm text-ink-500 mt-4">{t("checkout.contactForBankDetails")}</p>
             )}
           </div>
-          <Link href="/products" className="btn-primary mt-8 inline-block w-full text-center">
+          <Link
+            href="/products"
+            className="btn-primary mt-8 inline-block w-full text-center"
+            onClick={() => sessionStorage.removeItem(CONFIRM_KEY)}
+          >
             {t("checkout.continueShopping")}
           </Link>
         </div>
