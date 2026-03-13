@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { Order } from "@/lib/types";
+import { paySellerAmount } from "@/lib/fees";
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -76,9 +77,20 @@ export default function AdminOrdersPage() {
                     </li>
                   ))}
                 </ul>
-                <p className="mt-2 font-medium text-brand-400">
-                  Total: ${order.total.toFixed(2)}
-                </p>
+                {order.subtotal != null && order.buyerFee != null && order.sellerFee != null ? (
+                  <div className="mt-2 space-y-1 text-sm">
+                    <p className="text-ink-500">
+                      Subtotal: ${order.subtotal.toFixed(2)} · Buyer fee (1%): ${order.buyerFee.toFixed(2)} · Seller fee (1.5%): ${order.sellerFee.toFixed(2)}
+                    </p>
+                    <p className="font-medium text-brand-400">
+                      Total: ${order.total.toFixed(2)} · Pay seller: ${paySellerAmount(order.subtotal, order.sellerFee).toFixed(2)}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="mt-2 font-medium text-brand-400">
+                    Total: ${order.total.toFixed(2)}
+                  </p>
+                )}
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
                 <span

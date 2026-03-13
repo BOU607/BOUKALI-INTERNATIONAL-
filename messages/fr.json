@@ -88,8 +88,8 @@
   "categories": {
     "accommodation": "Hébergement (appartements, studios, hôtels)",
     "homemadeSweets": "Pâtisseries et gâteaux maison",
-    "men": "Hommes",
-    "women": "Femmes",
+    "men": "Vêtements homme",
+    "women": "Vêtements femme",
     "oilGas": "Pétrole et gaz",
     "carSpareParts": "Pièces détachées auto",
     "heavyTruckSpareParts": "Pièces détachées poids lourds",
@@ -155,6 +155,8 @@
     "thankYou": "Merci pour votre achat.",
     "continueShopping": "Continuer les achats",
     "orderSummary": "Récapitulatif",
+    "subtotal": "Sous-total",
+    "serviceFee": "Frais de service (1 %)",
     "total": "Total",
     "cardNotConfigured": "Paiement par carte non configuré. La commande sera enregistrée en attente.",
     "audNote": "Tous les prix et paiements sont en dollars australiens (AUD). Cartes australiennes acceptées."

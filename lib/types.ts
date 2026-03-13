@@ -45,6 +45,12 @@ export type Order = {
   createdAt: string;
   /** Detected location when order was placed (from request IP) */
   visitorLocation?: OrderLocation;
+  /** Subtotal (items only). Present when platform fees applied. */
+  subtotal?: number;
+  /** Buyer service fee (e.g. 1%). Present when platform fees applied. */
+  buyerFee?: number;
+  /** Seller fee (e.g. 1.5%) – deducted at payout. Present when platform fees applied. */
+  sellerFee?: number;
 };
 
 export type Job = {

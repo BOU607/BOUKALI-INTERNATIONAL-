@@ -88,8 +88,8 @@
   "categories": {
     "accommodation": "Accommodation (Apartments, Studios, Hotels)",
     "homemadeSweets": "Homemade Sweets & Cakes",
-    "men": "Men",
-    "women": "Women",
+    "men": "Men clothes",
+    "women": "Women clothes",
     "oilGas": "Oil & Gas",
     "carSpareParts": "Car spare parts",
     "heavyTruckSpareParts": "Heavy truck spare parts",
@@ -155,6 +155,8 @@
     "thankYou": "Thank you for your purchase.",
     "continueShopping": "Continue shopping",
     "orderSummary": "Order summary",
+    "subtotal": "Subtotal",
+    "serviceFee": "Service fee (1%)",
     "total": "Total",
     "cardNotConfigured": "Card payments not configured. Order will be created as pending.",
     "audNote": "All prices and payments are in Australian dollars (AUD). Australian cards accepted."

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { useCart } from "@/components/CartProvider";
 import { useI18n } from "@/components/LanguageProvider";
 import type { OrderItem } from "@/lib/types";
 import { formatAUD } from "@/lib/currency";
+import { computeFees } from "@/lib/fees";
 
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
@@ -42,6 +43,11 @@ export default function CheckoutPage() {
     image: i.image ?? "",
   }));
 
+  const { subtotal, buyerFee, total } = useMemo(
+    () => computeFees(totalPrice),
+    [totalPrice]
+  );
+
   const handlePayWithCard = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -51,7 +57,7 @@ export default function CheckoutPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           items: orderItems,
-          total: totalPrice,
+          total,
           customer: form,
         }),
       });
@@ -79,7 +85,7 @@ export default function CheckoutPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           items: orderItems,
-          total: totalPrice,
+          total,
           customer: form,
         }),
       });
@@ -104,7 +110,7 @@ export default function CheckoutPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           items: orderItems,
-          total: totalPrice,
+          total,
           customer: form,
         }),
       });
@@ -258,9 +264,19 @@ export default function CheckoutPage() {
               </li>
             ))}
           </ul>
-          <div className="mt-4 pt-4 border-t border-ink-700 flex justify-between font-semibold text-stone-200">
-            <span>{t("checkout.total")}</span>
-            <span className="text-brand-400">{formatAUD(totalPrice)}</span>
+          <div className="mt-4 pt-4 border-t border-ink-700 space-y-2 text-sm">
+            <div className="flex justify-between text-ink-500">
+              <span>{t("checkout.subtotal")}</span>
+              <span>{formatAUD(subtotal)}</span>
+            </div>
+            <div className="flex justify-between text-ink-500">
+              <span>{t("checkout.serviceFee")}</span>
+              <span>{formatAUD(buyerFee)}</span>
+            </div>
+            <div className="flex justify-between font-semibold text-stone-200 pt-2">
+              <span>{t("checkout.total")}</span>
+              <span className="text-brand-400">{formatAUD(total)}</span>
+            </div>
           </div>
         </div>
       </div>

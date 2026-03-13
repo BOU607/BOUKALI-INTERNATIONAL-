@@ -8,6 +8,7 @@ import {
   sanitizeString,
 } from "@/lib/security";
 import { getLocationFromRequest } from "@/lib/geo";
+import { computeFees } from "@/lib/fees";
 
 /** GET orders: admin only — prevents data leak to unauthenticated users */
 export async function GET(req: NextRequest) {
@@ -52,16 +53,27 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid items" }, { status: 400 });
   }
 
+  const subtotalFromItems = items.reduce(
+    (sum, i) => sum + i.price * i.quantity,
+    0
+  );
+  const fees = computeFees(subtotalFromItems);
   const total = Number(payload.total);
   if (!Number.isFinite(total) || total < 0) {
     return NextResponse.json({ error: "Invalid total" }, { status: 400 });
+  }
+  if (Math.abs(total - fees.total) > 0.02) {
+    return NextResponse.json(
+      { error: "Total does not match subtotal + buyer fee" },
+      { status: 400 }
+    );
   }
 
   const visitorLocation = getLocationFromRequest(req);
   const order: Order = {
     id: `ord-${Date.now()}`,
     items,
-    total,
+    total: fees.total,
     customer: {
       name: sanitizeString(payload.customer.name, 200),
       email: String(payload.customer.email).trim().toLowerCase(),
@@ -70,6 +82,9 @@ export async function POST(req: NextRequest) {
     status: "pending",
     createdAt: new Date().toISOString(),
     visitorLocation: Object.keys(visitorLocation).length > 0 ? visitorLocation : undefined,
+    subtotal: fees.subtotal,
+    buyerFee: fees.buyerFee,
+    sellerFee: fees.sellerFee,
   };
   addOrder(order);
   return NextResponse.json(order);

@@ -8,6 +8,7 @@ import {
   sanitizeString,
 } from "@/lib/security";
 import { getLocationFromRequest } from "@/lib/geo";
+import { computeFees } from "@/lib/fees";
 
 const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY)
@@ -56,9 +57,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid items" }, { status: 400 });
   }
 
+  const subtotalFromItems = items.reduce(
+    (sum, i) => sum + i.price * i.quantity,
+    0
+  );
+  const fees = computeFees(subtotalFromItems);
   const total = Number(payload.total);
   if (!Number.isFinite(total) || total < 0) {
     return NextResponse.json({ error: "Invalid total" }, { status: 400 });
+  }
+  if (Math.abs(total - fees.total) > 0.02) {
+    return NextResponse.json(
+      { error: "Total does not match subtotal + buyer fee" },
+      { status: 400 }
+    );
   }
 
   const orderId = `ord-${Date.now()}`;
@@ -72,18 +84,20 @@ export async function POST(req: NextRequest) {
   const order: Order = {
     id: orderId,
     items: items as OrderItem[],
-    total,
+    total: fees.total,
     customer,
     status: "pending",
     createdAt: new Date().toISOString(),
     visitorLocation: Object.keys(visitorLocation).length > 0 ? visitorLocation : undefined,
+    subtotal: fees.subtotal,
+    buyerFee: fees.buyerFee,
+    sellerFee: fees.sellerFee,
   };
   addOrder(order);
 
   const baseUrl = getBaseUrl(req);
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
-    line_items: items.map((i) => ({
+  const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [
+    ...items.map((i) => ({
       price_data: {
         currency: "aud",
         product_data: {
@@ -94,6 +108,24 @@ export async function POST(req: NextRequest) {
       },
       quantity: i.quantity,
     })),
+    ...(fees.buyerFee > 0
+      ? [
+          {
+            price_data: {
+              currency: "aud",
+              product_data: {
+                name: "Service fee (1%)",
+              },
+              unit_amount: Math.round(fees.buyerFee * 100),
+            },
+            quantity: 1,
+          },
+        ]
+      : []),
+  ];
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: lineItems,
     mode: "payment",
     success_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${baseUrl}/checkout`,
