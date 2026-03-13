@@ -23,6 +23,11 @@ export default function CheckoutPage() {
     address: "",
   });
 
+  const { subtotal, buyerFee, total } = useMemo(
+    () => computeFees(totalPrice),
+    [totalPrice]
+  );
+
   if (items.length === 0 && !done && !bankTransferDone) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
@@ -42,11 +47,6 @@ export default function CheckoutPage() {
     quantity: i.quantity,
     image: i.image ?? "",
   }));
-
-  const { subtotal, buyerFee, total } = useMemo(
-    () => computeFees(totalPrice),
-    [totalPrice]
-  );
 
   const handlePayWithCard = async (e: React.FormEvent) => {
     e.preventDefault();
