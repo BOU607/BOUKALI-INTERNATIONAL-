@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
+  trustHost: true,
   providers: [
     CredentialsProvider({
       name: "Admin",
@@ -24,7 +25,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   session: { strategy: "jwt", maxAge: 24 * 60 * 60 },
-  pages: { signIn: "/admin/login" },
+  pages: { signIn: "/admin/login", error: "/admin/login" },
   callbacks: {
     jwt({ token, user }) {
       if (user) token.id = user.id;

@@ -60,6 +60,35 @@ export default function CheckoutPage() {
     image: i.image ?? "",
   }));
 
+  const handlePayWithCard = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: orderItems,
+          total,
+          customer: form,
+        }),
+      });
+      const data = await res.json();
+      if (res.status === 503) {
+        alert(t("checkout.cardNotConfigured"));
+        setSubmitting(false);
+        return;
+      }
+      if (!res.ok) throw new Error(data.error || "Order failed");
+      if (data.url) window.location.href = data.url;
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      alert(msg);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -168,7 +197,7 @@ export default function CheckoutPage() {
       </h1>
       <div className="max-w-2xl grid md:grid-cols-2 gap-10">
         <form
-          onSubmit={handlePlaceOrder}
+          onSubmit={handlePayWithCard}
           className="space-y-4"
         >
           <label className="block">
@@ -209,10 +238,18 @@ export default function CheckoutPage() {
             disabled={submitting}
             className="btn-primary w-full py-3"
           >
+            {submitting ? t("checkout.redirecting") : t("checkout.payWithCard")}
+          </button>
+          <button
+            type="button"
+            onClick={handlePlaceOrder}
+            disabled={submitting}
+            className="btn-secondary w-full py-3 mt-2"
+          >
             {submitting ? t("checkout.placingOrder") : t("checkout.orderAndBankTransfer")}
           </button>
           <p className="text-xs text-ink-500">
-            {t("checkout.bankTransferOnly")}
+            {t("checkout.payWithCardOrBank")}
           </p>
         </form>
         <div className="card p-6">

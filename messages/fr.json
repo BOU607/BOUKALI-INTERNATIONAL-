@@ -165,6 +165,7 @@
     "cardNotConfigured": "Paiement par carte non configuré. La commande sera enregistrée en attente.",
     "audNote": "Tous les prix et paiements sont en dollars australiens (AUD). Cartes australiennes acceptées.",
     "bankTransferOnly": "Paiement par virement bancaire. Vous recevrez nos coordonnées bancaires après avoir passé commande.",
+    "payWithCardOrBank": "Payer par carte (débit automatique) ou virement bancaire ci-dessous.",
     "contactForBankDetails": "Contactez-nous pour les coordonnées bancaires."
   },
   "jobs": {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { addOrder } from "@/lib/store";
+import { addOrder } from "@/lib/orders-persist";
 import type { Order, OrderItem } from "@/lib/types";
 import {
   validateOrderPayload,
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
     buyerFee: fees.buyerFee,
     sellerFee: fees.sellerFee,
   };
-  addOrder(order);
+  await addOrder(order);
 
   const baseUrl = getBaseUrl(req);
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = items.map(

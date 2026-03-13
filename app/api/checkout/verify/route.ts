@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { updateOrderStatus } from "@/lib/store";
+import { updateOrderStatus } from "@/lib/orders-persist";
 
 const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY)
@@ -26,6 +26,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Order not found" }, { status: 400 });
   }
 
-  updateOrderStatus(orderId, "paid");
+  await updateOrderStatus(orderId, "paid");
   return NextResponse.json({ orderId });
 }

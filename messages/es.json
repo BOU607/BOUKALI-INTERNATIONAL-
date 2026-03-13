@@ -165,6 +165,7 @@
     "cardNotConfigured": "Pago con tarjeta no configurado. El pedido se creará como pendiente.",
     "audNote": "Todos los precios y pagos en dólares australianos (AUD). Se aceptan tarjetas australianas.",
     "bankTransferOnly": "Pago por transferencia bancaria. Recibirás los datos bancarios tras confirmar el pedido.",
+    "payWithCardOrBank": "Pagar con tarjeta (se deduce automáticamente) o usar transferencia bancaria abajo.",
     "contactForBankDetails": "Contáctanos para los datos de transferencia bancaria."
   },
   "jobs": {

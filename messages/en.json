@@ -165,6 +165,7 @@
     "cardNotConfigured": "Card payments not configured. Order will be created as pending.",
     "audNote": "All prices and payments are in Australian dollars (AUD). Australian cards accepted.",
     "bankTransferOnly": "Pay by bank transfer. You'll receive our bank details after placing your order.",
+    "payWithCardOrBank": "Pay with card (amount deducted automatically) or use bank transfer below.",
     "contactForBankDetails": "Contact us for bank transfer details."
   },
   "jobs": {
