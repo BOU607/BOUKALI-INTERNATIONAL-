@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { getOrders, addOrder } from "@/lib/store";
+import { getOrders, addOrder } from "@/lib/orders-persist";
 import type { Order } from "@/lib/types";
 import {
   validateOrderPayload,
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
   if (!token) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const orders = getOrders();
+  const orders = await getOrders();
   return NextResponse.json(orders);
 }
 
@@ -86,6 +86,6 @@ export async function POST(req: NextRequest) {
     buyerFee: fees.buyerFee,
     sellerFee: fees.sellerFee,
   };
-  addOrder(order);
+  await addOrder(order);
   return NextResponse.json(order);
 }

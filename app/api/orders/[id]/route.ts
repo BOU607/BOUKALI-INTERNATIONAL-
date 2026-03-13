@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { updateOrderStatus } from "@/lib/store";
+import { updateOrderStatus } from "@/lib/orders-persist";
 import type { Order } from "@/lib/types";
 
 const VALID_STATUSES: Order["status"][] = ["pending", "paid", "shipped", "delivered", "refunded"];
@@ -43,7 +43,7 @@ export async function PATCH(
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
   }
 
-  const order = updateOrderStatus(orderId, status as Order["status"]);
+  const order = await updateOrderStatus(orderId, status as Order["status"]);
   if (!order) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json(order);
 }
