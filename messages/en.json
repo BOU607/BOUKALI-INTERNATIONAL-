@@ -159,7 +159,9 @@
     "serviceFee": "Service fee (1%)",
     "total": "Total",
     "cardNotConfigured": "Card payments not configured. Order will be created as pending.",
-    "audNote": "All prices and payments are in Australian dollars (AUD). Australian cards accepted."
+    "audNote": "All prices and payments are in Australian dollars (AUD). Australian cards accepted.",
+    "bankTransferOnly": "Pay by bank transfer. You'll receive our bank details after placing your order.",
+    "contactForBankDetails": "Contact us for bank transfer details."
   },
   "jobs": {
     "title": "Job search",

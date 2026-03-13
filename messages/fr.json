@@ -159,7 +159,9 @@
     "serviceFee": "Frais de service (1 %)",
     "total": "Total",
     "cardNotConfigured": "Paiement par carte non configuré. La commande sera enregistrée en attente.",
-    "audNote": "Tous les prix et paiements sont en dollars australiens (AUD). Cartes australiennes acceptées."
+    "audNote": "Tous les prix et paiements sont en dollars australiens (AUD). Cartes australiennes acceptées.",
+    "bankTransferOnly": "Paiement par virement bancaire. Vous recevrez nos coordonnées bancaires après avoir passé commande.",
+    "contactForBankDetails": "Contactez-nous pour les coordonnées bancaires."
   },
   "jobs": {
     "title": "Recherche d'emploi",

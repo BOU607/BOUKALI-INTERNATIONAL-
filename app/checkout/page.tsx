@@ -12,7 +12,6 @@ export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
   const { t } = useI18n();
   const [submitting, setSubmitting] = useState(false);
-  const [payWithCard, setPayWithCard] = useState(true);
   const [done, setDone] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [bankTransferDone, setBankTransferDone] = useState(false);
@@ -48,60 +47,7 @@ export default function CheckoutPage() {
     image: i.image ?? "",
   }));
 
-  const handlePayWithCard = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    try {
-      const res = await fetch("/api/checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          items: orderItems,
-          total,
-          customer: form,
-        }),
-      });
-      const data = await res.json();
-      if (res.status === 503) {
-        setPayWithCard(false);
-        setSubmitting(false);
-        return;
-      }
-      if (!res.ok) throw new Error(data.error || "Failed");
-      if (data.url) window.location.href = data.url;
-    } catch {
-      alert("Something went wrong. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handlePlaceOrderOnly = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    try {
-      const res = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          items: orderItems,
-          total,
-          customer: form,
-        }),
-      });
-      if (!res.ok) throw new Error("Order failed");
-      const data = await res.json();
-      setOrderId(data.id);
-      clearCart();
-      setDone(true);
-    } catch {
-      alert("Something went wrong. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleBankTransfer = async (e: React.FormEvent) => {
+  const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     try {
@@ -127,9 +73,9 @@ export default function CheckoutPage() {
     }
   };
 
-  const bsb = process.env.NEXT_PUBLIC_BSB ?? "012245";
-  const accountNumber = process.env.NEXT_PUBLIC_ACCOUNT ?? "177793659";
-
+  const bsb = process.env.NEXT_PUBLIC_BSB ?? "";
+  const accountNumber = process.env.NEXT_PUBLIC_ACCOUNT ?? "";
+  const hasBankDetails = bsb && accountNumber;
   if (bankTransferDone && orderId) {
     return (
       <div className="container mx-auto px-4 py-16 text-center max-w-md mx-auto">
@@ -140,32 +86,21 @@ export default function CheckoutPage() {
           <p className="text-ink-500 mt-2">{t("checkout.transferInstructions")}</p>
           <p className="mt-4 text-sm text-brand-400 font-mono">{orderId}</p>
           <div className="mt-6 p-4 rounded-xl bg-ink-800/50 border border-ink-700">
-            <p className="text-sm text-ink-500 mb-1">{t("checkout.bsb")}</p>
-            <p className="font-mono text-stone-200">{bsb}</p>
-            <p className="text-sm text-ink-500 mt-3 mb-1">{t("checkout.account")}</p>
-            <p className="font-mono text-stone-200">{accountNumber}</p>
-            <p className="text-sm text-ink-500 mt-3 mb-1">{t("checkout.amount")} (AUD)</p>
+            <p className="text-sm text-ink-500 mb-1">{t("checkout.amount")} (AUD)</p>
             <p className="font-mono text-stone-200">{formatAUD(orderTotal)}</p>
             <p className="text-xs text-ink-500 mt-3">{t("checkout.useOrderIdAsReference")}</p>
+            {hasBankDetails ? (
+              <>
+                <p className="text-sm text-ink-500 mt-4 mb-1">{t("checkout.bsb")}</p>
+                <p className="font-mono text-stone-200">{bsb}</p>
+                <p className="text-sm text-ink-500 mt-3 mb-1">{t("checkout.account")}</p>
+                <p className="font-mono text-stone-200">{accountNumber}</p>
+              </>
+            ) : (
+              <p className="text-sm text-ink-500 mt-4">{t("checkout.contactForBankDetails")}</p>
+            )}
           </div>
           <Link href="/products" className="btn-primary mt-8 inline-block w-full text-center">
-            {t("checkout.continueShopping")}
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  if (done && orderId && !bankTransferDone) {
-    return (
-      <div className="container mx-auto px-4 py-16 text-center max-w-md mx-auto">
-        <div className="card p-8">
-          <h1 className="font-display text-2xl font-semibold text-stone-100">
-            {t("checkout.orderConfirmed")}
-          </h1>
-          <p className="text-ink-500 mt-2">{t("checkout.thankYou")}</p>
-          <p className="mt-4 text-sm text-brand-400 font-mono">{orderId}</p>
-          <Link href="/products" className="btn-primary mt-8 inline-block">
             {t("checkout.continueShopping")}
           </Link>
         </div>
@@ -180,7 +115,7 @@ export default function CheckoutPage() {
       </h1>
       <div className="max-w-2xl grid md:grid-cols-2 gap-10">
         <form
-          onSubmit={payWithCard ? handlePayWithCard : handlePlaceOrderOnly}
+          onSubmit={handlePlaceOrder}
           className="space-y-4"
         >
           <label className="block">
@@ -216,38 +151,15 @@ export default function CheckoutPage() {
               rows={3}
             />
           </label>
-          {payWithCard ? (
-            <button
-              type="submit"
-              disabled={submitting}
-              className="btn-primary w-full py-3"
-            >
-              {submitting ? t("checkout.redirecting") : t("checkout.payWithCard")}
-            </button>
-          ) : (
-            <button
-              type="submit"
-              disabled={submitting}
-              className="btn-primary w-full py-3"
-            >
-              {submitting ? t("checkout.placingOrder") : t("checkout.placeOrder")}
-            </button>
-          )}
           <button
-            type="button"
-            onClick={handleBankTransfer}
+            type="submit"
             disabled={submitting}
-            className="btn-secondary w-full py-3 mt-2"
+            className="btn-primary w-full py-3"
           >
             {submitting ? t("checkout.placingOrder") : t("checkout.orderAndBankTransfer")}
           </button>
-          {!payWithCard && (
-            <p className="text-xs text-ink-500">
-              {t("checkout.cardNotConfigured")}
-            </p>
-          )}
           <p className="text-xs text-ink-500">
-            {t("checkout.audNote")}
+            {t("checkout.bankTransferOnly")}
           </p>
         </form>
         <div className="card p-6">
