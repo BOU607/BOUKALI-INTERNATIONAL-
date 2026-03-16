@@ -12,7 +12,7 @@ export async function notifySellersOfOrder(order: Order): Promise<void> {
     return;
   }
 
-  const sellerIds = [...new Set(order.items.map((i) => i.sellerId).filter(Boolean))] as string[];
+  const sellerIds = Array.from(new Set(order.items.map((i) => i.sellerId).filter((id): id is string => Boolean(id))));
   if (sellerIds.length === 0) return;
 
   for (const sellerId of sellerIds) {
