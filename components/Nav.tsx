@@ -2,14 +2,17 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useCart } from "./CartProvider";
 import { useI18n } from "./LanguageProvider";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Nav() {
+  const { data: session, status } = useSession();
   const { totalItems } = useCart();
   const { t } = useI18n();
   const router = useRouter();
+  const isSeller = status === "authenticated" && (session?.user as { role?: string } | undefined)?.role === "seller";
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -62,8 +65,11 @@ export function Nav() {
               </span>
             )}
           </Link>
-          <Link href="/seller/login" className="btn-ghost text-sm">
-            Seller
+          <Link
+            href="/seller/dashboard"
+            className={`text-sm shrink-0 ${isSeller ? "text-brand-400 font-medium hover:text-brand-300" : "btn-ghost"}`}
+          >
+            Seller dashboard
           </Link>
           <Link href="/admin" className="btn-ghost text-sm text-ink-500">
             {t("nav.admin")}

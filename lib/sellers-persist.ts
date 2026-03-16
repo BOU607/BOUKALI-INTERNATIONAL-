@@ -2,6 +2,25 @@ import type { Seller } from "./types";
 
 const KV_KEY = "miaha:sellers";
 
+/** Dev-only seller when KV is not configured. Password: seller123 */
+let devSellerPromise: Promise<Seller> | null = null;
+async function getDevSeller(): Promise<Seller> {
+  if (!devSellerPromise) {
+    const { hash } = await import("bcryptjs");
+    devSellerPromise = hash("seller123", 10).then((passwordHash) => ({
+      id: "dev-seller",
+      name: "Dev Seller",
+      email: "seller@test.com",
+      passwordHash,
+      businessName: "Test Shop",
+      phone: "",
+      status: "approved" as const,
+      createdAt: new Date().toISOString(),
+    }));
+  }
+  return devSellerPromise;
+}
+
 function getKvCreds(): { url: string; token: string } | null {
   const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
@@ -18,7 +37,12 @@ async function getKv() {
 
 export async function getSellers(): Promise<Seller[]> {
   const kv = await getKv();
-  if (!kv) return [];
+  if (!kv) {
+    if (process.env.NODE_ENV === "development") {
+      return [await getDevSeller()];
+    }
+    return [];
+  }
   try {
     const raw = await kv.get(KV_KEY);
     if (Array.isArray(raw)) return raw as Seller[];
@@ -56,7 +80,14 @@ export async function addSeller(seller: Seller): Promise<Seller> {
 
 export async function updateSeller(id: string, updates: Partial<Seller>): Promise<Seller | undefined> {
   const kv = await getKv();
-  if (!kv) return undefined;
+  if (!kv) {
+    if (process.env.NODE_ENV === "development" && id === "dev-seller") {
+      const seller = await getDevSeller();
+      Object.assign(seller, updates);
+      return seller;
+    }
+    return undefined;
+  }
   const sellers = await getSellers();
   const i = sellers.findIndex((s) => s.id === id);
   if (i < 0) return undefined;

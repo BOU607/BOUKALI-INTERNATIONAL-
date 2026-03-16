@@ -1,12 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { useI18n } from "@/components/LanguageProvider";
 import { contact, whatsappHref } from "@/lib/contact";
 
 export function Footer() {
+  const { data: session } = useSession();
   const { t } = useI18n();
   const hasReach = contact.phone || contact.whatsapp || contact.address || contact.googleMapLink;
+  const isSeller = (session?.user as { role?: string } | undefined)?.role === "seller";
 
   return (
     <footer className="border-t border-ink-800 mt-auto">
@@ -46,8 +49,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/sell" className="text-ink-400 hover:text-brand-400 text-sm transition-colors">
-                  {t("footer.sell")}
+                <Link
+                  href={isSeller ? "/seller/dashboard" : "/sell"}
+                  className="text-ink-400 hover:text-brand-400 text-sm transition-colors"
+                >
+                  {isSeller ? "Seller dashboard" : t("footer.sell")}
                 </Link>
               </li>
             </ul>

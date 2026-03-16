@@ -9,6 +9,11 @@ export type Seller = {
   /** pending = awaiting admin approval, approved = can list products */
   status: "pending" | "approved";
   createdAt: string;
+  /** Payout: where to send seller's money */
+  bankName?: string;
+  accountHolder?: string;
+  iban?: string;
+  swift?: string;
 };
 
 export type Product = {

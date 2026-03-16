@@ -1,5 +1,10 @@
 import type { Order } from "./types";
-import { addOrder as addOrderFile, getOrders as getOrdersFile, updateOrderStatus as updateOrderStatusFile } from "./store";
+import {
+  addOrder as addOrderFile,
+  getOrders as getOrdersFile,
+  updateOrderStatus as updateOrderStatusFile,
+  updateOrdersCustomer as updateOrdersCustomerFile,
+} from "./store";
 
 const KV_KEY = "miaha:orders";
 
@@ -78,4 +83,34 @@ export async function updateOrderStatus(orderId: string, status: Order["status"]
     }
   }
   return updateOrderStatusFile(orderId, status);
+}
+
+/** Update customer name/email for all orders with the given customer email. Returns number of orders updated. */
+export async function updateCustomerForEmail(
+  currentEmail: string,
+  updates: { name?: string; newEmail?: string }
+): Promise<number> {
+  const creds = getKvCreds();
+  if (creds) {
+    try {
+      const { createClient } = await import("@vercel/kv");
+      const kv = createClient({ url: creds.url, token: creds.token });
+      const orders = await getOrders();
+      const key = currentEmail.trim().toLowerCase();
+      let count = 0;
+      for (const o of orders) {
+        const e = (o.customer?.email ?? "").trim().toLowerCase();
+        if (e !== key) continue;
+        if (updates.name !== undefined) o.customer.name = updates.name.trim();
+        if (updates.newEmail !== undefined) o.customer.email = updates.newEmail.trim().toLowerCase();
+        count++;
+      }
+      if (count > 0) await kv.set(KV_KEY, orders);
+      return count;
+    } catch (e) {
+      console.warn("KV updateCustomerForEmail failed:", e);
+      return 0;
+    }
+  }
+  return updateOrdersCustomerFile(currentEmail, updates);
 }

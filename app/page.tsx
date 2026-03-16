@@ -85,7 +85,7 @@ export default function HomePage() {
           {t("home.subtitle")}
         </p>
         <p className="mt-3 text-sm text-ink-400">
-          <Link href="/sell" className="underline hover:text-brand-400">
+          <Link href="/seller/dashboard" className="underline hover:text-brand-400">
             {t("home.firstSellersLine")}
           </Link>
         </p>
@@ -99,7 +99,7 @@ export default function HomePage() {
           <Link href="/jobs" className="btn-secondary text-base px-6 py-3">
             {t("home.findJobs")}
           </Link>
-          <Link href="/sell" className="btn-secondary text-base px-6 py-3">
+          <Link href="/seller/dashboard" className="btn-secondary text-base px-6 py-3">
             {t("home.sellOn")}
           </Link>
           <Link href="/trust" className="btn-ghost text-base px-6 py-3 text-ink-400 hover:text-stone-200">

@@ -9,6 +9,7 @@ import {
 } from "@/lib/security";
 import { getLocationFromRequest } from "@/lib/geo";
 import { computeFees } from "@/lib/fees";
+import { notifySellersOfOrder } from "@/lib/notify-seller";
 
 const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY)
@@ -94,6 +95,7 @@ export async function POST(req: NextRequest) {
     sellerFee: fees.sellerFee,
   };
   await addOrder(order);
+  notifySellersOfOrder(order).catch((e) => console.error("Notify sellers:", e));
 
   const baseUrl = getBaseUrl(req);
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = items.map(

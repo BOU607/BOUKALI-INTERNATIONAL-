@@ -219,6 +219,25 @@ export function updateOrderStatus(orderId: string, status: Order["status"]) {
   return order;
 }
 
+/** Update customer name/email for all orders with the given customer email. */
+export function updateOrdersCustomer(
+  currentEmail: string,
+  updates: { name?: string; newEmail?: string }
+): number {
+  const orders = readOrders();
+  const key = currentEmail.trim().toLowerCase();
+  let count = 0;
+  for (const o of orders) {
+    const e = (o.customer?.email ?? "").trim().toLowerCase();
+    if (e !== key) continue;
+    if (updates.name !== undefined) o.customer.name = updates.name.trim();
+    if (updates.newEmail !== undefined) o.customer.email = updates.newEmail.trim().toLowerCase();
+    count++;
+  }
+  if (count > 0) writeOrders(orders);
+  return count;
+}
+
 function readVisits(): Visit[] {
   ensureDataDir();
   if (!existsSync(VISITS_FILE)) return [];

@@ -9,5 +9,6 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const sellers = await getSellers();
-  return NextResponse.json(sellers);
+  const safe = sellers.map(({ passwordHash: _, ...s }) => s);
+  return NextResponse.json(safe);
 }

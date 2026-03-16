@@ -6,10 +6,28 @@ import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { formatAUD } from "@/lib/currency";
 
+type SellerProfile = {
+  id: string;
+  bankName?: string;
+  accountHolder?: string;
+  iban?: string;
+  swift?: string;
+};
+
 export default function SellerDashboardPage() {
   const { data: session } = useSession();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<SellerProfile | null>(null);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [payoutSaving, setPayoutSaving] = useState(false);
+  const [payoutMessage, setPayoutMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [payoutForm, setPayoutForm] = useState({
+    bankName: "",
+    accountHolder: "",
+    iban: "",
+    swift: "",
+  });
 
   useEffect(() => {
     fetch("/api/seller/products")
@@ -19,7 +37,48 @@ export default function SellerDashboardPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const sellerId = session?.user?.id;
+  useEffect(() => {
+    fetch("/api/seller/profile")
+      .then(async (r) => {
+        const data = await r.json();
+        if (r.ok) {
+          setProfile(data);
+          setPayoutForm({
+            bankName: data.bankName ?? "",
+            accountHolder: data.accountHolder ?? "",
+            iban: data.iban ?? "",
+            swift: data.swift ?? "",
+          });
+        }
+        return data;
+      })
+      .catch(() => setProfile(null))
+      .finally(() => setProfileLoading(false));
+  }, []);
+
+  const savePayoutDetails = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPayoutMessage(null);
+    setPayoutSaving(true);
+    try {
+      const res = await fetch("/api/seller/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payoutForm),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setProfile(data);
+        setPayoutMessage({ type: "success", text: "Payout details saved." });
+      } else {
+        setPayoutMessage({ type: "error", text: data.error ?? "Failed to save." });
+      }
+    } catch {
+      setPayoutMessage({ type: "error", text: "Failed to save." });
+    } finally {
+      setPayoutSaving(false);
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -38,6 +97,9 @@ export default function SellerDashboardPage() {
           </Link>
           <Link href="/seller/orders" className="btn-secondary text-sm py-2">
             My orders
+          </Link>
+          <Link href="/seller/payout" className="btn-secondary text-sm py-2">
+            Payout details
           </Link>
           <button
             type="button"
@@ -87,6 +149,67 @@ export default function SellerDashboardPage() {
               </li>
             ))}
           </ul>
+        )}
+      </div>
+
+      <div id="payout-details" className="card p-6 mt-6 scroll-mt-4">
+        <h2 className="font-medium text-stone-200 mb-1">Payout details</h2>
+        <p className="text-sm text-ink-500 mb-4">
+          Enter your bank details so we can send your earnings. Only the platform admin will see these.
+        </p>
+        {profileLoading ? (
+          <p className="text-ink-500">Loading…</p>
+        ) : (
+          <form onSubmit={savePayoutDetails} className="space-y-4 max-w-md">
+            <div>
+              <label className="block text-sm font-medium text-stone-300 mb-1">Account holder name</label>
+              <input
+                type="text"
+                className="input w-full"
+                value={payoutForm.accountHolder}
+                onChange={(e) => setPayoutForm((f) => ({ ...f, accountHolder: e.target.value }))}
+                placeholder="Full name as on bank account"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-stone-300 mb-1">Bank name</label>
+              <input
+                type="text"
+                className="input w-full"
+                value={payoutForm.bankName}
+                onChange={(e) => setPayoutForm((f) => ({ ...f, bankName: e.target.value }))}
+                placeholder="e.g. Ziraat Bankası"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-stone-300 mb-1">IBAN</label>
+              <input
+                type="text"
+                className="input w-full font-mono"
+                value={payoutForm.iban}
+                onChange={(e) => setPayoutForm((f) => ({ ...f, iban: e.target.value.toUpperCase().replace(/\s/g, "") }))}
+                placeholder="TR00 0000 0000 0000 0000 0000 00"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-stone-300 mb-1">SWIFT / BIC (optional)</label>
+              <input
+                type="text"
+                className="input w-full font-mono"
+                value={payoutForm.swift}
+                onChange={(e) => setPayoutForm((f) => ({ ...f, swift: e.target.value.toUpperCase().replace(/\s/g, "") }))}
+                placeholder="e.g. TCZBTR2A"
+              />
+            </div>
+            {payoutMessage && (
+              <p className={payoutMessage.type === "success" ? "text-green-400 text-sm" : "text-red-400 text-sm"}>
+                {payoutMessage.text}
+              </p>
+            )}
+            <button type="submit" className="btn-primary text-sm py-2" disabled={payoutSaving}>
+              {payoutSaving ? "Saving…" : "Save payout details"}
+            </button>
+          </form>
         )}
       </div>
 

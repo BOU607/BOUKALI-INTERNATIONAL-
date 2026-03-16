@@ -9,6 +9,7 @@ import {
 } from "@/lib/security";
 import { getLocationFromRequest } from "@/lib/geo";
 import { computeFees } from "@/lib/fees";
+import { notifySellersOfOrder } from "@/lib/notify-seller";
 
 /** GET orders: admin only — prevents data leak to unauthenticated users */
 export async function GET(req: NextRequest) {
@@ -87,5 +88,6 @@ export async function POST(req: NextRequest) {
     sellerFee: fees.sellerFee,
   };
   await addOrder(order);
+  notifySellersOfOrder(order).catch((e) => console.error("Notify sellers:", e));
   return NextResponse.json(order);
 }
