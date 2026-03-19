@@ -2,7 +2,7 @@ import type { Seller } from "./types";
 
 const KV_KEY = "miaha:sellers";
 
-/** Dev-only seller when KV is not configured. Password: seller123 */
+/** Test seller (seller@test.com / seller123). Used in dev or when ALLOW_DEV_SELLER=true */
 let devSellerPromise: Promise<Seller> | null = null;
 async function getDevSeller(): Promise<Seller> {
   if (!devSellerPromise) {
@@ -36,23 +36,28 @@ async function getKv() {
 }
 
 export async function getSellers(): Promise<Seller[]> {
+  const allowDevSeller = process.env.ALLOW_DEV_SELLER === "true";
   const kv = await getKv();
   if (!kv) {
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === "development" || allowDevSeller) {
       return [await getDevSeller()];
     }
     return [];
   }
   try {
     const raw = await kv.get(KV_KEY);
-    if (Array.isArray(raw)) return raw as Seller[];
-    if (typeof raw === "string") {
+    let sellers: Seller[] = [];
+    if (Array.isArray(raw)) sellers = raw as Seller[];
+    else if (typeof raw === "string") {
       const parsed = JSON.parse(raw) as Seller[];
-      return Array.isArray(parsed) ? parsed : [];
+      sellers = Array.isArray(parsed) ? parsed : [];
     }
-    return [];
+    if (sellers.length === 0 && allowDevSeller) {
+      return [await getDevSeller()];
+    }
+    return sellers;
   } catch {
-    return [];
+    return allowDevSeller ? [await getDevSeller()] : [];
   }
 }
 
