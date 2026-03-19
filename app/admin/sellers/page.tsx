@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import type { Seller } from "@/lib/types";
 
 export default function AdminSellersPage() {
@@ -44,7 +45,16 @@ export default function AdminSellersPage() {
       </p>
       <div className="space-y-4">
         {sellers.length === 0 ? (
-          <p className="text-ink-500">No sellers yet.</p>
+          <div className="text-ink-500 space-y-2">
+            <p>No sellers yet.</p>
+            <p className="text-sm">
+              Sellers register themselves at{" "}
+              <Link href="/seller/register" className="text-brand-400 hover:underline">
+                Become a seller
+              </Link>
+              . After they register, they will appear here for you to approve.
+            </p>
+          </div>
         ) : (
           sellers.map((s) => (
             <div key={s.id} className="card p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">

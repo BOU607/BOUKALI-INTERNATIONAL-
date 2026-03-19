@@ -20,7 +20,7 @@ function formatLoc(v: Visit): string {
 }
 
 export default function AdminDashboardPage() {
-  const [stats, setStats] = useState({ products: 0, orders: 0, sales: 0 });
+  const [stats, setStats] = useState({ products: 0, orders: 0, sales: 0, sellers: 0 });
   const [recentVisits, setRecentVisits] = useState<Visit[]>([]);
   const [recentOrders, setRecentOrders] = useState<Order[]>([]);
 
@@ -29,13 +29,16 @@ export default function AdminDashboardPage() {
       fetch("/api/products").then((r) => r.json()),
       fetch("/api/orders").then((r) => r.json()),
       fetch("/api/visits").then((r) => r.json()),
-    ]).then(([products, orders, visitsData]) => {
+      fetch("/api/admin/sellers").then((r) => r.json()),
+    ]).then(([products, orders, visitsData, sellers]) => {
       const ordersList = Array.isArray(orders) ? orders : [];
       const sales = ordersList.reduce((s: number, o: { total?: number }) => s + (o.total ?? 0), 0);
+      const sellersList = Array.isArray(sellers) ? sellers : [];
       setStats({
         products: products.length,
         orders: ordersList.length,
         sales,
+        sellers: sellersList.length,
       });
       setRecentOrders(ordersList.slice(0, 5));
       const visits = Array.isArray(visitsData) ? visitsData : (visitsData.visits ?? []);
@@ -48,7 +51,7 @@ export default function AdminDashboardPage() {
       <h2 className="font-display text-lg font-medium text-stone-200 mb-6">
         Overview
       </h2>
-      <div className="grid sm:grid-cols-3 gap-6 mb-10">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         <Link href="/admin/products" className="card p-6 hover:border-ink-700 transition-colors">
           <p className="text-ink-500 text-sm">Products</p>
           <p className="text-2xl font-semibold text-stone-100 mt-1">{stats.products}</p>
@@ -58,6 +61,11 @@ export default function AdminDashboardPage() {
           <p className="text-ink-500 text-sm">Orders</p>
           <p className="text-2xl font-semibold text-stone-100 mt-1">{stats.orders}</p>
           <p className="text-ink-500 text-sm mt-1">View all orders</p>
+        </Link>
+        <Link href="/admin/sellers" className="card p-6 hover:border-ink-700 transition-colors">
+          <p className="text-ink-500 text-sm">Sellers</p>
+          <p className="text-2xl font-semibold text-stone-100 mt-1">{stats.sellers}</p>
+          <p className="text-ink-500 text-sm mt-1">Approve sellers</p>
         </Link>
         <div className="card p-6">
           <p className="text-ink-500 text-sm">Total sales</p>
