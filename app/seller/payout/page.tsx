@@ -9,6 +9,7 @@ type SellerProfile = {
   accountHolder?: string;
   iban?: string;
   swift?: string;
+  connectedAccountId?: string;
 };
 
 export default function SellerPayoutPage() {
@@ -16,11 +17,13 @@ export default function SellerPayoutPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [stripeLoading, setStripeLoading] = useState(false);
   const [form, setForm] = useState({
     bankName: "",
     accountHolder: "",
     iban: "",
     swift: "",
+    connectedAccountId: "",
   });
 
   useEffect(() => {
@@ -34,6 +37,7 @@ export default function SellerPayoutPage() {
             accountHolder: data.accountHolder ?? "",
             iban: data.iban ?? "",
             swift: data.swift ?? "",
+            connectedAccountId: data.connectedAccountId ?? "",
           });
         }
         return data;
@@ -66,6 +70,24 @@ export default function SellerPayoutPage() {
     }
   };
 
+  const connectStripe = async () => {
+    setStripeLoading(true);
+    setMessage(null);
+    try {
+      const res = await fetch("/api/seller/stripe/onboard", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok || !data?.url) {
+        setMessage({ type: "error", text: data?.error ?? "Failed to start Stripe onboarding." });
+      } else {
+        window.location.href = data.url;
+      }
+    } catch {
+      setMessage({ type: "error", text: "Failed to start Stripe onboarding." });
+    } finally {
+      setStripeLoading(false);
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
       <div className="mb-6">
@@ -80,6 +102,22 @@ export default function SellerPayoutPage() {
         <p className="text-sm text-ink-500 mt-1 mb-6">
           Enter your bank details so we can send your earnings. Only the platform admin will see these.
         </p>
+        <div className="mb-6 p-4 rounded-lg border border-ink-800 bg-ink-900/40">
+          <p className="text-sm text-stone-300 mb-2">
+            Stripe Connect for automatic payouts
+          </p>
+          <p className="text-xs text-ink-500 mb-3">
+            Connect your Stripe account once. This enables automatic transfer release when delivery is confirmed.
+          </p>
+          <button
+            type="button"
+            onClick={connectStripe}
+            disabled={stripeLoading}
+            className="btn-secondary text-sm py-2"
+          >
+            {stripeLoading ? "Opening Stripe..." : "Connect Stripe account"}
+          </button>
+        </div>
         {loading ? (
           <p className="text-ink-500">Loading…</p>
         ) : (
@@ -112,6 +150,16 @@ export default function SellerPayoutPage() {
                 value={form.iban}
                 onChange={(e) => setForm((f) => ({ ...f, iban: e.target.value.toUpperCase().replace(/\s/g, "") }))}
                 placeholder="e.g. QA58DOHB00001234567890"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-stone-300 mb-1">Stripe connected account ID</label>
+              <input
+                type="text"
+                className="input w-full font-mono"
+                value={form.connectedAccountId}
+                onChange={(e) => setForm((f) => ({ ...f, connectedAccountId: e.target.value.trim() }))}
+                placeholder="acct_1234..."
               />
             </div>
             <div>
