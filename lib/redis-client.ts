@@ -5,6 +5,12 @@
  */
 import { getKvCreds } from "./kv-creds";
 
+/** Normalise env values (copy-paste sometimes includes wrapping quotes). */
+function tcpUrlFromEnv(): string {
+  const raw = process.env.KV_REDIS_URL || process.env.REDIS_URL || "";
+  return raw.trim().replace(/^["']|["']$/g, "");
+}
+
 export type RedisLike = {
   get<T = unknown>(key: string): Promise<T | null>;
   set(key: string, value: unknown): Promise<unknown>;
@@ -32,7 +38,7 @@ export async function getRedisClient(): Promise<RedisLike | null> {
     return createClient({ url: rest.url, token: rest.token }) as unknown as RedisLike;
   }
 
-  const tcp = (process.env.KV_REDIS_URL || process.env.REDIS_URL || "").trim();
+  const tcp = tcpUrlFromEnv();
   if (!tcp.startsWith("redis://") && !tcp.startsWith("rediss://")) {
     return null;
   }

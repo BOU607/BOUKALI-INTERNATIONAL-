@@ -81,7 +81,7 @@ export async function addSeller(seller: Seller): Promise<Seller> {
     return addSellerFile(seller);
   }
   throw new Error(
-    "Database not configured. Set up Vercel KV: Project → Storage → Create Database → KV."
+    "Database not configured. In Vercel → Project → Settings → Environment Variables, add KV_REDIS_URL (copy from Storage → your Redis → .env.local) for Production, then Redeploy. Or remove empty KV_REST_API_URL / KV_REST_API_TOKEN if present."
   );
 }
 

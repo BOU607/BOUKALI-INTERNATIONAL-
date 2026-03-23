@@ -32,9 +32,14 @@ function httpsRestUrl(raw: string | undefined): string | undefined {
   return undefined;
 }
 
+function tcpUrlRaw(): string {
+  const raw = process.env.KV_REDIS_URL || process.env.REDIS_URL || "";
+  return raw.trim().replace(/^["']|["']$/g, "");
+}
+
 /** REST (HTTPS) or TCP redis:// URL — both work via lib/redis-client */
 export function isKvConfigured(): boolean {
   if (getKvCreds() !== null) return true;
-  const u = (process.env.KV_REDIS_URL || process.env.REDIS_URL || "").trim();
+  const u = tcpUrlRaw();
   return u.startsWith("redis://") || u.startsWith("rediss://");
 }
