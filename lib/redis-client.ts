@@ -7,7 +7,11 @@ import { getKvCreds } from "./kv-creds";
 
 /** Normalise env values (copy-paste sometimes includes wrapping quotes). */
 function tcpUrlFromEnv(): string {
-  const raw = process.env.KV_REDIS_URL || process.env.REDIS_URL || "";
+  const raw =
+    process.env.KV_REDIS_URL ||
+    process.env["kv_REDIS_URL"] ||
+    process.env.REDIS_URL ||
+    "";
   return raw.trim().replace(/^["']|["']$/g, "");
 }
 
