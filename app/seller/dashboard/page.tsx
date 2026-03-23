@@ -178,7 +178,7 @@ export default function SellerDashboardPage() {
                 className="input w-full"
                 value={payoutForm.bankName}
                 onChange={(e) => setPayoutForm((f) => ({ ...f, bankName: e.target.value }))}
-                placeholder="e.g. Ziraat Bankası"
+                placeholder="e.g. QNB, HSBC, Citi"
               />
             </div>
             <div>
@@ -188,7 +188,7 @@ export default function SellerDashboardPage() {
                 className="input w-full font-mono"
                 value={payoutForm.iban}
                 onChange={(e) => setPayoutForm((f) => ({ ...f, iban: e.target.value.toUpperCase().replace(/\s/g, "") }))}
-                placeholder="TR00 0000 0000 0000 0000 0000 00"
+                placeholder="e.g. QA58DOHB00001234567890"
               />
             </div>
             <div>
@@ -198,7 +198,7 @@ export default function SellerDashboardPage() {
                 className="input w-full font-mono"
                 value={payoutForm.swift}
                 onChange={(e) => setPayoutForm((f) => ({ ...f, swift: e.target.value.toUpperCase().replace(/\s/g, "") }))}
-                placeholder="e.g. TCZBTR2A"
+                placeholder="e.g. DOHBQAQA"
               />
             </div>
             {payoutMessage && (
