@@ -1,4 +1,4 @@
-import type { Product, Order, Job, Service, Visit } from "./types";
+import type { Product, Order, Job, Service, Visit, Seller } from "./types";
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
 import { join } from "path";
 
@@ -8,6 +8,7 @@ const ORDERS_FILE = join(DATA_DIR, "orders.json");
 const JOBS_FILE = join(DATA_DIR, "jobs.json");
 const SERVICES_FILE = join(DATA_DIR, "services.json");
 const VISITS_FILE = join(DATA_DIR, "visits.json");
+const SELLERS_FILE = join(DATA_DIR, "sellers.json");
 const MAX_VISITS = 500;
 
 const defaultProducts: Product[] = [
@@ -236,6 +237,48 @@ export function updateOrdersCustomer(
   }
   if (count > 0) writeOrders(orders);
   return count;
+}
+
+function readSellers(): Seller[] {
+  ensureDataDir();
+  if (!existsSync(SELLERS_FILE)) return [];
+  try {
+    return JSON.parse(readFileSync(SELLERS_FILE, "utf-8"));
+  } catch {
+    return [];
+  }
+}
+
+function writeSellers(sellers: Seller[]) {
+  ensureDataDir();
+  try {
+    writeFileSync(SELLERS_FILE, JSON.stringify(sellers, null, 2));
+  } catch {
+    throw new Error("Cannot write sellers (read-only filesystem). Set up Vercel KV in production.");
+  }
+}
+
+export function getSellersFile(): Seller[] {
+  return readSellers();
+}
+
+export function addSellerFile(seller: Seller): Seller {
+  const sellers = readSellers();
+  if (sellers.some((s) => s.email.toLowerCase() === seller.email.trim().toLowerCase())) {
+    throw new Error("A seller with this email already exists.");
+  }
+  sellers.unshift(seller);
+  writeSellers(sellers);
+  return seller;
+}
+
+export function updateSellerFile(id: string, updates: Partial<Seller>): Seller | undefined {
+  const sellers = readSellers();
+  const i = sellers.findIndex((s) => s.id === id);
+  if (i < 0) return undefined;
+  sellers[i] = { ...sellers[i], ...updates };
+  writeSellers(sellers);
+  return sellers[i];
 }
 
 function readVisits(): Visit[] {

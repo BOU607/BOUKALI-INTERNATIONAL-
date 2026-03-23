@@ -1,4 +1,6 @@
 import type { Seller } from "./types";
+import { getSellersFile, addSellerFile, updateSellerFile } from "./store";
+import { getRedisClient } from "./redis-client";
 
 const KV_KEY = "miaha:sellers";
 
@@ -21,27 +23,20 @@ async function getDevSeller(): Promise<Seller> {
   return devSellerPromise;
 }
 
-function getKvCreds(): { url: string; token: string } | null {
-  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (url && token) return { url, token };
-  return null;
-}
-
 async function getKv() {
-  const creds = getKvCreds();
-  if (!creds) return null;
-  const { createClient } = await import("@vercel/kv");
-  return createClient({ url: creds.url, token: creds.token });
+  return getRedisClient();
 }
 
 export async function getSellers(): Promise<Seller[]> {
   const allowDevSeller = process.env.ALLOW_DEV_SELLER === "true";
   const kv = await getKv();
   if (!kv) {
-    if (process.env.NODE_ENV === "development" || allowDevSeller) {
-      return [await getDevSeller()];
+    if (process.env.NODE_ENV === "development") {
+      const fileSellers = getSellersFile();
+      if (fileSellers.length === 0 && allowDevSeller) return [await getDevSeller()];
+      return fileSellers;
     }
+    if (allowDevSeller) return [await getDevSeller()];
     return [];
   }
   try {
@@ -73,30 +68,35 @@ export async function getSellerByEmail(email: string): Promise<Seller | undefine
 
 export async function addSeller(seller: Seller): Promise<Seller> {
   const kv = await getKv();
-  if (!kv) throw new Error("Database not configured. Set up Vercel KV.");
-  const sellers = await getSellers();
-  if (sellers.some((s) => s.email.toLowerCase() === seller.email.trim().toLowerCase())) {
-    throw new Error("A seller with this email already exists.");
+  if (kv) {
+    const sellers = await getSellers();
+    if (sellers.some((s) => s.email.toLowerCase() === seller.email.trim().toLowerCase())) {
+      throw new Error("A seller with this email already exists.");
+    }
+    sellers.unshift(seller);
+    await kv.set(KV_KEY, sellers);
+    return seller;
   }
-  sellers.unshift(seller);
-  await kv.set(KV_KEY, sellers);
-  return seller;
+  if (process.env.NODE_ENV === "development") {
+    return addSellerFile(seller);
+  }
+  throw new Error(
+    "Database not configured. Set up Vercel KV: Project → Storage → Create Database → KV."
+  );
 }
 
 export async function updateSeller(id: string, updates: Partial<Seller>): Promise<Seller | undefined> {
   const kv = await getKv();
-  if (!kv) {
-    if (process.env.NODE_ENV === "development" && id === "dev-seller") {
-      const seller = await getDevSeller();
-      Object.assign(seller, updates);
-      return seller;
-    }
-    return undefined;
+  if (kv) {
+    const sellers = await getSellers();
+    const i = sellers.findIndex((s) => s.id === id);
+    if (i < 0) return undefined;
+    sellers[i] = { ...sellers[i], ...updates };
+    await kv.set(KV_KEY, sellers);
+    return sellers[i];
   }
-  const sellers = await getSellers();
-  const i = sellers.findIndex((s) => s.id === id);
-  if (i < 0) return undefined;
-  sellers[i] = { ...sellers[i], ...updates };
-  await kv.set(KV_KEY, sellers);
-  return sellers[i];
+  if (process.env.NODE_ENV === "development") {
+    return updateSellerFile(id, updates);
+  }
+  return undefined;
 }

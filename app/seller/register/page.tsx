@@ -106,9 +106,19 @@ export default function SellerRegisterPage() {
             />
           </label>
           {message && (
-            <p className={`text-sm ${message.type === "success" ? "text-green-400" : "text-red-400"}`}>
-              {message.text}
-            </p>
+            <div className={`text-sm ${message.type === "success" ? "text-green-400" : "text-red-400"}`}>
+              <p>{message.text}</p>
+              {message.type === "error" && message.text.toLowerCase().includes("vercel kv") && (
+                <a
+                  href="https://vercel.com/docs/storage/vercel-kv"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block mt-2 text-brand-400 hover:underline"
+                >
+                  → Setup guide: Vercel Storage → Create Database → KV
+                </a>
+              )}
+            </div>
           )}
           <button type="submit" disabled={loading} className="btn-primary w-full py-3">
             {loading ? "Registering…" : "Register"}

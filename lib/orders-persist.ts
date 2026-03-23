@@ -5,22 +5,14 @@ import {
   updateOrderStatus as updateOrderStatusFile,
   updateOrdersCustomer as updateOrdersCustomerFile,
 } from "./store";
+import { getRedisClient } from "./redis-client";
 
 const KV_KEY = "miaha:orders";
 
-function getKvCreds(): { url: string; token: string } | null {
-  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (url && token) return { url, token };
-  return null;
-}
-
 export async function getOrders(): Promise<Order[]> {
-  const creds = getKvCreds();
-  if (creds) {
+  const kv = await getRedisClient();
+  if (kv) {
     try {
-      const { createClient } = await import("@vercel/kv");
-      const kv = createClient({ url: creds.url, token: creds.token });
       const raw = await kv.get(KV_KEY);
       if (Array.isArray(raw)) return raw as Order[];
       if (typeof raw === "string") {
@@ -41,11 +33,9 @@ export async function getOrders(): Promise<Order[]> {
 }
 
 export async function addOrder(order: Order): Promise<Order> {
-  const creds = getKvCreds();
-  if (creds) {
+  const kv = await getRedisClient();
+  if (kv) {
     try {
-      const { createClient } = await import("@vercel/kv");
-      const kv = createClient({ url: creds.url, token: creds.token });
       const orders = await getOrders();
       orders.unshift(order);
       await kv.set(KV_KEY, orders);
@@ -59,18 +49,14 @@ export async function addOrder(order: Order): Promise<Order> {
     return addOrderFile(order);
   } catch (e) {
     console.error("File addOrder failed (Vercel has read-only FS):", e);
-    // Still return order so customer gets bank details; order won't appear in Admin.
-    // Set up Vercel KV for persistent orders in production.
     return order;
   }
 }
 
 export async function updateOrderStatus(orderId: string, status: Order["status"]): Promise<Order | undefined> {
-  const creds = getKvCreds();
-  if (creds) {
+  const kv = await getRedisClient();
+  if (kv) {
     try {
-      const { createClient } = await import("@vercel/kv");
-      const kv = createClient({ url: creds.url, token: creds.token });
       const orders = await getOrders();
       const order = orders.find((o) => o.id === orderId);
       if (!order) return undefined;
@@ -90,11 +76,9 @@ export async function updateCustomerForEmail(
   currentEmail: string,
   updates: { name?: string; newEmail?: string }
 ): Promise<number> {
-  const creds = getKvCreds();
-  if (creds) {
+  const kv = await getRedisClient();
+  if (kv) {
     try {
-      const { createClient } = await import("@vercel/kv");
-      const kv = createClient({ url: creds.url, token: creds.token });
       const orders = await getOrders();
       const key = currentEmail.trim().toLowerCase();
       let count = 0;

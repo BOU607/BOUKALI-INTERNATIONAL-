@@ -1,20 +1,12 @@
 import type { Product } from "./types";
+import { getRedisClient } from "./redis-client";
 
 const KV_KEY = "miaha:products";
 
-function getKvCreds(): { url: string; token: string } | null {
-  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (url && token) return { url, token };
-  return null;
-}
-
 export async function getProducts(): Promise<Product[]> {
-  const creds = getKvCreds();
-  if (creds) {
+  const kv = await getRedisClient();
+  if (kv) {
     try {
-      const { createClient } = await import("@vercel/kv");
-      const kv = createClient({ url: creds.url, token: creds.token });
       const raw = await kv.get(KV_KEY);
       if (Array.isArray(raw)) {
         const products = raw as Product[];
@@ -42,10 +34,8 @@ export async function getProductsBySeller(sellerId: string): Promise<Product[]> 
 }
 
 export async function addProduct(product: Product): Promise<Product> {
-  const creds = getKvCreds();
-  if (creds) {
-    const { createClient } = await import("@vercel/kv");
-    const kv = createClient({ url: creds.url, token: creds.token });
+  const kv = await getRedisClient();
+  if (kv) {
     const products = await getProducts();
     products.unshift(product);
     await kv.set(KV_KEY, products);
@@ -55,10 +45,8 @@ export async function addProduct(product: Product): Promise<Product> {
 }
 
 export async function updateProduct(id: string, updates: Partial<Product>): Promise<Product | undefined> {
-  const creds = getKvCreds();
-  if (!creds) return undefined;
-  const { createClient } = await import("@vercel/kv");
-  const kv = createClient({ url: creds.url, token: creds.token });
+  const kv = await getRedisClient();
+  if (!kv) return undefined;
   const products = await getProducts();
   const i = products.findIndex((p) => p.id === id);
   if (i < 0) return undefined;
@@ -68,10 +56,8 @@ export async function updateProduct(id: string, updates: Partial<Product>): Prom
 }
 
 export async function deleteProduct(id: string): Promise<boolean> {
-  const creds = getKvCreds();
-  if (!creds) return false;
-  const { createClient } = await import("@vercel/kv");
-  const kv = createClient({ url: creds.url, token: creds.token });
+  const kv = await getRedisClient();
+  if (!kv) return false;
   const products = await getProducts().then((p) => p.filter((x) => x.id !== id));
   await kv.set(KV_KEY, products);
   return true;
