@@ -2,6 +2,7 @@ import type { Order } from "./types";
 import {
   addOrder as addOrderFile,
   getOrders as getOrdersFile,
+  patchOrder as patchOrderFile,
   updateOrderStatus as updateOrderStatusFile,
   updateOrdersCustomer as updateOrdersCustomerFile,
 } from "./store";
@@ -51,6 +52,30 @@ export async function addOrder(order: Order): Promise<Order> {
     console.error("File addOrder failed (Vercel has read-only FS):", e);
     return order;
   }
+}
+
+export async function getOrderById(orderId: string): Promise<Order | undefined> {
+  const orders = await getOrders();
+  return orders.find((o) => o.id === orderId);
+}
+
+/** Merge updates into an existing order and persist. */
+export async function patchOrder(orderId: string, updates: Partial<Order>): Promise<Order | undefined> {
+  const kv = await getRedisClient();
+  if (kv) {
+    try {
+      const orders = await getOrders();
+      const i = orders.findIndex((o) => o.id === orderId);
+      if (i < 0) return undefined;
+      orders[i] = { ...orders[i], ...updates };
+      await kv.set(KV_KEY, orders);
+      return orders[i];
+    } catch (e) {
+      console.warn("KV patchOrder failed:", e);
+      return undefined;
+    }
+  }
+  return patchOrderFile(orderId, updates);
 }
 
 export async function updateOrderStatus(orderId: string, status: Order["status"]): Promise<Order | undefined> {

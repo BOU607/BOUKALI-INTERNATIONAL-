@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { Order, OrderItem } from "@/lib/types";
-import { paySellerAmount, SELLER_FEE_PERCENT } from "@/lib/fees";
+import { BUYER_FEE_PERCENT, paySellerAmount, SELLER_FEE_PERCENT } from "@/lib/fees";
 
 type SellerSafe = {
   id: string;
@@ -13,6 +13,7 @@ type SellerSafe = {
   accountHolder?: string;
   iban?: string;
   swift?: string;
+  connectedAccountId?: string;
 };
 
 function orderPayoutsBySeller(order: Order): { sellerId: string; subtotal: number; fee: number; pay: number }[] {
@@ -34,6 +35,8 @@ export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [sellers, setSellers] = useState<SellerSafe[]>([]);
   const [loading, setLoading] = useState(true);
+  const [releasingOrderId, setReleasingOrderId] = useState<string | null>(null);
+  const [releaseMessage, setReleaseMessage] = useState<string>("");
 
   const load = () => {
     Promise.all([
@@ -56,6 +59,25 @@ export default function AdminOrdersPage() {
       body: JSON.stringify({ status }),
     });
     load();
+  };
+
+  const confirmDeliveryAndRelease = async (orderId: string) => {
+    setReleaseMessage("");
+    setReleasingOrderId(orderId);
+    try {
+      const res = await fetch(`/api/orders/${orderId}/confirm-delivery`, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) {
+        setReleaseMessage(data?.error ?? "Failed to release payout.");
+      } else {
+        setReleaseMessage(`Delivery confirmed. Created ${data.createdTransfers} transfer(s).`);
+        load();
+      }
+    } catch {
+      setReleaseMessage("Failed to release payout.");
+    } finally {
+      setReleasingOrderId(null);
+    }
   };
 
   if (loading) {
@@ -112,7 +134,7 @@ export default function AdminOrdersPage() {
                 {order.subtotal != null && order.buyerFee != null && order.sellerFee != null ? (
                   <div className="mt-2 space-y-1 text-sm">
                     <p className="text-ink-500">
-                      Subtotal: ${order.subtotal.toFixed(2)} · Buyer fee (1%): ${order.buyerFee.toFixed(2)} · Seller fee (1.5%): ${order.sellerFee.toFixed(2)}
+                      {`Subtotal: $${order.subtotal.toFixed(2)} · Buyer fee (${BUYER_FEE_PERCENT}%): $${order.buyerFee.toFixed(2)} · Seller fee (${SELLER_FEE_PERCENT}%): $${order.sellerFee.toFixed(2)}`}
                     </p>
                     <p className="font-medium text-brand-400">
                       Total: ${order.total.toFixed(2)}
@@ -142,6 +164,7 @@ export default function AdminOrdersPage() {
                               {seller.bankName && <p>Bank: {seller.bankName}</p>}
                               {seller.iban && <p>IBAN: {seller.iban}</p>}
                               {seller.swift && <p>SWIFT: {seller.swift}</p>}
+                              {seller.connectedAccountId && <p>Stripe: {seller.connectedAccountId}</p>}
                             </div>
                           ) : (
                             <p className="mt-1 text-xs text-amber-500/90">No payout details on file</p>
@@ -152,37 +175,58 @@ export default function AdminOrdersPage() {
                   </div>
                 )}
               </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <span
-                  className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-                    order.status === "refunded"
-                      ? "bg-red-500/20 text-red-400"
-                      : order.status === "delivered"
-                        ? "bg-green-500/20 text-green-400"
-                        : order.status === "shipped"
-                          ? "bg-blue-500/20 text-blue-400"
-                          : order.status === "paid"
-                            ? "bg-brand-500/20 text-brand-400"
-                            : "bg-ink-600 text-ink-400"
-                  }`}
-                >
-                  {order.status}
-                </span>
-                <select
-                  value={order.status}
-                  onChange={(e) =>
-                    updateStatus(order.id, e.target.value as Order["status"])
-                  }
-                  className="input py-1.5 text-sm w-32"
-                >
-                  <option value="pending">Pending</option>
-                  <option value="paid">Paid</option>
-                  <option value="shipped">Shipped</option>
-                  <option value="delivered">Delivered</option>
-                  <option value="refunded">Refunded</option>
-                </select>
+              <div className="flex flex-col items-stretch sm:items-end gap-2 flex-shrink-0 w-full sm:w-auto">
+                <div className="flex flex-wrap items-center gap-2 justify-end">
+                  <span
+                    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
+                      order.status === "refunded"
+                        ? "bg-red-500/20 text-red-400"
+                        : order.status === "delivered"
+                          ? "bg-green-500/20 text-green-400"
+                          : order.status === "shipped"
+                            ? "bg-blue-500/20 text-blue-400"
+                            : order.status === "paid"
+                              ? "bg-brand-500/20 text-brand-400"
+                              : "bg-ink-600 text-ink-400"
+                    }`}
+                  >
+                    {order.status}
+                  </span>
+                  <select
+                    value={order.status}
+                    onChange={(e) =>
+                      updateStatus(order.id, e.target.value as Order["status"])
+                    }
+                    className="input py-1.5 text-sm w-32"
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="paid">Paid</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="refunded">Refunded</option>
+                  </select>
+                </div>
               </div>
             </div>
+            {(order.status === "paid" || order.status === "shipped" || order.status === "delivered") && (
+              <div className="mt-4 pt-4 border-t border-brand-500/30 rounded-b-lg bg-ink-900/40 px-1 pb-1">
+                <p className="text-xs font-medium text-stone-300 mb-2">Stripe Connect payout</p>
+                <p className="text-xs text-ink-500 mb-3">
+                  When the buyer has received the order, confirm here to send the seller&apos;s share from Stripe to their connected account. This is separate from manual bank (IBAN) payouts above.
+                </p>
+                <button
+                  type="button"
+                  className="btn-primary text-sm py-3 px-4 w-full max-w-md"
+                  disabled={releasingOrderId === order.id}
+                  onClick={() => confirmDeliveryAndRelease(order.id)}
+                >
+                  {releasingOrderId === order.id ? "Releasing…" : "Confirm delivery — release Stripe payout"}
+                </button>
+              </div>
+            )}
+            {releaseMessage && (
+              <p className="text-xs mt-2 text-brand-400">{releaseMessage}</p>
+            )}
           </div>
         ))}
       </div>

@@ -14,6 +14,8 @@ export type Seller = {
   accountHolder?: string;
   iban?: string;
   swift?: string;
+  /** Stripe Connect account id (e.g. acct_...) for automated transfers */
+  connectedAccountId?: string;
 };
 
 export type Product = {
@@ -72,6 +74,18 @@ export type Order = {
   buyerFee?: number;
   /** Seller fee (e.g. 1.5%) – deducted at payout. Present when platform fees applied. */
   sellerFee?: number;
+  /** Stripe payment intent id from Checkout Session (if card payment). */
+  paymentIntentId?: string;
+  /** Stripe transfer group used for seller payouts for this order. */
+  transferGroup?: string;
+  /** Seller payout transfers created after delivery confirmation. */
+  payoutTransfers?: Array<{
+    sellerId: string;
+    transferId: string;
+    amount: number;
+    currency: string;
+    releasedAt: string;
+  }>;
 };
 
 export type Job = {

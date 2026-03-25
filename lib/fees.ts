@@ -1,9 +1,16 @@
 /**
- * Platform fees: buyer pays 1%, seller pays 1.5% (deducted at payout).
+ * Platform fees (configurable via env):
+ * - BUYER_FEE_PERCENT (default 1)
+ * - SELLER_FEE_PERCENT (default 1.5)
  */
+function parsePercent(value: string | undefined, fallback: number): number {
+  if (!value) return fallback;
+  const n = Number(value);
+  return Number.isFinite(n) && n >= 0 ? n : fallback;
+}
 
-export const BUYER_FEE_PERCENT = 1;
-export const SELLER_FEE_PERCENT = 1.5;
+export const BUYER_FEE_PERCENT = parsePercent(process.env.BUYER_FEE_PERCENT, 1);
+export const SELLER_FEE_PERCENT = parsePercent(process.env.SELLER_FEE_PERCENT, 1.5);
 
 export function roundAUD(value: number): number {
   return Math.round(value * 100) / 100;

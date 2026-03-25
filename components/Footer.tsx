@@ -33,6 +33,16 @@ export function Footer() {
                   {t("footer.contact")}
                 </Link>
               </li>
+              <li>
+                <Link href="/terms" className="text-ink-400 hover:text-brand-400 text-sm transition-colors">
+                  Terms of service
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className="text-ink-400 hover:text-brand-400 text-sm transition-colors">
+                  Privacy policy
+                </Link>
+              </li>
             </ul>
           </div>
           <div>

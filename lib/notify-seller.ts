@@ -5,6 +5,26 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 /** Use your verified domain, e.g. "Miaha <orders@miahamarket.com>" */
 const FROM_EMAIL = process.env.NOTIFY_FROM_EMAIL || "Miaha Market <onboarding@resend.dev>";
 
+async function sendEmail(to: string, subject: string, html: string): Promise<void> {
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${RESEND_API_KEY}`,
+    },
+    body: JSON.stringify({
+      from: FROM_EMAIL,
+      to: [to],
+      subject,
+      html,
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Resend email failed ${res.status}: ${err}`);
+  }
+}
+
 /** Notify each seller whose products are in the order. Runs in background, does not block. */
 export async function notifySellersOfOrder(order: Order): Promise<void> {
   if (!RESEND_API_KEY) {
@@ -41,25 +61,35 @@ export async function notifySellersOfOrder(order: Order): Promise<void> {
     `;
 
     try {
-      const res = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${RESEND_API_KEY}`,
-        },
-        body: JSON.stringify({
-          from: FROM_EMAIL,
-          to: [seller.email],
-          subject,
-          html,
-        }),
-      });
-      if (!res.ok) {
-        const err = await res.text();
-        console.error("Resend email failed:", res.status, err);
-      }
+      await sendEmail(seller.email, subject, html);
     } catch (e) {
       console.error("Notify seller failed:", e);
     }
   }
+}
+
+/** Notify seller that payout transfer has been released after delivery confirmation. */
+export async function notifySellerPayoutReleased(input: {
+  sellerEmail: string;
+  sellerName?: string;
+  orderId: string;
+  amount: number;
+  currency: string;
+  transferId: string;
+}): Promise<void> {
+  if (!RESEND_API_KEY) {
+    console.warn("RESEND_API_KEY not set — payout notifications disabled");
+    return;
+  }
+  const amountLabel = `${input.amount.toFixed(2)} ${input.currency.toUpperCase()}`;
+  const subject = `Payout released for order ${input.orderId} — ${amountLabel}`;
+  const html = `
+    <h2>Payout released</h2>
+    <p>Hello ${input.sellerName || "Seller"},</p>
+    <p>Your payout has been released for order <strong>${input.orderId}</strong>.</p>
+    <p><strong>Amount:</strong> ${amountLabel}</p>
+    <p><strong>Transfer ID:</strong> ${input.transferId}</p>
+    <p>You can view details in your seller dashboard and Stripe account.</p>
+  `;
+  await sendEmail(input.sellerEmail, subject, html);
 }

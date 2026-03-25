@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model MarketplaceOrder {
+  id                    String        @id
+  buyerId               String?
+  sellerId              String
+  currency              String
+  subtotalMinor         Int
+  buyerFeeMinor         Int
+  sellerFeeMinor        Int
+  totalMinor            Int
+  status                String
+  gateway               String
+  transferGroup         String?
+  paymentIntentId       String?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  transactions          Transaction[]
+  payouts               Payout[]
+}
+
+model Transaction {
+  id                       String          @id @default(cuid())
+  orderId                  String
+  gateway                  String
+  gatewayTxnId             String
+  amountMinor              Int
+  currency                 String
+  platformCommissionMinor  Int
+  status                   String
+  idempotencyKey           String          @unique
+  rawPayload               Json?
+  createdAt                DateTime        @default(now())
+  order                    MarketplaceOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([gatewayTxnId])
+}
+
+model Payout {
+  id            String          @id @default(cuid())
+  orderId       String
+  sellerId      String
+  gateway       String
+  payoutRef     String?
+  amountMinor   Int
+  currency      String
+  status        String
+  releasedAt    DateTime?
+  createdAt     DateTime        @default(now())
+  order         MarketplaceOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId, sellerId])
+}
+

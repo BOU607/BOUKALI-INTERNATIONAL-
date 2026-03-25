@@ -8,7 +8,7 @@ import {
   sanitizeString,
 } from "@/lib/security";
 import { getLocationFromRequest } from "@/lib/geo";
-import { computeFees } from "@/lib/fees";
+import { BUYER_FEE_PERCENT, computeFees } from "@/lib/fees";
 import { notifySellersOfOrder } from "@/lib/notify-seller";
 
 const stripe = process.env.STRIPE_SECRET_KEY
@@ -75,6 +75,7 @@ export async function POST(req: NextRequest) {
   }
 
   const orderId = `ord-${Date.now()}`;
+  const transferGroup = `order_${orderId}`;
   const customer = {
     name: sanitizeString(payload.customer.name, 200),
     email: String(payload.customer.email).trim().toLowerCase(),
@@ -93,6 +94,7 @@ export async function POST(req: NextRequest) {
     subtotal: fees.subtotal,
     buyerFee: fees.buyerFee,
     sellerFee: fees.sellerFee,
+    transferGroup,
   };
   await addOrder(order);
   notifySellersOfOrder(order).catch((e) => console.error("Notify sellers:", e));
@@ -115,7 +117,7 @@ export async function POST(req: NextRequest) {
     lineItems.push({
       price_data: {
         currency: "aud",
-        product_data: { name: "Service fee (1%)" },
+        product_data: { name: `Service fee (${BUYER_FEE_PERCENT}%)` },
         unit_amount: Math.round(fees.buyerFee * 100),
       },
       quantity: 1,
@@ -129,6 +131,7 @@ export async function POST(req: NextRequest) {
     cancel_url: `${baseUrl}/checkout`,
     metadata: { orderId },
     customer_email: customer.email,
+    payment_intent_data: { transfer_group: transferGroup },
   });
 
   return NextResponse.json({ url: session.url, orderId });

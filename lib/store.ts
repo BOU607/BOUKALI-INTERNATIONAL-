@@ -177,6 +177,14 @@ export function getProducts(): Product[] {
   return readProducts();
 }
 
+/** Default/demo catalog with sellerId set (used when KV product list is empty). */
+export function getProductsForCatalog(): Product[] {
+  return readProducts().map((p) => ({
+    ...p,
+    sellerId: p.sellerId ?? "platform",
+  }));
+}
+
 export function getProductById(id: string): Product | undefined {
   return readProducts().find((p) => p.id === id);
 }
@@ -218,6 +226,16 @@ export function updateOrderStatus(orderId: string, status: Order["status"]) {
     writeOrders(orders);
   }
   return order;
+}
+
+/** Merge updates into an order (file-store fallback). */
+export function patchOrder(orderId: string, updates: Partial<Order>): Order | undefined {
+  const orders = readOrders();
+  const i = orders.findIndex((o) => o.id === orderId);
+  if (i < 0) return undefined;
+  orders[i] = { ...orders[i], ...updates };
+  writeOrders(orders);
+  return orders[i];
 }
 
 /** Update customer name/email for all orders with the given customer email. */
