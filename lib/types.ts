@@ -123,3 +123,12 @@ export type Visit = {
   longitude?: string;
   timezone?: string;
 };
+
+export type PayoutReleaseRun = {
+  id: string;
+  createdAt: string;
+  checked: number;
+  releasedCount: number;
+  failedCount: number;
+  failed?: Array<{ payoutId: string; error: string }>;
+};

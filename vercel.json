@@ -1,5 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/payouts/release-due",
+      "schedule": "0 2 * * *"
+    }
+  ],
   "redirects": [
     {
       "source": "/(.*)",

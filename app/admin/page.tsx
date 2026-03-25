@@ -62,6 +62,11 @@ export default function AdminDashboardPage() {
           <p className="text-2xl font-semibold text-stone-100 mt-1">{stats.orders}</p>
           <p className="text-ink-500 text-sm mt-1">View all orders</p>
         </Link>
+        <Link href="/admin/payouts" className="card p-6 hover:border-ink-700 transition-colors">
+          <p className="text-ink-500 text-sm">Payout runs</p>
+          <p className="text-2xl font-semibold text-stone-100 mt-1">Auto</p>
+          <p className="text-ink-500 text-sm mt-1">Monitor scheduler</p>
+        </Link>
         <Link href="/admin/sellers" className="card p-6 hover:border-ink-700 transition-colors">
           <p className="text-ink-500 text-sm">Sellers</p>
           <p className="text-2xl font-semibold text-stone-100 mt-1">{stats.sellers}</p>
