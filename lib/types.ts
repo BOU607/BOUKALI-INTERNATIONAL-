@@ -9,6 +9,12 @@ export type Seller = {
   /** pending = awaiting admin approval, approved = can list products */
   status: "pending" | "approved";
   createdAt: string;
+  /**
+   * How the platform should pay this seller.
+   * - stripe: automated (requires connectedAccountId)
+   * - manual: admin pays outside the system (bank/mobile money/etc.)
+   */
+  payoutProvider?: "stripe" | "manual";
   /** Payout: where to send seller's money */
   bankName?: string;
   accountHolder?: string;
@@ -64,7 +70,7 @@ export type Order = {
   items: OrderItem[];
   total: number;
   customer: { name: string; email: string; address: string };
-  status: "pending" | "paid" | "shipped" | "delivered" | "refunded";
+  status: "pending" | "paid" | "shipped" | "delivered" | "refunded" | "disputed";
   createdAt: string;
   /** Detected location when order was placed (from request IP) */
   visitorLocation?: OrderLocation;
@@ -85,6 +91,9 @@ export type Order = {
     amount: number;
     currency: string;
     releasedAt: string;
+    /** stripe = transfer created, manual = admin must pay externally */
+    mode?: "stripe" | "manual";
+    note?: string;
   }>;
 };
 

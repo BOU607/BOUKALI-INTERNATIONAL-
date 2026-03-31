@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useI18n } from "@/components/LanguageProvider";
 import { formatAUD } from "@/lib/currency";
 
-type OrderStatus = "pending" | "paid" | "shipped" | "delivered" | "refunded";
+type OrderStatus = "pending" | "paid" | "shipped" | "delivered" | "refunded" | "disputed";
 
 type TrackedOrder = {
   id: string;
@@ -21,6 +21,7 @@ const STATUS_LABELS: Record<OrderStatus, string> = {
   shipped: "Shipped",
   delivered: "Delivered",
   refunded: "Refunded",
+  disputed: "Disputed",
 };
 
 export default function TrackOrderPage() {
@@ -30,10 +31,13 @@ export default function TrackOrderPage() {
   const [order, setOrder] = useState<TrackedOrder | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setConfirmMessage(null);
     setOrder(null);
     setLoading(true);
     fetch(
@@ -46,6 +50,36 @@ export default function TrackOrderPage() {
       .then(setOrder)
       .catch((err) => setError(err.message || "Order not found."))
       .finally(() => setLoading(false));
+  };
+
+  const handleConfirmReceived = async () => {
+    if (!order) return;
+    setConfirmMessage(null);
+    setError(null);
+    setConfirming(true);
+    try {
+      const res = await fetch(`/api/orders/${encodeURIComponent(order.id)}/confirm-received`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data?.error ?? "Failed to confirm delivery.");
+        return;
+      }
+
+      const refreshed = await fetch(
+        `/api/order-track?orderId=${encodeURIComponent(order.id)}&email=${encodeURIComponent(email)}`
+      ).then((r) => r.json());
+
+      setOrder(refreshed ?? null);
+      setConfirmMessage("Thanks! We confirmed your receipt.");
+    } catch {
+      setError("Failed to confirm delivery.");
+    } finally {
+      setConfirming(false);
+    }
   };
 
   return (
@@ -100,7 +134,7 @@ export default function TrackOrderPage() {
             <span className="text-ink-500 text-sm">{t("trackOrder.orderId")}: {order.id}</span>
             <span
               className={`px-3 py-1 rounded-full text-sm font-medium ${
-                order.status === "refunded"
+                order.status === "refunded" || order.status === "disputed"
                   ? "bg-red-500/20 text-red-400"
                   : order.status === "delivered"
                     ? "bg-green-500/20 text-green-400"
@@ -131,6 +165,24 @@ export default function TrackOrderPage() {
             {t("cart.total")}
             <span>{formatAUD(order.total)}</span>
           </p>
+
+          {(order.status === "paid" || order.status === "shipped") && (
+            <div className="pt-4 border-t border-ink-800">
+              <button
+                type="button"
+                className="btn-primary w-full py-3"
+                disabled={confirming}
+                onClick={handleConfirmReceived}
+              >
+                {confirming ? "Confirming..." : "I received the order"}
+              </button>
+              {confirmMessage && (
+                <p className="text-sm text-green-400 mt-3">
+                  {confirmMessage}
+                </p>
+              )}
+            </div>
+          )}
         </div>
       )}
 

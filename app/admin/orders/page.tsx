@@ -70,7 +70,13 @@ export default function AdminOrdersPage() {
       if (!res.ok) {
         setReleaseMessage(data?.error ?? "Failed to release payout.");
       } else {
-        setReleaseMessage(`Delivery confirmed. Created ${data.createdTransfers} transfer(s).`);
+        const stripeCount = Number(data?.createdTransfers ?? 0);
+        const manualCount = Number(data?.manualPayouts ?? 0);
+        setReleaseMessage(
+          manualCount > 0
+            ? `Delivery confirmed. Stripe transfers: ${stripeCount}. Manual payouts required: ${manualCount}.`
+            : `Delivery confirmed. Created ${stripeCount} Stripe transfer(s).`
+        );
         load();
       }
     } catch {
@@ -179,7 +185,7 @@ export default function AdminOrdersPage() {
                 <div className="flex flex-wrap items-center gap-2 justify-end">
                   <span
                     className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-                      order.status === "refunded"
+                      order.status === "refunded" || order.status === "disputed"
                         ? "bg-red-500/20 text-red-400"
                         : order.status === "delivered"
                           ? "bg-green-500/20 text-green-400"
@@ -204,15 +210,16 @@ export default function AdminOrdersPage() {
                     <option value="shipped">Shipped</option>
                     <option value="delivered">Delivered</option>
                     <option value="refunded">Refunded</option>
+                    <option value="disputed">Disputed</option>
                   </select>
                 </div>
               </div>
             </div>
             {(order.status === "paid" || order.status === "shipped" || order.status === "delivered") && (
               <div className="mt-4 pt-4 border-t border-brand-500/30 rounded-b-lg bg-ink-900/40 px-1 pb-1">
-                <p className="text-xs font-medium text-stone-300 mb-2">Stripe Connect payout</p>
+                <p className="text-xs font-medium text-stone-300 mb-2">Payout release</p>
                 <p className="text-xs text-ink-500 mb-3">
-                  When the buyer has received the order, confirm here to send the seller&apos;s share from Stripe to their connected account. This is separate from manual bank (IBAN) payouts above.
+                  Confirm delivery to release payouts. If a seller is connected to Stripe, we send an automatic Stripe transfer. Otherwise, we mark it as a manual payout required (admin pays outside the system).
                 </p>
                 <button
                   type="button"
@@ -222,6 +229,11 @@ export default function AdminOrdersPage() {
                 >
                   {releasingOrderId === order.id ? "Releasing…" : "Confirm delivery — release Stripe payout"}
                 </button>
+                {order.payoutTransfers?.some((t) => (t as any).mode === "manual" || String((t as any).transferId || "").startsWith("manual:")) && (
+                  <p className="text-xs text-amber-400 mt-3">
+                    This order contains at least one <span className="font-medium">manual payout</span>. Check the Payouts section above for seller bank details.
+                  </p>
+                )}
               </div>
             )}
             {releaseMessage && (

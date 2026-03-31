@@ -3,14 +3,15 @@ import { getToken } from "next-auth/jwt";
 import Stripe from "stripe";
 import { getOrderById, patchOrder } from "@/lib/orders-persist";
 import { getSellerById } from "@/lib/sellers-persist";
-import { SELLER_FEE_PERCENT } from "@/lib/fees";
+import { computeSellerTransferAmountsMinor, toMinor } from "@/lib/fees-minor";
+import { prisma } from "@/lib/prisma";
 import { notifySellerPayoutReleased } from "@/lib/notify-seller";
 
 const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY)
   : null;
 
-const CURRENCY = "aud";
+const DEFAULT_CURRENCY = "aud";
 
 type TransferRecord = {
   sellerId: string;
@@ -34,10 +35,6 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!stripe) {
-    return NextResponse.json({ error: "Payments not configured" }, { status: 503 });
-  }
-
   const secret = process.env.NEXTAUTH_SECRET;
   if (!secret) {
     return NextResponse.json({ error: "Server not configured" }, { status: 503 });
@@ -53,16 +50,26 @@ export async function POST(
 
   const order = await getOrderById(orderId);
   if (!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
+  if (order.status === "disputed") {
+    return NextResponse.json({ error: "Order has an active payment dispute" }, { status: 400 });
+  }
   if (order.status !== "paid" && order.status !== "shipped" && order.status !== "delivered") {
     return NextResponse.json({ error: "Order must be paid before payout release" }, { status: 400 });
   }
 
-  const bySeller = new Map<string, number>();
-  for (const item of order.items) {
-    if (!item.sellerId) continue;
-    bySeller.set(item.sellerId, (bySeller.get(item.sellerId) ?? 0) + item.price * item.quantity);
-  }
-  if (bySeller.size === 0) {
+  const mo = await prisma.marketplaceOrder.findUnique({ where: { id: order.id } }).catch(() => null);
+  const ledger = mo
+    ? { sellerFeeMinor: mo.sellerFeeMinor, currency: mo.currency }
+    : null;
+  const { perSeller: netBySeller, currency: transferCurrency } =
+    computeSellerTransferAmountsMinor({
+      items: order.items,
+      ledger,
+      ...(!mo && order.sellerFee != null && Number.isFinite(order.sellerFee)
+        ? { fallbackSellerFeeMinor: toMinor(order.sellerFee) }
+        : {}),
+    });
+  if (netBySeller.size === 0) {
     return NextResponse.json({ error: "No seller items found on this order" }, { status: 400 });
   }
 
@@ -70,33 +77,56 @@ export async function POST(
   const transferGroup = order.transferGroup || `order_${order.id}`;
   const created: TransferRecord[] = [];
   const emailQueue: EmailPayload[] = [];
+  let manualRequired = 0;
+  const currency = transferCurrency || DEFAULT_CURRENCY;
 
-  for (const [sellerId, subtotal] of Array.from(bySeller.entries())) {
+  for (const [sellerId, amountCents] of Array.from(netBySeller.entries())) {
     if (existing.some((t) => t.sellerId === sellerId)) continue; // idempotent per seller
 
     const seller = await getSellerById(sellerId);
-    if (!seller?.connectedAccountId) {
-      return NextResponse.json(
-        { error: `Missing Stripe connected account for seller ${sellerId}` },
-        { status: 400 }
-      );
-    }
-    const amountCents = Math.round(subtotal * (1 - SELLER_FEE_PERCENT / 100) * 100);
     if (amountCents <= 0) continue;
 
-    const transfer = await stripe.transfers.create({
-      amount: amountCents,
-      currency: CURRENCY,
-      destination: seller.connectedAccountId,
-      transfer_group: transferGroup,
-      metadata: { orderId: order.id, sellerId },
-    });
+    // If seller has no Stripe connected account, record manual payout required.
+    if (!seller?.connectedAccountId) {
+      manualRequired++;
+      created.push({
+        sellerId,
+        transferId: `manual:${order.id}:${sellerId}`,
+        amount: amountCents / 100,
+        currency,
+        releasedAt: new Date().toISOString(),
+      });
+      continue;
+    }
+
+    if (!stripe) {
+      return NextResponse.json({ error: "Payments not configured" }, { status: 503 });
+    }
+
+    let transfer: Stripe.Transfer;
+    try {
+      transfer = await stripe.transfers.create({
+        amount: amountCents,
+        currency,
+        destination: seller.connectedAccountId,
+        transfer_group: transferGroup,
+        metadata: { orderId: order.id, sellerId },
+      });
+    } catch (e) {
+      const msg =
+        e instanceof Stripe.errors.StripeError
+          ? e.message
+          : e instanceof Error
+            ? e.message
+            : "Stripe transfer failed";
+      return NextResponse.json({ error: msg }, { status: 502 });
+    }
 
     created.push({
       sellerId,
       transferId: transfer.id,
       amount: amountCents / 100,
-      currency: CURRENCY,
+      currency,
       releasedAt: new Date().toISOString(),
     });
     if (seller.email) {
@@ -105,13 +135,22 @@ export async function POST(
         sellerName: seller.name,
         orderId: order.id,
         amount: amountCents / 100,
-        currency: CURRENCY,
+        currency,
         transferId: transfer.id,
       });
     }
   }
 
-  const nextTransfers = [...existing, ...created];
+  const nextTransfers = [
+    ...existing,
+    ...created.map((t) => ({
+      ...t,
+      mode: t.transferId.startsWith("manual:") ? ("manual" as const) : ("stripe" as const),
+      note: t.transferId.startsWith("manual:")
+        ? "Manual payout required (seller not connected to Stripe)."
+        : undefined,
+    })),
+  ];
   const updated = await patchOrder(order.id, {
     status: "delivered",
     transferGroup,
@@ -124,7 +163,8 @@ export async function POST(
   }
   return NextResponse.json({
     orderId: order.id,
-    createdTransfers: created.length,
+    createdTransfers: created.length - manualRequired,
+    manualPayouts: manualRequired,
     payoutTransfers: updated?.payoutTransfers ?? nextTransfers,
   });
 }

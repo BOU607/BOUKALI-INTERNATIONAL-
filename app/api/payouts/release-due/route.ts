@@ -37,7 +37,12 @@ export async function POST(req: NextRequest) {
     where: {
       status: "pending",
       order: {
-        OR: [{ status: "delivered" }, { createdAt: { lte: cutoff } }],
+        AND: [
+          { status: { notIn: ["disputed", "refunded"] } },
+          {
+            OR: [{ status: "delivered" }, { createdAt: { lte: cutoff } }],
+          },
+        ],
       },
     },
     include: { order: true },
@@ -45,10 +50,14 @@ export async function POST(req: NextRequest) {
   });
 
   const released: string[] = [];
+  const manual: string[] = [];
   const failed: Array<{ payoutId: string; error: string }> = [];
 
   for (const payout of due) {
     try {
+      if (payout.order.status === "disputed") {
+        continue;
+      }
       if (payout.gateway !== "stripe") {
         failed.push({ payoutId: payout.id, error: `Gateway ${payout.gateway} not supported for auto release` });
         continue;
@@ -56,7 +65,12 @@ export async function POST(req: NextRequest) {
 
       const seller = await getSellerById(payout.sellerId);
       if (!seller?.connectedAccountId) {
-        failed.push({ payoutId: payout.id, error: "Missing seller connectedAccountId" });
+        // Safe fallback: mark as manual payout required instead of failing the whole run.
+        await prisma.payout.update({
+          where: { id: payout.id },
+          data: { status: "pending_manual" },
+        }).catch(() => null);
+        manual.push(payout.id);
         continue;
       }
 
@@ -105,6 +119,7 @@ export async function POST(req: NextRequest) {
   const result = {
     checked: due.length,
     releasedCount: released.length,
+    manualCount: manual.length,
     failedCount: failed.length,
     failed,
   };
@@ -114,7 +129,7 @@ export async function POST(req: NextRequest) {
     createdAt: new Date().toISOString(),
     checked: result.checked,
     releasedCount: result.releasedCount,
-    failedCount: result.failedCount,
+    failedCount: result.failedCount + result.manualCount,
     failed: result.failed,
   });
 

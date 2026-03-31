@@ -21,6 +21,11 @@ export default function SellerDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<SellerProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
+  const [stripeStatus, setStripeStatus] = useState<{
+    status: "not_connected" | "needs_onboarding" | "restricted" | "ready";
+    onboardingUrl: string | null;
+  } | null>(null);
+  const [stripeStatusLoading, setStripeStatusLoading] = useState(false);
   const [payoutSaving, setPayoutSaving] = useState(false);
   const [payoutMessage, setPayoutMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [stripeLoading, setStripeLoading] = useState(false);
@@ -58,6 +63,25 @@ export default function SellerDashboardPage() {
       })
       .catch(() => setProfile(null))
       .finally(() => setProfileLoading(false));
+  }, []);
+
+  useEffect(() => {
+    setStripeStatusLoading(true);
+    fetch("/api/seller/stripe/status")
+      .then(async (r) => {
+        const data = await r.json().catch(() => null);
+        if (!r.ok || !data) return;
+        setStripeStatus({
+          status: data.status,
+          onboardingUrl: data.onboardingUrl ?? null,
+        });
+      })
+      .catch(() => {
+        setStripeStatus(null);
+      })
+      .finally(() => {
+        setStripeStatusLoading(false);
+      });
   }, []);
 
   const savePayoutDetails = async (e: React.FormEvent) => {
@@ -179,6 +203,36 @@ export default function SellerDashboardPage() {
         <p className="text-sm text-ink-500 mb-4">
           Enter your bank details so we can send your earnings. Only the platform admin will see these.
         </p>
+        <div className="mb-4 p-4 rounded-lg border border-ink-800 bg-ink-900/60 max-w-md">
+          <p className="text-sm text-stone-200 mb-1">Stripe payout status</p>
+          {stripeStatusLoading ? (
+            <p className="text-xs text-ink-500">Checking status…</p>
+          ) : !stripeStatus ? (
+            <p className="text-xs text-ink-500">
+              Unable to load Stripe status right now. You can still try connecting Stripe below.
+            </p>
+          ) : (
+            <>
+              <p className="text-xs text-ink-500 mb-2">
+                {stripeStatus.status === "ready" && "Your Stripe account is ready to receive payouts."}
+                {stripeStatus.status === "not_connected" &&
+                  "You have not connected a Stripe account yet. Connect below to enable automatic payouts."}
+                {stripeStatus.status === "needs_onboarding" &&
+                  "Stripe needs a bit more information from you before payouts can be sent."}
+                {stripeStatus.status === "restricted" &&
+                  "Your Stripe account is currently restricted. Please continue onboarding in Stripe."}
+              </p>
+              {stripeStatus.onboardingUrl && (
+                <a
+                  href={stripeStatus.onboardingUrl}
+                  className="inline-flex items-center text-xs px-3 py-1.5 rounded-md border border-brand-400 text-brand-300 hover:bg-brand-500/10"
+                >
+                  Continue Stripe onboarding
+                </a>
+              )}
+            </>
+          )}
+        </div>
         <div className="mb-6 p-4 rounded-lg border border-ink-800 bg-ink-900/40 max-w-md">
           <p className="text-sm text-stone-300 mb-2">Stripe Connect for automatic payouts</p>
           <p className="text-xs text-ink-500 mb-3">
