@@ -9,6 +9,7 @@ type PayoutUpdate = {
   iban?: string;
   swift?: string;
   connectedAccountId?: string;
+  payoutProvider?: "stripe" | "manual";
 };
 
 function omitPassword(seller: { passwordHash?: string; [k: string]: unknown }) {
@@ -45,6 +46,7 @@ export async function PATCH(req: Request) {
   if (body.connectedAccountId !== undefined) {
     const v = String(body.connectedAccountId).trim();
     updates.connectedAccountId = v || undefined;
+    updates.payoutProvider = v ? "stripe" : "manual";
   }
   const updated = await updateSeller(session.user.id, updates);
   if (!updated) return NextResponse.json({ error: "Update failed" }, { status: 500 });

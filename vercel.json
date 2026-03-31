@@ -4,6 +4,10 @@
     {
       "path": "/api/payouts/release-due",
       "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/orders/release-due",
+      "schedule": "0 2 * * *"
     }
   ],
   "redirects": [
